@@ -1,4 +1,4 @@
-[submodule "submodule/test"]
-	path = submodule/test
+[submodule "submodule/GitDmo"]
+	path = submodule/GitDmo
 	url = git@github.com:jiangnanqw12/GitDmo.git
 
