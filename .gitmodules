@@ -1,9 +1,0 @@
-<<<<<<< HEAD
-[submodule "submodule/GitDmo"]
-	path = submodule/GitDmo
-=======
-[submodule "submodule/test"]
-	path = submodule/test
->>>>>>> adafe28afb3f0fe66edb74b05fcbeec4655d0983
-	url = git@github.com:jiangnanqw12/GitDmo.git
-
