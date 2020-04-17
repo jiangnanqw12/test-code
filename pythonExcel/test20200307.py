@@ -17,14 +17,12 @@ def getFree(fee):
     _FreeFee=27
     FreeFeeTotal=dict()
     FeeTotal=dict()
-
     for i in range(12):
         FreeFeeTotal[i+1]=0
         FeeTotal[i+1]=0
     for date in fee:
         #print(1)
         month=int(date[0]+date[1])
-
         day=int(date[2]+date[3])
         #print(month)
         #print(day)
@@ -32,7 +30,6 @@ def getFree(fee):
             FeeTotal[month]=FeeTotal[month]+fee[date][0]+fee[date][1]
             if fee[date][2]==1:
                 FreeFeeTotal[month]+=27
-
             if fee[date][3]==1:
                 FreeFeeTotal[month]+=27
         else:
@@ -49,7 +46,6 @@ def getFree(fee):
 def getFeeNumber():
     f=open("data.txt","r")
     fee=dict()
-
     countDinner=0
     DinnerFlag=0
     countLunch=0
@@ -74,7 +70,6 @@ def getFeeNumber():
             if feeLunch>0:
                 countLunch+=1
                 LunchFlag=1
-
             #print(lunch)
             dinner=line[10]+line[11]
             feeDinner=int(dinner)
