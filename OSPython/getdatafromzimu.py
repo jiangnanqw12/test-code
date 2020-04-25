@@ -18,11 +18,11 @@ for i in range(len(listdir)):
         counter = 0
         # print(linelist[i], end="")
         #print(i + 1, ":", linelist[i], end="")
-
-        if ((i + 1) % 4 == 3):
-            print(linelist[i], end="")
-            f2.write(linelist[i])
-            counter += 1
+        for i in range(len(linelist)):
+            if ((i + 1) % 4 == 3):
+                print(linelist[i], end="")
+                f2.write(linelist[i])
+                counter += 1
         print(counter)
         print(len(linelist))
         if counter * 4 != len(linelist):

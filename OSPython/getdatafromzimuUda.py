@@ -1,10 +1,9 @@
 # getdatafromzimu
-
+# -*- coding: GBK -*-
 import os
 # path = "D:\\BaiduNetdiskDownload\\6.00.1x Introduction to Computer Science and Programming Using Python\\week1\\1 INTRODUCTION"
-path = "/mnt/d/BaiduNetdiskDownload/6.00.1x Introduction to Computer Science and Programming Using Python/week1/1 INTRODUCTION/"
-
-listfiles = os.listdir(path)
+path = ""
+listfiles = os.listdir()
 # print(listfiles)
 for i in range(len(listfiles)):
     filename = listfiles[i]  # get all file list
@@ -19,13 +18,14 @@ for i in range(len(listfiles)):
         # print(linelist[i], end="")
         #print(i + 1, ":", linelist[i], end="")
 
-        if ((i + 1) % 4 == 3):
-            print(linelist[i], end="")
-            f2.write(linelist[i])
-            counter += 1
+        for i in range(len(linelist)):
+            if ((i + 1) % 3 == 0):
+                print(linelist[i], end="")
+                f2.write(linelist[i])
+                counter += 1
         print(counter)
         print(len(linelist))
-        if counter * 4 != len(linelist):
+        if counter * 3 != len(linelist)-1:
             print("errors")
         f2.close()
         f.close()
