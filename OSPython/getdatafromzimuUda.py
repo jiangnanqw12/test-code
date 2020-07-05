@@ -13,7 +13,8 @@ for i in range(len(listfiles)):
         f = open(path+filename)
         linelist = f.readlines()
         # print(linelist)
-        f2 = open(path+filenamelist[0]+".txt", "w")
+        f2 = open(path+filenamelist[0] +
+                  filenamelist[1]+filenamelist[2]+".txt", "w")
         counter = 0
         # print(linelist[i], end="")
         #print(i + 1, ":", linelist[i], end="")
