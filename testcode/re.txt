@@ -1,0 +1,49 @@
+Module 01: Lessons
+Lesson 01: Introduction
+Concept 01: Beta Testing
+Concept 02: Welcome!
+Concept 03: Introduction to Andrei
+Concept 04: MATLAB
+Lesson 02: Radar Principles
+Review Radar functionality, FMCW waveform, Radar Hardware, Schematic and the Radar Equation
+
+Concept 01: Why Use Radar?
+Concept 02: The Radar Sensor
+Concept 03: Signal Properties
+Concept 04: FMCW
+Concept 05: FMCW Hardware and Antenna
+Concept 06: Radar Cross Section
+Concept 07: Radar Range Equation
+Concept 08: What Does a Sensor Fusion Engineer Need to Know?
+Lesson 03: Range-Doppler Estimation
+Estimate the range and velocity of the target using the FMCW radar
+
+Concept 01: Range, Velocity, and Angle Resolution
+Concept 02: Range Estimation
+Concept 03: Doppler Estimation
+Concept 04: Fast Fourier Transform (FFT)
+Concept 05: The 2D FFT
+Concept 06: What Kind of Math Do Radar Engineers Use?
+Lesson 04: Clutter, CFAR, AoA
+Discuss - Clutter formation and then its removal using CFAR technique. After that
+
+Concept 01: Clutter, CFAR, AoA
+Concept 02: Clutter
+Concept 03: CFAR
+Concept 04: CA-CFAR
+Concept 05: CFAR 2D
+Concept 06: Angle of Arrival Introduction
+Lesson 05: Clustering and Tracking
+Concept 01: Clustering and Tracking
+Concept 02: Clustering
+Concept 03: Kalman Tracking
+Concept 04: MATLAB Sensor Fusion Guided Walkthrough
+Lesson 06: Radar Target Generation and Detection
+Project Description - Radar Target Generation and Detection
+
+Project Rubric - Radar Target Generation and Detection
+
+Concept 01: Project Overview
+Concept 02: Target Generation and Detection
+Concept 03: FFT Operation
+Concept 04: 2D CFAR

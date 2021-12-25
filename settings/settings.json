@@ -1,0 +1,83 @@
+{
+    //"terminal.integrated.shell.windows": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    //"http.proxySupport": "off",
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.formatOnPaste": true,
+    "files.encoding": "gb2312",
+    "editor.fontSize": 18,
+    "editor.minimap.maxColumn": 40,
+    "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?�������������������������������������������� ",
+    "editor.fontFamily": "'Source Code Pro', Consolas, 'Courier New', monospace",
+    "editor.suggest.localityBonus": true,
+    "window.title": "${dirty}${activeEditorLong}${separator}${rootName}${separator}${appName}",
+    "window.titleBarStyle": "custom",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Better Solarized Dark",
+    "workbench.sideBar.location": "left",
+    "workbench.activityBar.visible": true,
+    "diffEditor.ignoreTrimWhitespace": true,
+    "http.proxyStrictSSL": false,
+    "files.trimTrailingWhitespace": true,
+    "files.autoGuessEncoding": true,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true
+    },
+    "C_Cpp.updateChannel": "Insiders",
+    "C_Cpp.default.intelliSenseMode": "gcc-x64",
+    "C_Cpp.default.includePath": [
+        "/usr/include",
+        "/usr/local/include",
+        "${workspaceFolder}/**"
+    ],
+    // "[cpp]": {
+    //     "editor.defaultFormatter": "xaver.clang-format"
+    // },
+    "workbench.statusBar.visible": true,
+    "terminal.integrated.fontFamily": "monospace",
+    "terminal.integrated.fontSize": 16,
+    "window.zoomLevel": 1,
+    "sync.gist": " df9cfc9498249e0d6226f93d2f81a2ec6e11fa46",
+    "sync.removeExtensions": false,
+    "tabnine.experimentalAutoImports": true,
+    "git.ignoreMissingGitWarning": true,
+    "git.enableSmartCommit": true,
+    "bracket-pair-colorizer-2.activeScopeCSS": [
+        "borderStyle : solid",
+        "borderWidth : 1px",
+        "borderColor : {color}",
+        "opacity: 0.5"
+    ],
+    "bracket-pair-colorizer-2.colors": [
+        "Gold",
+        "Orchid",
+        "LightSkyBlue"
+    ],
+    "git.autofetch": true,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "workbench.editorAssociations": [
+        {
+            "viewType": "jupyter.notebook.ipynb",
+            "filenamePattern": "*.ipynb"
+        }
+    ],
+    "python.languageServer": "Microsoft",
+    "C_Cpp.clang_format_sortIncludes": true,
+    // "C_Cpp.intelliSenseEngine": "Disabled",
+    // "C_Cpp.default.browse.path": [],
+    // "C_Cpp.autocomplete": "Disabled", // So you don't get autocomplete from both extensions.
+    // "C_Cpp.errorSquiggles": "Disabled", // So you don't get error squiggles from both extensions clangd's seem to be more reliable anyway.
+    // //"clang-format.fallbackStyle": "Google",
+    //"clangd.path": "/mnt/d/Program Files/LLVM/bin",
+    // "clangd.arguments": [
+    //     "-log=verbose",
+    //     "-pretty",
+    //     "--background-index",
+    //     "--compile-commands-dir=${workspaceFolder}"
+    //     //"PathMatch=C:\\Users\\shade\\Documents\\GitHub"
+    //     //"--compile-commands-dir=/path/to/your/compile_commands_dir/"
+    // ],
+}
