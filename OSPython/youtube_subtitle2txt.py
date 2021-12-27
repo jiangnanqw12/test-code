@@ -1,6 +1,7 @@
 import os
 # -*- coding: UTF-8 -*-
-path = "/mnt/c/Users/shadow/Desktop/temp/"
+#path = "/mnt/c/Users/shadow/Desktop/temp/"
+path = "/mnt/d/BaiduNetdiskDownload/YouTube/Understanding Kalman Filters/"
 #path = "C:\\Users\\shadow\\Desktop\\temp\\"
 listdir = os.listdir(path)
 
@@ -46,18 +47,28 @@ for i in range(len(listdir)):
                             continue
 
         # print(pop_idx_list)
+        # remove multiple data from the list
         if pop_idx_list != []:
             for index in sorted(pop_idx_list, reverse=True):
                 del linelist[index]
         for line in linelist:
+            if line[-2] == " ":
+                if line[-3] == "." or line[-3] == "?":
+                    f2.write(line+"\n")
+                else:
+                    f2.write(line[:-1])
+            elif line[-2] == "." or line[-2] == "?":
+                f2.write(line+"\n")
+            else:
+                f2.write(line[:-1])
+                # print(1)
+                # f2.write(line+"\n")
+                # print(ord(line[-2]))
+                # if line[-2] == "." or line[-2] == "?":
+                #     print(line)
+                #     f2.write(line)
 
-            # print(1)
-            f2.write(line+"\n")
-            # if line[-2] == "." or line[-2] == "?":
-            #     print(line)
-            #     f2.write(line)
-
-            # else:
-            #     f2.write(line[:-1])
+                # else:
+                #     f2.write(line[:-1])
         f2.close()
         f.close()
