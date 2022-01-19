@@ -1,7 +1,7 @@
 import os
 # -*- coding: UTF-8 -*-
-#path = "/mnt/c/Users/shadow/Desktop/temp/"
-path = "/mnt/d/BaiduNetdiskDownload/YouTube/Understanding Kalman Filters/"
+path = "/mnt/c/Users/shadow/Desktop/temp/"
+#path = "/mnt/d/BaiduNetdiskDownload/YouTube/Understanding Kalman Filters/"
 #path = "C:\\Users\\shadow\\Desktop\\temp\\"
 listdir = os.listdir(path)
 
@@ -60,7 +60,7 @@ for i in range(len(listdir)):
             elif line[-2] == "." or line[-2] == "?":
                 f2.write(line+"\n")
             else:
-                f2.write(line[:-1])
+                f2.write(line[:-1]+" ")
                 # print(1)
                 # f2.write(line+"\n")
                 # print(ord(line[-2]))
