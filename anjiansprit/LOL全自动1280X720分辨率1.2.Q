@@ -9,7 +9,7 @@ StopHotkeyMod=0
 RunOnce=0
 EnableWindow=
 MacroID=399dc7f4-9591-4541-9aba-bd5de11f4e2c
-Description=LOL全自动1280X720分辨率1.1
+Description=LOL全自动1280X720分辨率1.2
 Enable=0
 AutoRun=0
 [Repeat]
