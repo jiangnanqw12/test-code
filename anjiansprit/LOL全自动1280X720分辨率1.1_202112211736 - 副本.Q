@@ -530,8 +530,14 @@ KeyUp "F5", 1
 //———角色移动———
 
 //移动鼠标至中心点
+//Delay 100
+//MoveTo 1045, 549
+//Delay 100
+//锁定英雄错误取消
 Delay 100
-MoveTo 1045, 549
+MoveTo 643, 380
+Delay 100
+LeftClick 1
 Delay 100
 
 //———角色移动———
