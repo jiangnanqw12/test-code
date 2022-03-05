@@ -1,0 +1,15 @@
+#coding:utf-8
+
+import matplotlib.pyplot as plt
+import numpy as np
+import sys
+n1=input('请给出行数')
+n2=input('请输入文件编号')
+time=input('请输入积分时间')
+##filename='Matrix_512x512_Line2_10000_0.txt'
+filename='Matrix_512x512_Line'+str(n1)+'_'+str(time)+'_'+str(n2)+'.txt'
+data=np.loadtxt(filename)
+plt.imshow(data)
+print(data)
+plt.colorbar()
+plt.show()
