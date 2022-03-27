@@ -22,7 +22,7 @@
       "mousegesturesapi.com"
     ],
     "protocol": [],
-    "enabled": false
+    "enabled": true
   },
   {
     "inboundTag": [],
@@ -72,7 +72,7 @@
     "ip": [],
     "domain": [],
     "protocol": [],
-    "enabled": false
+    "enabled": true
   },
   {
     "outboundTag": "direct",
