@@ -1,23 +1,31 @@
 [
   {
+    "inboundTag": [],
     "outboundTag": "proxy",
     "domain": [
       "#以下三行是GitHub网站，为了不影响下载速度走代理",
       "github.com",
       "githubassets.com",
       "githubusercontent.com",
-      "notion.com",
       "notion.so",
-    ]
+      "notion.com"
+    ],
+    "enabled": true
   },
   {
+    "port": "",
+    "inboundTag": [],
     "outboundTag": "block",
+    "ip": [],
     "domain": [
       "#阻止CrxMouse鼠标手势收集上网数据",
       "mousegesturesapi.com"
-    ]
+    ],
+    "protocol": [],
+    "enabled": false
   },
   {
+    "inboundTag": [],
     "outboundTag": "direct",
     "domain": [
       "bitwarden.com",
@@ -26,6 +34,9 @@
       "letsencrypt.org",
       "adblockplus.org",
       "safesugar.net",
+      "tomatobox.cn",
+      "selfma.com",
+      "odysseusline.com",
       "#下两行谷歌广告",
       "googleads.g.doubleclick.net",
       "adservice.google.com",
@@ -50,20 +61,52 @@
       "#geosite:google-cn",
       "#下一行包含可直连访问苹果网址，需要替换为加强版GEO文件，如已手动更新为加强版GEO文件，删除此行前面的#号使其生效",
       "#geosite:apple-cn"
-    ]
-  },
-  {
-    "type": "field",
-    "outboundTag": "proxy",
-    "domain": [
-      "#GFW域名列表",
-      "geosite:gfw",
-      "geosite:greatfire"
-    ]
+    ],
+    "enabled": true
   },
   {
     "type": "field",
     "port": "0-65535",
-    "outboundTag": "direct"
+    "inboundTag": [],
+    "outboundTag": "direct",
+    "ip": [],
+    "domain": [],
+    "protocol": [],
+    "enabled": false
+  },
+  {
+    "outboundTag": "direct",
+    "domain": [
+      "geosite:cn"
+    ],
+    "enabled": true
+  },
+  {
+    "outboundTag": "direct",
+    "ip": [
+      "geoip:private",
+      "geoip:cn"
+    ],
+    "enabled": true
+  },
+  {
+    "outboundTag": "direct",
+    "domain": [
+      "domain:example-example.com",
+      "domain:example-example2.com"
+    ],
+    "enabled": true
+  },
+  {
+    "outboundTag": "proxy",
+    "ip": [
+      "geoip:telegram"
+    ],
+    "domain": [
+      "geosite:gfw",
+      "geosite:greatfire",
+      "geosite:tld-!cn"
+    ],
+    "enabled": true
   }
 ]
