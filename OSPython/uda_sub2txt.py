@@ -11,6 +11,10 @@ def reformat_txt_full_sentence(path, filename, pos4end):
     linelist = f.readlines()
     for line in linelist:
         if line != []:
+            try:
+                line[-pos4end]
+            except:
+                print(line)
             if line[-pos4end] == ".":
 
                 f2.write(line)
@@ -19,17 +23,17 @@ def reformat_txt_full_sentence(path, filename, pos4end):
                 if line[0:-2] == "Language: en":
                     pass
                 else:
-                    f2.write(line[0:-2])
+                    f2.write(line[0:-2]+" ")
     f.close
     f2.close()
 
 
 # listfiles = os.listdir()
 # print(listfiles)
-mypath = ""
 f = []
-
-for (dirpath, dirnames, filenames) in os.walk(os.getcwd()):
+mypath = "/mnt/d/00mooc/Sensor Fusion v1.0.0/Part 04-Module 01-Lesson 01_Introduction/"
+#mypath = os.getcwd()
+for (dirpath, dirnames, filenames) in os.walk(mypath):
     # print(dirpath)
     # print(dirnames)
     # print(filenames)
