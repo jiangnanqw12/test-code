@@ -13,9 +13,9 @@ for line in linelist:
             if word not in [" ", "-", "\n", '']:
                 # print(word)
                 if word[-1] in [",", ":", "!", "?", "\n", ")"]:
-                    # print(word)
+                    print(word)
                     word = word[0:-1]
-                    # print(word)
+                    print(word)
                 if word[0] in [",", ":", "!", "?", "\n", "("]:
                     word = word[1:]
 
@@ -30,6 +30,6 @@ for line in linelist:
                     # print(word)
 
                     word_set.add(word)
-print(word_set)
-for word in word_set:
-    f2.write(word+"\n")
+# print(word_set)
+# for word in word_set:
+#     f2.write(word+"\n")
