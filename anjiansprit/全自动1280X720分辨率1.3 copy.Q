@@ -9,7 +9,7 @@ StopHotkeyMod=0
 RunOnce=0
 EnableWindow=
 MacroID=399dc7f4-9591-4541-9aba-bd5de11f4e2c
-Description=LOL全自动1280X720分辨率1.2
+Description=LOL全自动1280X720分辨率1.3c
 Enable=0
 AutoRun=0
 [Repeat]
@@ -29,17 +29,7 @@ SetupOCXFile=
 //F2视角循环
 For 19
 //------------------------F2视角------------------------
-//寻找对局
-MoveTo 601, 685
-Delay 100
-LeftClick 1
-Delay 100
 
-//接受对局
-MoveTo 714, 556
-Delay 100
-LeftClick 1
-Delay 100
 
 //赞誉一名队友
 Delay 100
@@ -82,9 +72,11 @@ LeftClick 1
 Delay 500
 LeftClick 1
 //移动鼠标至中心点
+
 Delay 100
-MoveTo 694, 365
+MoveTo 636, 387
 Delay 100
+LeftClick 1
 //———角色移动———
 KeyDown "F2", 1
 Delay 100
@@ -161,17 +153,7 @@ Delay 100
 //F3视角循环
 For 19
 //------------------------F3视角------------------------
-//寻找对局
-MoveTo 601, 685
-Delay 100
-LeftClick 1
-Delay 100
 
-//接受对局
-MoveTo 714, 556
-Delay 100
-LeftClick 1
-Delay 100
 
 //赞誉一名队友
 Delay 100
@@ -268,7 +250,9 @@ KeyUp "F3", 1
 
 //移动鼠标至中心点
 Delay 100
-MoveTo 1045, 549
+MoveTo 636, 387
+Delay 100
+LeftClick 1
 Delay 100
 
 //———角色移动———
@@ -292,17 +276,7 @@ Delay 100
 //F4视角循环
 For 19
 //------------------------F4视角------------------------
-//寻找对局
-MoveTo 601, 685
-Delay 100
-LeftClick 1
-Delay 100
 
-//接受对局
-MoveTo 714, 556
-Delay 100
-LeftClick 1
-Delay 100
 
 //赞誉一名队友
 Delay 100
@@ -346,7 +320,9 @@ Delay 500
 LeftClick 1
 //移动鼠标至中心点
 Delay 100
-MoveTo 694, 365
+MoveTo 636, 387
+Delay 100
+LeftClick 1
 Delay 100
 //———角色移动———
 KeyDown "F4", 1
@@ -424,17 +400,7 @@ Delay 100
 //F5视角循环
 For 19
 //------------------------F5视角------------------------
-//寻找对局
-MoveTo 601, 685
-Delay 100
-LeftClick 1
-Delay 100
 
-//接受对局
-MoveTo 714, 556
-Delay 100
-LeftClick 1
-Delay 100
 
 //赞誉一名队友
 Delay 100
@@ -478,7 +444,9 @@ Delay 500
 LeftClick 1
 //移动鼠标至中心点
 Delay 100
-MoveTo 694, 365
+MoveTo 636, 387
+Delay 100
+LeftClick 1
 Delay 100
 //———角色移动———
 KeyDown "F5", 1
