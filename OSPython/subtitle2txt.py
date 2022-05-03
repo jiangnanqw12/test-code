@@ -19,7 +19,7 @@ def line_check_if_full_sentence(line, pos4end, f):
             if line[0:-2] == "Language: en":
                 pass
             else:
-                f.write(line[0:pos4end]+" ")
+                f.write(line[0:-1]+" ")
 
 
 def subtitle2txt_full_files(path):
