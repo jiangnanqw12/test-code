@@ -1,6 +1,6 @@
 import os
-#path = os.getcwd()+"\\"
-path = "/mnt/d/BaiduNetdiskDownload/01-03 Dual Photography Videos/"
+path = os.getcwd()+"\\"
+#path = "/mnt/d/BaiduNetdiskDownload/01-03 Dual Photography Videos/"
 str_name_subtitle = "srt"
 pos4end = -2
 
