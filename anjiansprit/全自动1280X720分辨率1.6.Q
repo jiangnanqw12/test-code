@@ -26,7 +26,7 @@ SetupOCXFile=
 
 //LOL全自动1280X720分辨率1.5
 Dim data_hero_str
-data_hero_str = Array("f2", "f3", "f4", "f5")
+data_hero_str = Array("f2", "f4", "f5")
 Dim x, y, coordinate, delay1, delay2, click_num,fx
 click_num = 1
 delay1 = 100
@@ -149,7 +149,7 @@ KeyPress "T", 1
 Delay 100
 //重新连接
 call move_and_click(rematch,1,100,100)
-Delay 20000
+Delay 30000
 Next
 
 
