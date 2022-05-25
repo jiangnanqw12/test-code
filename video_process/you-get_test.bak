@@ -1,0 +1,2 @@
+
+you-get - -socks-proxy 127.0.0.1: 10808 "https://www.youtube.com/watch?v=k7RM-ot2NWY&ab_channel=3Blue1Brown" - -debug
