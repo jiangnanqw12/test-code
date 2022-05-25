@@ -1,8 +1,9 @@
 import os
 # -*- coding: UTF-8 -*-
-path = "/mnt/c/Users/shadow/Desktop/temp/"
+#path = "/mnt/c/Users/shadow/Desktop/temp/"
 #path = "/mnt/d/BaiduNetdiskDownload/YouTube/Understanding Kalman Filters/"
 #path = "C:\\Users\\shadow\\Desktop\\temp\\"
+path = os.getcwd()+"\\"
 listdir = os.listdir(path)
 
 # print(listdir)
