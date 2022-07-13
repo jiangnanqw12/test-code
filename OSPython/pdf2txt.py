@@ -1,6 +1,6 @@
 import os
 #coding in utf-8
-
+#提取pdf复制出来的问题，去掉换行符，加入空格
 path = os.getcwd()+"/"
 listdir = os.listdir(path)
 for i in range(len(listdir)):
@@ -16,7 +16,7 @@ for i in range(len(listdir)):
         f2 = open(path+filenamelist[0]+".pdfp2", "w")
         for i in range(len(linelist)):
             #print(linelist[i][-1])
-            if i==(len(linelist)-1):
-                f2.write(linelist[i])
+            if linelist[i][-1]==".":
+                f2.write(linelist[i]+" ")
             else:
-                f2.write(linelist[i][:-1])
+                f2.write(linelist[i][:-1]+" ")
