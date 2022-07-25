@@ -1,0 +1,21 @@
+{
+  "5174a483-c88d-4bf8-a95f-35cd330b76e2": {
+    "tweak.hide_help": true
+  },
+  "a5658d03-21c6-4088-bade-fa4780459133": {
+    "tiling": true
+  },
+  "_mods": {
+    "a5658d03-21c6-4088-bade-fa4780459133": false,
+    "e71ce1e0-024c-435e-a25e-7dd50448d1df": true,
+    "87e077cc-5402-451c-ac70-27cc4ae65546": true,
+    "35815b3b-3916-4dc6-8769-c9c2448f8b57": true,
+    "d61dc8a7-b195-465b-935f-53eea9efe74e": true
+  },
+  "36a2ffc9-27ff-480e-84a7-c7700a7d232d": {
+    "panel.width": 240
+  },
+  "d61dc8a7-b195-465b-935f-53eea9efe74e": {
+    "single_lined": true
+  }
+}
