@@ -1,5 +1,5 @@
 from pynput import keyboard
-
+controller = keyboard.Controller()
 def on_activate():
     print('Global hotkey activated!')
 
