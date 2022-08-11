@@ -1,0 +1,8 @@
+you-get -l "https://www.youtube.com/playlist?list=PLd3hlSJsX_ImKP68wfKZJVIPTd8Ie5u-9" --socks-proxy 127.0.0.1:10809
+you-get -l "https://space.bilibili.com/88461692/channel/seriesdetail?sid=1528929" --no-proxy
+you-get -l "" --no-proxy
+you-get -l "" --no-proxy
+you-get -l "" --no-proxy
+you-get -l "https://www.youtube.com/playlist?list=PLd3hlSJsX_Imk_BPmB_H3AQjFKZS9XgZm" --socks-proxy 127.0.0.1:10809
+you-get -l "" --socks-proxy 127.0.0.1:10809
+you-get -l "" --socks-proxy 127.0.0.1:10809
