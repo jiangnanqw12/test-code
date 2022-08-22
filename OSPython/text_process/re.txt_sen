@@ -1,0 +1,14 @@
+• Learning covariant feature detectors (Lenc and Vedaldi 2016);
+• Learning to assign orientations to feature points (Yi, Verdie et al. 2016);
+• LIFT, learned invariant feature transforms (Yi, Trulls et al. 2016), SuperPoint, selfsupervised
+interest point detection and description (DeTone, Malisiewicz, and Rabinovich
+2018), and LF-Net, learning local features from images (Ono, Trulls et al.
+2018), all three of which jointly optimize the detectors and descriptors in a single
+(multi-head) pipeline;
+• AffNet (Mishkin, Radenovic, and Matas 2018), which detects matchable affine-covariant
+regions;
+• Key.Net (Barroso-Laguna, Riba et al. 2019), which uses a combination of handcrafted
+and learned CNN features; and
+• D2-Net (Dusmanu, Rocco et al. 2019), R2D2 (Revaud, Weinzaepfel et al. 2019), and
+D2D (Tian, Balntas et al. 2020), which all extract dense local feature descriptors and
+then keeps the ones that have high saliency or repeatability.
