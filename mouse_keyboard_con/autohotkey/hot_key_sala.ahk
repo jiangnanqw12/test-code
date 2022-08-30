@@ -5,11 +5,11 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 !v::
 
 send ^w
-Sleep 200
+Sleep 500
 send ^+M
 Sleep 500
 send ^+v
-Sleep 200
+Sleep 500
 send {Enter}
 return
 
