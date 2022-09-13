@@ -1,13 +1,14 @@
 import os
-import pyperclip
+#import pyperclip
+import testclip
 #coding in utf-8
 #提取pdf复制出来的list文字，进行纯文字输出
 
-def copy_text_from_clip(path):
-    text = pyperclip.paste()
-    path = os.getcwd()+"/"
-    f1=open(path+"re.txtlist","w")
-    f1.write(text)
+# def copy_text_from_clip(path):
+#     text = pyperclip.paste()
+#     #path = os.getcwd()+"/"
+#     f1=open(path+"re.txtlist","w")
+#     f1.write(text)
 def list_reform(path):
     listdir = os.listdir(path)
     for i in range(len(listdir)):
@@ -33,8 +34,7 @@ def list_reform(path):
                 if flag==0:
                     f2.write(linelist[i]+"\n")
 
-def main():
+if __name__ == '__main__':
     path = os.getcwd()+"/"
-    copy_text_from_clip(path)
+    testclip.copy_text_from_clip(path,"txtlist")
     list_reform(path)
-main()
