@@ -121,7 +121,7 @@ def down_one(self, url, format_qn: int = None, down_path=r'F:\bili', txt_format_
     # cmd = 'explorer {}'.format(down_path)
     # os.system(cmd)
 
-def down_multipart(self, url, format_qn_list=None, root_path=r'F:\bili', rename_file=None, some_parts=None, txt_qn=None):
+def down_multipart(self, url, format_qn_list=None, root_path=r'c:\bili', rename_file=None, some_parts=None, txt_qn=None):
     """
     批量下载
     :param url:请求url
