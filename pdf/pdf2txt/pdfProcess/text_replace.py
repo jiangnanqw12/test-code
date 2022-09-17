@@ -1,10 +1,9 @@
 import os
-import re
 
 
-def text_replace(path):
+def text_replace(path, replace_list):
     listdir = os.listdir(path)
-    replace_list = [["", " $$\sigma$ "]]
+    #replace_list = [["", " $$\sigma$ "]]
     #replace_list.append(["", " $$\sigma$ "])
     for i in range(len(listdir)):
 
