@@ -5,10 +5,10 @@ def text_replace(path):
     listdir = os.listdir(path)
     replace_list = [
         ["", " $$\sigma$ "],
-    ["Ã¢Ë†Å¡2","$$\sqrt{2}$"],
+    ["Ã¢Ë†Å¡2","$$\sqrt\{2\}$"],
     ["ˆx","$$\hat x$"],
     ["","$$\\alpha$"],
-    ["","$$\\belta$"]
+    ["","$$\\beta$"]
     ]
     #replace_list.append(["", " $$\sigma$ "])
     for i in range(len(listdir)):
