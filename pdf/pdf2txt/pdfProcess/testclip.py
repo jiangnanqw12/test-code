@@ -1,6 +1,7 @@
 
 import pyperclip
 import os
+#coding in utf-8
 # text = pyperclip.paste()
 # path = os.getcwd()+"/"
 # f1=open(path+"test.txt","w")

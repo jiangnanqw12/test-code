@@ -1,11 +1,14 @@
 import os
-
+#coding in utf-8
 
 def text_replace(path):
     listdir = os.listdir(path)
     replace_list = [
         ["", " $$\sigma$ "],
-    ["Ã¢Ë†Å¡2","$$\sqrt{2}$"]
+    ["Ã¢Ë†Å¡2","$$\sqrt{2}$"],
+    ["ˆx","$$\hat x$"],
+    ["","$$\\alpha$"],
+    ["","$$\\belta$"]
     ]
     #replace_list.append(["", " $$\sigma$ "])
     for i in range(len(listdir)):
@@ -20,13 +23,16 @@ def text_replace(path):
             # print(linelist)
             f2 = open(path+filenamelist[0]+".pdftext3", "w", encoding='UTF-8')
             for i in range(len(linelist)):
-                # idx = line.find("")
-                # print(idx)
+
+
                 line=linelist[i]
                 for j in range(len(replace_list)):
+                    # idx = line.find(replace_list[j][0])
+                    # idx2 = line.find("ˆx")
+                    # print(idx2)
                     line = line.replace(
                         replace_list[j][0], replace_list[j][1])
-                    f2.write(line)
+                f2.write(line)
 
                 # print(linelist[i][-1])
                 # idx = line.find("")
