@@ -21,14 +21,16 @@ def pdf2text(path):
                 if linelist[i] not in ["\n", "\r\n", ""]:
                     # print(linelist[i][-1])
                     # print("-1:",linelist[i][-1])
-                    if(linelist[i][-1] == "\n"):
-                        print("\\n\n")
-                    elif(linelist[i][-1] == "\r\n"):
-                        print("rn\n")
-                    try:
-                        print("-2:", linelist[i][-2])
-                    except:
-                        print("error line:", linelist[i])
+
+                    # if(linelist[i][-1] == "\n"):
+                    #     print("\\n\n")
+                    # elif(linelist[i][-1] == "\r\n"):
+                    #     print("rn\n")
+                    # try:
+                    #     print("-2:", linelist[i][-2])
+                    # except:
+                    #     print("error line:", linelist[i])
+
                     if linelist[i][-1] == "\n":
                         # print("\\n\n")
                         if linelist[i][-2] in [":", ".", "!", "?"]:
