@@ -1,6 +1,6 @@
 import os
 #import pyperclip
-import testclip
+from pdfProcess import testclip
 #coding in utf-8
 # 提取pdf复制出来的list文字，进行纯文字输出
 
@@ -30,11 +30,11 @@ def list_reform(path):
                 flag = 0
                 for j in (range(len(list4remove))):
                     if linelist[i].find(list4remove[j]) != -1:
-                        f2.write(linelist[i][2:]+"\n")
+                        f2.write(linelist[i][2:]+"\n"+"\n")
                         flag = 1
 
                 if flag == 0:
-                    f2.write(linelist[i]+"\n")
+                    f2.write(linelist[i]+"\n"+"\n")
 
 
 if __name__ == '__main__':
