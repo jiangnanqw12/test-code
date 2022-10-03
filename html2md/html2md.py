@@ -45,7 +45,8 @@ def formatMD(path):
 
                     if ((linelist[j].find(str2)) != -1):
                         flag += 1
-
+                if ((linelist[j].find("- ")) != -1) and ((linelist[j].find(".html")) != -1):
+                    flag += 1
                 if flag == 0:
                     f2.write(linelist[j]+"\n")
 
