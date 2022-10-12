@@ -26,7 +26,8 @@ def list_reform(path):
             f2 = open(path+filenamelist[0]+".txtlist2", "w", encoding='UTF-8')
             for i in range(len(linelist)):
                 # print(linelist[i][-1])
-                list4remove = [" ", "• ", " ", "– "]
+                list4remove = [" ", "• ", " ", "– "," "]
+
                 flag = 0
                 for j in (range(len(list4remove))):
                     if linelist[i].find(list4remove[j]) != -1:
