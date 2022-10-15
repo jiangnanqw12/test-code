@@ -71,9 +71,9 @@ def send_data(data_send,listsend):
     get_send_list(data_send,listsend)
     ser.write(listsend)
 def get_crc():
-    s=bytes(synccode)+bytes(cmd)+bytes(des)+bytes(data1)+bytes(data2)
+    s=str(synccode)+str(cmd)+str(des)+str(data1)+str(data2)
     print(s)
-    t1=zlib.crc32(s)
+    t1=zlib.crc32(bytes(s.encode("utf-8")))
     print(hex(t1))
 if __name__ == '__main__':
     synccode=0xAD7BC565
@@ -101,6 +101,7 @@ if __name__ == '__main__':
     send_data(check,listsend)
     rs=ser.read(100)
     print(rs)
+    s2=zlib.crc32(b"123")
+    print(s2)
 
-    s=bytes()
     get_crc()
