@@ -1,8 +1,10 @@
 import time
+from typing import ByteString
 import serial
 import sys
 import glob
 import zlib
+import binascii
 def serial_ports():
     """ Lists serial port names
 
@@ -75,6 +77,12 @@ def get_crc():
     print(s)
     t1=zlib.crc32(bytes(s.encode("utf-8")))
     print(hex(t1))
+def crc32mpeg2(buf, crc=0xffffffff):
+    for val in buf:
+        crc ^= val << 24
+        for _ in range(8):
+            crc = crc << 1 if (crc & 0x80000000) == 0 else (crc << 1) ^ 0x104c11db7
+    return crc
 if __name__ == '__main__':
     synccode=0xAD7BC565
     cmd=0x00180100
@@ -101,7 +109,13 @@ if __name__ == '__main__':
     send_data(check,listsend)
     rs=ser.read(100)
     print(rs)
-    s2=zlib.crc32(b"123")
-    print(s2)
+    #print(0xAD7BC5650018010000B00000037A037C037E0380)
+    # s4=binascii.crc32mpeg2(binascii.a2b_hex('AD'))
+    # print(hex(s4))
+    #s2=zlib.crc32(s4)
+    #print(hex(s2))
 
-    get_crc()
+    # get_crc()
+    s3=crc32mpeg2(binascii.a2b_hex('AD7BC5650018010000B00000037A037C037E0380'))
+    print(hex(s3))
+
