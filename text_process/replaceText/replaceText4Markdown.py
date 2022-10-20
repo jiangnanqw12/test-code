@@ -81,7 +81,24 @@ replace_list = [
     [" sin⁡(θ)\\\\sin(\\\\theta)"," \\\\sin(\\\\theta)"],
     [" cos⁡(θ)\\\\cos(\\\\theta)"," \\\\cos(\\\\theta)"],
     [" θ\\\\theta"," \\\\theta"],
-    [" dθd \\\\theta"," d \\\\theta"]
+    [" dθd \\\\theta"," d \\\\theta"],
+    [" sin⁡(x)\\\\sin(x)"," \\\\sin(x)"],
+    [" f(x)\=g(x)+h(x)f(x) = g(x) + h(x)"," f(x) = g(x) + h(x)"],
+    [" f(x)\=sin⁡(x)+x2f(x) = \\\\sin(x) + x^2"," f(x) = \\\\sin(x) + x^2"],
+    [" x\=0.5x = 0.5"," x = 0.5"],
+[" 0.5+dx0.5 + dx"," 0.5 + dx"],
+[" d(sin⁡(x))d\\\\left(\\\\sin(x)\\\\right)"," d\\\\left(\\\\sin(x)\\\\right)"],
+[" d(x2)d(x^2)"," d(x^2)"],
+[" cos⁡(x)⋅dx\\\\cos(x) \\\\cdot dx"," \\\\cos(x) \\\\cdot dx"],
+[" 2x⋅dx2x \\\\cdot"," 2x \\\\cdot"],
+[" cos⁡(x)+2x\\\\cos(x)+2x"," \\\\cos(x)+2x"],
+[" sin⁡(x)⋅x2\\\\sin(x) \\\\cdot x^2"," \\\\sin(x) \\\\cdot x^2"],
+[" d(sin⁡(x))d\\\\left( \\\\sin(x)\\\\right)"," d\\\\left( \\\\sin(x)\\\\right)"],
+[" cos⁡(x)dx\\\\cos(x)dx"," \\\\cos(x)dx"],
+[" f(x)\=g(x)h(x)f(x) = g(x)h(x)"," f(x) = g(x)h(x)"],
+[" sin⁡(x2)\\\\sin(x^2)"," \\\\sin(x^2)"],
+[" d(sin⁡(h))d\\\\left(\\\\sin(h)\\\\right)"," d\\\\left(\\\\sin(h)\\\\right)"],
+[" sin⁡(h)\\sin(h)"," \\sin(h)"]
 
     ]
 def text_replace(path):
