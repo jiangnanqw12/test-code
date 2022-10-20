@@ -74,7 +74,15 @@ replace_list = [
     [" d(1/x)d(1/x)"," d(1/x)"],
     [" d(1/x)/dxd(1/x)/dx"," d(1/x)/dx"],
     [" f(x)\=xf(x) = \\\\sqrt{x}"," f(x) = \\\\sqrt{x}"],
-    ["x12x^{\\\\frac{1}{2}}","x^{\\\\frac{1}{2}}"]
+    ["x12x^{\\\\frac{1}{2}}","x^{\\\\frac{1}{2}}"],
+    [" sin⁡(0.8)\\\\sin(0.8)"," \\\\sin(0.8)"],
+    [" θ\=0.8\\\\theta = 0.8"," \\\\theta = 0.8"],
+    [" 0.80.8"," 0.8"],
+    [" sin⁡(θ)\\\\sin(\\\\theta)"," \\\\sin(\\\\theta)"],
+    [" cos⁡(θ)\\\\cos(\\\\theta)"," \\\\cos(\\\\theta)"],
+    [" θ\\\\theta"," \\\\theta"],
+    [" dθd \\\\theta"," d \\\\theta"]
+
     ]
 def text_replace(path):
     listdir = os.listdir(path)
