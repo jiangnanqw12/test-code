@@ -43,4 +43,10 @@ def generateTestData(config_list):
 
 if __name__== '__main__':
     calibritionNA=[256,256,132,2,1,"calibritionNA"]
+    fastAlign=[256,256,24,4,1,"fastAlign"]
+    fasZernike=[256,256,46,5,1,"fastZernike"]
+    pupil=[256,256,8,6,1,"pupil"]
     generateTestData(calibritionNA)
+    generateTestData(fastAlign)
+    generateTestData(fasZernike)
+    generateTestData(pupil)

@@ -109,6 +109,7 @@ if __name__ == '__main__':
     send_data(check,listsend)
     rs=ser.read(100)
     print(rs)
+    print(str(hex(synccode))+str(hex(cmd)))
     #print(0xAD7BC5650018010000B00000037A037C037E0380)
     # s4=binascii.crc32mpeg2(binascii.a2b_hex('AD'))
     # print(hex(s4))
