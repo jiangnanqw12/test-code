@@ -12,7 +12,7 @@ def generateTestData(config_list):
         f= open(config_list[5]+"/"+str(k+1)+".txt","w", encoding="utf-8")
         for i in range(config_list[0]):
             for j in range(config_list[1]):
-                if i in [0,1]:
+                if i==0:
 
 
 
@@ -21,6 +21,12 @@ def generateTestData(config_list):
                         f.write(str(k)+"\n")
                     if config_list[4]==2:
                         f.write(str(k)+" ")
+                elif i==1:
+                    if config_list[4]==1:
+
+                        f.write(str(config_list[3])+"\n")
+                    if config_list[4]==2:
+                        f.write(str(config_list[3])+" ")
                 else:
                     if j%2==1:
                         if config_list[4]==1:
@@ -42,7 +48,7 @@ def generateTestData(config_list):
 
 
 if __name__== '__main__':
-    calibritionNA=[256,256,132,2,1,"calibritionNA"]
+    calibritionNA=[256,256,132,2,2,"calibritionNA"]
     fastAlign=[256,256,24,4,1,"fastAlign"]
     fasZernike=[256,256,46,5,1,"fastZernike"]
     pupil=[256,256,8,6,1,"pupil"]

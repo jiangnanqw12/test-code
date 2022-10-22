@@ -70,6 +70,7 @@ def get_send_list(data_send,listsend):
         listsend.append(temp)
         #print(listsend)
 def send_data(data_send,listsend):
+    listsend=[]
     get_send_list(data_send,listsend)
     ser.write(listsend)
 def get_crc():
@@ -83,6 +84,16 @@ def crc32mpeg2(buf, crc=0xffffffff):
         for _ in range(8):
             crc = crc << 1 if (crc & 0x80000000) == 0 else (crc << 1) ^ 0x104c11db7
     return crc
+def hex2str(hexdata):
+    strData=str(hex(hexdata))
+    #print(len(strData))
+    if len(strData)==10:
+        return strData[2:]
+    elif len(strData)<10:
+        #print(10*"0")
+        return (10-len(strData))*"0"+strData[2:]
+#def send_synccode():
+
 if __name__ == '__main__':
     synccode=0xAD7BC565
     cmd=0x00180100
@@ -95,21 +106,29 @@ if __name__ == '__main__':
     ser=serial.Serial("COM4",57600,timeout=1)
     if ser.is_open!=True:
         print("can't open ")
+    str_send=""
     listsend=[]
     send_data(synccode,listsend)
-    listsend=[]
+    str_send+=hex2str(synccode)
+
     send_data(cmd,listsend)
-    listsend=[]
+    str_send+=hex2str(cmd)
+
     send_data(des,listsend)
-    listsend=[]
+    str_send+=hex2str(des)
+
     send_data(data1,listsend)
-    listsend=[]
+    str_send+=hex2str(data1)
+
     send_data(data2,listsend)
-    listsend=[]
+    str_send+=hex2str(data2)
+
     send_data(check,listsend)
     rs=ser.read(100)
     print(rs)
-    print(str(hex(synccode))+str(hex(cmd)))
+
+    print(str_send)
+
     #print(0xAD7BC5650018010000B00000037A037C037E0380)
     # s4=binascii.crc32mpeg2(binascii.a2b_hex('AD'))
     # print(hex(s4))
@@ -117,6 +136,10 @@ if __name__ == '__main__':
     #print(hex(s2))
 
     # get_crc()
+
+    print(hex(int((len(str_send)+8)/2)))
     s3=crc32mpeg2(binascii.a2b_hex('AD7BC5650018010000B00000037A037C037E0380'))
+    print(hex(s3))
+    s3=crc32mpeg2(binascii.a2b_hex(str_send))
     print(hex(s3))
 
