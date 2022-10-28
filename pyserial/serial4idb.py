@@ -133,12 +133,12 @@ def send_synccode(send_data_hex):
     send_data(send_data_hex,listsend)
     str_send+=hex2str(send_data_hex)
     return str_send
-def generate_cmd(config):
+def generate_cmd(config,cmd_type=0x100):
     data_frame_lenght=4+4+4+config[1]*2+4
     #print(hex(data_frame_lenght)+"0100")
     #cmd=eval(hex(data_frame_lenght)+"0100")
     #print(data_frame_lenght)
-    cmd=(data_frame_lenght<<16)+0x0100
+    cmd=(data_frame_lenght<<16)+cmd_type
     #print(hex(cmd))
     return cmd,data_frame_lenght
 def send_data_hex_in4(send_data_hex):
@@ -270,15 +270,23 @@ def chip_erase():
     synccode=0xAD7BC565
     hex_data_send=synccode
     config=[0,0,0,0,1,"test2"]
-    cmd_code,data_frame_length=generate_cmd(config)
+    global ser
+    ser=serial.Serial("COM4",57600,timeout=1)
+    if ser.is_open!=True:
+        print("can't open ")
+    cmd_code,data_frame_length=generate_cmd(config,0x0300)
     hex_data_send=store_data(hex_data_send,cmd_code)
     hex_data_send=store_data(hex_data_send,0x0)
     check_code=0x7d731943
     hex_data_send=store_data(hex_data_send,check_code)
     list_send=hex_data_2_bytes_list(hex_data_send,data_frame_length)
+    for d in list_send:
+        print(hex(d))
     ser.write(list_send)
     rs=ser.read(100)
-    print(rs)
+    #print(rs)
+    for d in rs:
+        print(hex(d))
 def writ_data_4IDB():
     global synccode
     synccode=0xAD7BC565
@@ -349,10 +357,13 @@ def writ_data_4IDB():
                 #     print(hex(d1))
                 ser.write(list_send)
                 rs=ser.read(100)
-                print(rs)
+                #print(rs)
+                for d in rs:
+                    print(hex(d))
 
 if __name__ == '__main__':
     #test1()
-    writ_data_4IDB()
+    #writ_data_4IDB()
     #test_case1()
+    chip_erase()
 
