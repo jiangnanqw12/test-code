@@ -6,6 +6,8 @@ import sys
 import glob
 import zlib
 import binascii
+import CRC
+
 def serial_ports():
     """ Lists serial port names
 
@@ -301,7 +303,7 @@ def chip_erase():
             print(hex(d))
         raise Exception("crc32mpeg2 FAILED")
     time.sleep(10)
-    rs5="0x55"
+    rs5=0x55
     counter=0
     while(hex(rs5)!="0xaa"):
         time.sleep(10)
@@ -364,6 +366,11 @@ def get_status():
     ser.write(list_send)
     rs=ser.read(100)
     #print(rs)
+    if len(rs)<2:
+        time.sleep(0.1)
+        rs=ser.read(100)
+        print(rs)
+
     if (hex(rs[-5]))!="0xaa":
         for d in list_send:
             print(hex(d))
@@ -441,7 +448,9 @@ def writ_data_4IDB():
                     hex_data_send=store_data(hex_data_send,d)
 
                 #print(hex(hex_data_send))
-                check_code=crc32mpeg2(binascii.a2b_hex(hex(hex_data_send)[2:]))
+                #check_code=crc32mpeg2(binascii.a2b_hex(hex(hex_data_send)[2:]))
+                check_code=CRC.crc32_mpeg2(binascii.a2b_hex(hex(hex_data_send)[2:]))
+
                 #print(hex(check_code))
                 hex_data_send=store_data(hex_data_send,check_code)
 
@@ -478,9 +487,11 @@ def open_port(port_num="COM4",Baud_rate=57600):
     if ser.is_open!=True:
         print("can't open ")
 if __name__ == '__main__':
-    open_port()
+    open_port(port_num="COM4",Baud_rate=1000000)
     #test1()
-    writ_data_4IDB()
+
     #test_case1()
-    #chip_erase()
+
+    chip_erase()
+    writ_data_4IDB()
 
