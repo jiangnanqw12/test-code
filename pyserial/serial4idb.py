@@ -1,4 +1,5 @@
 import time
+
 from typing import ByteString
 import serial
 import sys
@@ -269,24 +270,117 @@ def test_case2():
 def chip_erase():
     synccode=0xAD7BC565
     hex_data_send=synccode
-    config=[0,0,0,0,1,"test2"]
-    global ser
-    ser=serial.Serial("COM4",57600,timeout=1)
-    if ser.is_open!=True:
-        print("can't open ")
+    config=[0,0,0,0,1,"chip_erase"]
+    # global ser
+    # ser=serial.Serial("COM4",57600,timeout=1)
+    # if ser.is_open!=True:
+    #     print("can't open ")
     cmd_code,data_frame_length=generate_cmd(config,0x0300)
     hex_data_send=store_data(hex_data_send,cmd_code)
     hex_data_send=store_data(hex_data_send,0x0)
     check_code=0x7d731943
     hex_data_send=store_data(hex_data_send,check_code)
     list_send=hex_data_2_bytes_list(hex_data_send,data_frame_length)
-    for d in list_send:
-        print(hex(d))
+
+    ser.write(list_send)
+    rs=ser.read(100)
+    if (hex(rs[-5]))!="0xaa":
+        for d in list_send:
+            print(hex(d))
+        print("\n")
+        for d in rs:
+            print(hex(d))
+
+        raise Exception("flash busy")
+
+    if (hex(rs[-6]))!="0xaa":
+        for d in list_send:
+            print(hex(d))
+        print("\n")
+        for d in rs:
+            print(hex(d))
+        raise Exception("crc32mpeg2 FAILED")
+    time.sleep(10)
+    rs5="0x55"
+    counter=0
+    while(rs5!="0xaa"):
+        time.sleep(10)
+        rs5=get_status()
+        counter+=1
+        print(counter)
+    #print(rs)
+def get_status2():
+    synccode=0xAD7BC565
+    hex_data_send=synccode
+    config=[0,0,0,0,1,"get_status"]
+    # global ser
+    # ser=serial.Serial("COM4",57600,timeout=1)
+    # if ser.is_open!=True:
+    #     print("can't open ")
+    cmd_code,data_frame_length=generate_cmd(config,0x0400)
+    hex_data_send=store_data(hex_data_send,cmd_code)
+    hex_data_send=store_data(hex_data_send,0x0)
+    check_code=0x3cab3b2b
+    hex_data_send=store_data(hex_data_send,check_code)
+    list_send=hex_data_2_bytes_list(hex_data_send,data_frame_length)
+
+
     ser.write(list_send)
     rs=ser.read(100)
     #print(rs)
     for d in rs:
         print(hex(d))
+    if (hex(rs[-5]))!="0xaa":
+        for d in list_send:
+            print(hex(d))
+        print("\n")
+        for d in rs:
+            print(hex(d))
+
+        raise Exception("flash busy")
+
+    if (hex(rs[-6]))!="0xaa":
+        for d in list_send:
+            print(hex(d))
+        print("\n")
+        for d in rs:
+            print(hex(d))
+        raise Exception("crc32mpeg2 FAILED")
+def get_status():
+    synccode=0xAD7BC565
+    hex_data_send=synccode
+    config=[0,0,0,0,1,"get_status"]
+
+    cmd_code,data_frame_length=generate_cmd(config,0x0400)
+    hex_data_send=store_data(hex_data_send,cmd_code)
+    hex_data_send=store_data(hex_data_send,0x0)
+    check_code=0x3cab3b2b
+    hex_data_send=store_data(hex_data_send,check_code)
+    list_send=hex_data_2_bytes_list(hex_data_send,data_frame_length)
+
+    # for d in list_send:
+    #     print(hex(d))
+    # print("\n")
+    ser.write(list_send)
+    rs=ser.read(100)
+    #print(rs)
+    if (hex(rs[-5]))!="0xaa":
+        for d in list_send:
+            print(hex(d))
+        print("\n")
+        for d in rs:
+            print(hex(d))
+        return rs[-5]
+        #raise Exception("flash busy")
+
+    if (hex(rs[-6]))!="0xaa":
+        for d in list_send:
+            print(hex(d))
+        print("\n")
+        for d in rs:
+            print(hex(d))
+        raise Exception("crc32mpeg2 FAILED")
+    return rs[-5]
 def writ_data_4IDB():
     global synccode
     synccode=0xAD7BC565
@@ -302,10 +396,10 @@ def writ_data_4IDB():
     testcase1=[4,4,3,9,1,"testcase1"]
     config_list=[calibritionNA,fastAlign,fasZernike,pupil]
     print(serial_ports())
-    global ser
-    ser=serial.Serial("COM4",57600,timeout=1)
-    if ser.is_open!=True:
-        print("can't open ")
+    # global ser
+    # ser=serial.Serial("COM4",57600,timeout=1)
+    # if ser.is_open!=True:
+    #     print("can't open ")
     global str_send
     global listsend
     str_send=""
@@ -313,13 +407,16 @@ def writ_data_4IDB():
     global config
     #config=testcase1
     for config in config_list:
+        print("start to write",config[-1])
         for i in range(config[2]):
-            print("start to wirite %d pic"&(i+1))
+            print("start to write",config[-1],":","pic ",i+1,"\n")
+            #print("start to wirite %d pic"&(i+1))
             f= open(config[5]+"/"+str(i+1)+".txt",encoding="utf-8")
             linelist = f.readlines()
 
 
             for column in range(config[0]):
+                print("start to write","column ",column+1,"\n")
                 hex_data_send=synccode
 
                 #print(str_send)
@@ -355,13 +452,33 @@ def writ_data_4IDB():
                 # print(list_send)
                 # for d1 in list_send:
                 #     print(hex(d1))
+                rs5=get_status()
+                while rs5!="0xaa":
+                    time.sleep(0.1)
+                    rs5=get_status()
                 ser.write(list_send)
+
                 rs=ser.read(100)
                 #print(rs)
-                for d in rs:
-                    print(hex(d))
+                if (hex(rs[-5]))!="0xaa":
+                    for d in rs:
+                        print(hex(d))
 
+                    raise Exception("flash busy")
+
+                if (hex(rs[-6]))!="0xaa":
+                    for d in rs:
+                        print(hex(d))
+                    raise Exception("crc32mpeg2 FAILED")
+
+def open_port(port_num="COM4",Baud_rate=57600):
+    print(serial_ports())
+    global ser
+    ser=serial.Serial(port_num,Baud_rate,timeout=1)
+    if ser.is_open!=True:
+        print("can't open ")
 if __name__ == '__main__':
+    open_port()
     #test1()
     #writ_data_4IDB()
     #test_case1()
