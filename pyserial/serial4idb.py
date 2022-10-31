@@ -303,7 +303,7 @@ def chip_erase():
     time.sleep(10)
     rs5="0x55"
     counter=0
-    while(rs5!="0xaa"):
+    while(hex(rs5)!="0xaa"):
         time.sleep(10)
         rs5=get_status()
         counter+=1
@@ -453,7 +453,7 @@ def writ_data_4IDB():
                 # for d1 in list_send:
                 #     print(hex(d1))
                 rs5=get_status()
-                while rs5!="0xaa":
+                while hex(rs5)!="0xaa":
                     time.sleep(0.1)
                     rs5=get_status()
                 ser.write(list_send)
@@ -480,7 +480,7 @@ def open_port(port_num="COM4",Baud_rate=57600):
 if __name__ == '__main__':
     open_port()
     #test1()
-    #writ_data_4IDB()
+    writ_data_4IDB()
     #test_case1()
-    chip_erase()
+    #chip_erase()
 
