@@ -516,6 +516,7 @@ def send_full_data():
     listsend=[]
     global config
     #config=testcase1
+    counter=0
     for list_send in list_send_total:
         rs5=get_status()
         while hex(rs5)!="0xaa":
@@ -523,6 +524,9 @@ def send_full_data():
             rs5=get_status()
         ser.write(list_send)
         rs=ser.read(100)
+        counter+=1
+        if counter%256==0:
+            print(counter)
         #
         # print(rs)
         if (hex(rs[-5]))!="0xaa":
@@ -567,17 +571,17 @@ def generate_full_data():
     global config
     #config=testcase1
     for config in config_list:
-        print("start to write",config[-1])
+        print("start to generate",config[-1])
         for i in range(config[2]):
-            print("start to write",config[-1],":","pic ",i+1,"\n")
-            #print("start to wirite %d pic"&(i+1))
+            #print("start to generate",config[-1],":","pic ",i+1,"\n")
+            #print("start to generate %d pic"&(i+1))
             f= open(config[5]+"/"+str(i+1)+".txt",encoding="utf-8")
             linelist = f.readlines()
             fhex=open(config[5]+"/"+str(i+1)+"_hex"+".txt","w",encoding="utf-8")
             fbytes=open(config[5]+"/"+str(i+1)+"_bytes"+".txt","w",encoding="utf-8")
 
             for column in range(config[0]):
-                #print("start to write","pic ",i+1," column ",column+1,"\n")
+                #print("start to generate","pic ",i+1," column ",column+1,"\n")
                 hex_data_send=synccode
 
                 #print(str_send)
