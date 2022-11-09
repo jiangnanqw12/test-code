@@ -489,7 +489,7 @@ def writ_data_4IDB():
                         print(hex(d))
                     raise Exception("crc32mpeg2 FAILED")
     toc = time.perf_counter()
-    print(f"tiem is {toc - tic:0.4f} seconds")
+    print(f"time is {toc - tic:0.4f} seconds")
 def send_full_data():
     tic = time.perf_counter()
     global synccode
@@ -541,7 +541,7 @@ def send_full_data():
             raise Exception("crc32mpeg2 FAILED")
 
     toc = time.perf_counter()
-    print(f"tiem is {toc - tic:0.4f} seconds")
+    print(f"time is {toc - tic:0.4f} seconds")
 def generate_full_data():
     tic = time.perf_counter()
     global synccode
@@ -650,11 +650,11 @@ def generate_full_data():
                 #         print(hex(d))
                 #     raise Exception("crc32mpeg2 FAILED")
     toc = time.perf_counter()
-    print(f"tiem is {toc - tic:0.4f} seconds")
+    print(f"time is {toc - tic:0.4f} seconds")
 def open_port(port_num="COM4",Baud_rate=57600):
     print(serial_ports())
     global ser
-    ser=serial.Serial(port_num,Baud_rate,timeout=1)
+    ser=serial.Serial(port_num,Baud_rate,timeout=0.05)
     if ser.is_open!=True:
         print("can't open ")
 if __name__ == '__main__':
