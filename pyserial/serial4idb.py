@@ -125,7 +125,7 @@ def test_case1():
     str_send+=hex2str(data2)
 
     send_data(check,listsend)
-    rs=ser.read(100)
+    rs=ser.read(20)
     print(rs)
     for i in rs:
         print(hex(i))
@@ -248,7 +248,7 @@ def test_case2():
             # for d1 in list_send:
             #     print(hex(d1))
             ser.write(list_send)
-            rs=ser.read(100)
+            rs=ser.read(20)
             print(rs)
             #print(hex(rs[-5]))
             # for i in rs:
@@ -285,7 +285,7 @@ def chip_erase():
     list_send=hex_data_2_bytes_list(hex_data_send,data_frame_length)
 
     ser.write(list_send)
-    rs=ser.read(100)
+    rs=ser.read(20)
     if (hex(rs[-5]))!="0xaa":
         for d in list_send:
             print(hex(d))
@@ -328,7 +328,7 @@ def get_status2():
 
 
     ser.write(list_send)
-    rs=ser.read(100)
+    rs=ser.read(20)
     #print(rs)
     for d in rs:
         print(hex(d))
@@ -364,7 +364,7 @@ def get_status():
     #     print(hex(d))
     # print("\n")
     ser.write(list_send)
-    rs=ser.read(100)
+    rs=ser.read(20)
     #print(rs)
 
     if rs!=b"":
@@ -387,12 +387,12 @@ def get_status():
     else:
 
         time.sleep(1)
-        rs=ser.read(100)
+        rs=ser.read(20)
         print(rs)
         while rs==b"":
             time.sleep(0.1)
             ser.write(list_send)
-            rs=ser.read(100)
+            rs=ser.read(20)
 
 
     return rs[-5]
@@ -476,7 +476,7 @@ def writ_data_4IDB():
                     rs5=get_status()
                 ser.write(list_send)
 
-                rs=ser.read(100)
+                rs=ser.read(20)
                 #print(rs)
                 if (hex(rs[-5]))!="0xaa":
                     for d in rs:
@@ -523,7 +523,7 @@ def send_full_data():
             time.sleep(0.1)
             rs5=get_status()
         ser.write(list_send)
-        rs=ser.read(100)
+        rs=ser.read(20)
         counter+=1
         if counter%256==0:
             print(counter)
@@ -637,7 +637,7 @@ def generate_full_data():
                 #     rs5=get_status()
                 # ser.write(list_send)
 
-                # rs=ser.read(100)
+                # rs=ser.read(20)
                 # #print(rs)
                 # if (hex(rs[-5]))!="0xaa":
                 #     for d in rs:
@@ -654,7 +654,7 @@ def generate_full_data():
 def open_port(port_num="COM4",Baud_rate=57600):
     print(serial_ports())
     global ser
-    ser=serial.Serial(port_num,Baud_rate,timeout=0.05)
+    ser=serial.Serial(port_num,Baud_rate,timeout=0.03)
     if ser.is_open!=True:
         print("can't open ")
 if __name__ == '__main__':
