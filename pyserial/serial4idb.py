@@ -577,8 +577,8 @@ def generate_full_data():
             #print("start to generate %d pic"&(i+1))
             f= open(config[5]+"/"+str(i+1)+".txt",encoding="utf-8")
             linelist = f.readlines()
-            fhex=open(config[5]+"/"+str(i+1)+"_hex"+".txt","w",encoding="utf-8")
-            fbytes=open(config[5]+"/"+str(i+1)+"_bytes"+".txt","w",encoding="utf-8")
+            #fhex=open(config[5]+"/"+str(i+1)+"_hex"+".txt","w",encoding="utf-8")
+            #fbytes=open(config[5]+"/"+str(i+1)+"_bytes"+".txt","w",encoding="utf-8")
 
             for column in range(config[0]):
                 #print("start to generate","pic ",i+1," column ",column+1,"\n")
@@ -663,7 +663,7 @@ if __name__ == '__main__':
 
     #test_case1()
 
-    #chip_erase()
+    chip_erase()
     #writ_data_4IDB()
     generate_full_data()
     send_full_data()
