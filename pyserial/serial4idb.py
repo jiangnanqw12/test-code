@@ -151,7 +151,7 @@ def send_data_hex_in4(send_data_hex):
     str_send+=hex2str(send_data_hex)
     return str_send
 def generate_des(i,column):
-    base1=i*0x00080000
+    base1=(pic_num+i)*0x00080000
     base2=base1+column*0x400
     return base2
 def generate_send_list(linelist,row,column):
@@ -398,6 +398,7 @@ def get_status():
     return rs[-5]
 def writ_data_4IDB():
     tic = time.perf_counter()
+
     global synccode
     synccode=0xAD7BC565
     cmd=0x00180100
@@ -488,6 +489,7 @@ def writ_data_4IDB():
                     for d in rs:
                         print(hex(d))
                     raise Exception("crc32mpeg2 FAILED")
+        pic_num+=config[2]
     toc = time.perf_counter()
     print(f"time is {toc - tic:0.4f} seconds")
 def send_full_data():
@@ -543,6 +545,9 @@ def send_full_data():
     toc = time.perf_counter()
     print(f"time is {toc - tic:0.4f} seconds")
 def generate_full_data():
+    global pic_num
+    pic_num=0
+    flag_log_hex_data=1
     tic = time.perf_counter()
     global synccode
     synccode=0xAD7BC565
@@ -577,7 +582,8 @@ def generate_full_data():
             #print("start to generate %d pic"&(i+1))
             f= open(config[5]+"/"+str(i+1)+".txt",encoding="utf-8")
             linelist = f.readlines()
-            #fhex=open(config[5]+"/"+str(i+1)+"_hex"+".txt","w",encoding="utf-8")
+            if flag_log_hex_data:
+                fhex=open(config[5]+"/"+str(i+1)+"_hex"+".txt","w",encoding="utf-8")
             #fbytes=open(config[5]+"/"+str(i+1)+"_bytes"+".txt","w",encoding="utf-8")
 
             for column in range(config[0]):
@@ -612,8 +618,9 @@ def generate_full_data():
                 #print(hex(check_code))
                 hex_data_send=store_data(hex_data_send,check_code)
                 #print(hex_data_send)
-                # fhex.write(hex(hex_data_send))
-                # fhex.write("\n")
+                if flag_log_hex_data:
+                    fhex.write(hex(hex_data_send))
+                    fhex.write("\n")
                 #print(hex(hex_data_send))
                 #send_data_hex_in4(s3)
                 temp=hex_data_send
@@ -649,6 +656,7 @@ def generate_full_data():
                 #     for d in rs:
                 #         print(hex(d))
                 #     raise Exception("crc32mpeg2 FAILED")
+        pic_num+=config[2]
     toc = time.perf_counter()
     print(f"time is {toc - tic:0.4f} seconds")
 def open_port(port_num="COM4",Baud_rate=57600):
