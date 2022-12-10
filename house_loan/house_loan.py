@@ -2,7 +2,7 @@ import math
 #目前，上海首套房贷执行利率：LPR(4.3%)+35bp =4.65%，二套房贷执行利率：LPR(4.3%)+105bp=5.35%。
 # 房价
 house=2865139
-shoufubili=0.33
+shoufubili=0.35
 print("房子总价:",house)
 print("首付:",shoufubili*house)
 gongjijin=600000
