@@ -98,8 +98,32 @@ replace_list = [
 [" f(x)\=g(x)h(x)f(x) = g(x)h(x)"," f(x) = g(x)h(x)"],
 [" sin⁡(x2)\\\\sin(x^2)"," \\\\sin(x^2)"],
 [" d(sin⁡(h))d\\\\left(\\\\sin(h)\\\\right)"," d\\\\left(\\\\sin(h)\\\\right)"],
-[" sin⁡(h)\\sin(h)"," \\sin(h)"]
+[" sin⁡(h)\\sin(h)"," \\sin(h)"],
+["left brace,","{"],
+["right brace,","}"],
+["minus,","-"],
+["plus,","+"],
+["left parenthesis,","("],
+["right parenthesis,",")"],
+["comma,",","],
 
+["right parenthesis,",")"],
+["right parenthesis,",")"],
+["left brace","{"],
+["right brace","}"],
+["right parenthesis",")"],
+["cubed,","^3"],
+["\\\\varvdots, rectangle","$\\vdots$"],
+["start bold text, a, end bold text, with, vector, on top","\\vec{a}"],
+["start bold text, b, end bold text, with, vector, on top","\\vec{b}"],
+["start bold text, c, end bold text, with, vector, on top","\\vec{c}"],
+["start bold text, d, end bold text, with, vector, on top","\\vec{d}"],
+["start bold text, e, end bold text, with, vector, on top","\\vec{e}"],
+["start bold text, f, end bold text, with, vector, on top","\\vec{f}"],
+["start bold text, i, end bold text, with, vector, on top","\\vec{i}"],
+["start bold text, j, end bold text, with, vector, on top","\\vec{j}"],
+["start bold text, k, end bold text, with, vector, on top","\\vec{k}"],
+[", ,",","],
     ]
 def text_replace(path):
     listdir = os.listdir(path)
