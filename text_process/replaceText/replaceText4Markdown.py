@@ -1,5 +1,14 @@
 import os
 # coding=<utf-8>
+# replace text with given list
+def replaceText(file_path, replace_list):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        text = f.read()
+    for i in range(len(replace_list)):
+        text = text.replace(replace_list[i][0], replace_list[i][1])
+    with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(text)
+
 replace_list = [
         ["", " $$\sigma$ "],
     ["ĂÂ˘Ăâ ĂÂĄ2","$$\sqrt\{2\}$"],
