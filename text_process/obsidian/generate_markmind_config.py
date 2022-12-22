@@ -32,6 +32,8 @@ def create_annotator_4pdf_file(file_name_with_endswith_pdf):
         "/", "_")
     cwd_after_obsidian_workspace2 = cwd_after_obsidian_workspace2.replace(
         "=", "_")
+    # Traversal the current directory
+
     f_annotate.write('---\n')
     f_annotate.write("annotate-target: " + cwd_after_obsidian_workspace +
                      "/assets/pdfs/" + file_name_with_endswith_pdf + "\n")
