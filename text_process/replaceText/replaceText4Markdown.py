@@ -3,6 +3,7 @@ import os
 # replace text with given list
 
 
+
 def replaceText(file_path, replace_list):
     with open(file_path, 'r', encoding='utf-8') as f:
         text = f.read()
@@ -11,7 +12,35 @@ def replaceText(file_path, replace_list):
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(text)
 
+def text_replace(path,replace_list):
+    listdir = os.listdir(path)
 
+    #replace_list.append(["", " $$\sigma$ "])
+    for i in range(len(listdir)):
+
+        filename = listdir[i]
+        filenamelist = filename.split(sep=".")
+        if filenamelist[-1] == "md":
+
+            f = open(path+filename, 'r', encoding='UTF-8')
+            linelist = f.readlines()
+
+            # print(linelist)
+            if os.path.isdir(path + 'des/'):
+                pass
+            else:
+                os.mkdir(path + 'des/')
+            f2 = open(path+"des/"+filenamelist[0]+".md", "w", encoding='UTF-8')
+            for i in range(len(linelist)):
+
+                line = linelist[i]
+                for j in range(len(replace_list)):
+                    # idx = line.find(replace_list[j][0])
+                    # idx2 = line.find("Ëx")
+                    # print(idx2)
+                    line = line.replace(
+                        replace_list[j][0], replace_list[j][1])
+                f2.write(line)
 replace_list = [
     ["", " $$\sigma$ "],
     ["Ã¢Ë†Å¡2", "$$\sqrt\{2\}$"],
@@ -174,47 +203,10 @@ replace_list = [
         ["\\\\", "\\"],
     [", ,", ","],
 ]
+def main():
 
-
-def text_replace(path):
-    listdir = os.listdir(path)
-
-    #replace_list.append(["", " $$\sigma$ "])
-    for i in range(len(listdir)):
-
-        filename = listdir[i]
-        filenamelist = filename.split(sep=".")
-        if filenamelist[-1] == "md":
-
-            f = open(path+filename, 'r', encoding='UTF-8')
-            linelist = f.readlines()
-
-            # print(linelist)
-            f2 = open(path+"des/"+filenamelist[0]+".md", "w", encoding='UTF-8')
-            for i in range(len(linelist)):
-
-                line = linelist[i]
-                for j in range(len(replace_list)):
-                    # idx = line.find(replace_list[j][0])
-                    # idx2 = line.find("Ëx")
-                    # print(idx2)
-                    line = line.replace(
-                        replace_list[j][0], replace_list[j][1])
-                f2.write(line)
-
-                # print(linelist[i][-1])
-                # idx = line.find("")
-                # print(idx)
-                # if idx != -1:
-                #     print(line)
-                #     f2.write(line)
-                #     f2.write("$$\sigma$$")
-                #     line.replace("", "$$\sigma$$")
-                #     print(line)
-                #     f2.write(line)
-                # f2.write(linelist[i])
-
+    path = os.getcwd()+"/"
+    text_replace(path,replace_list)
 
 if __name__ == '__main__':
-    path = os.getcwd()+"/"
-    text_replace(path)
+    main()
