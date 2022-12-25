@@ -157,6 +157,7 @@ replace_list = [
     ["{cc}", ""],
     ["{ccc}", ""],
     ["{cccc}", ""],
+    #color+A  \textcolor{color} todolist
     ["\\blueD", "\\textcolor{blue}"],
     ["\\greenD", "\\textcolor{green}"],
     ["\\maroonD", "\\textcolor{maroon}"],
@@ -165,7 +166,8 @@ replace_list = [
     ["\\_", "_"],
     ["start color #11accd, \\imath, with, hat, on top, end color #11accd", "\\textcolor{blue}{\\hat\\imath}"],
     ["start color #ca337c, \\jmath, with, hat, on top, end color #ca337c", "\\textcolor{red}{\\hat\\jmath}"],
-#[" 111 ", " 1 "],
+    #[" 111 ", " 1 "],todolist 1 a A dx dy    , . ! - + = < > ? : ; / \ | ( ) [ ] { } * ^ & % $ # @ ~ ` " ' \n \t
+    #[" 111,", " 1 "],todolist
     ["", ""],
     ["", ""],
     ["", ""],
