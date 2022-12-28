@@ -40,6 +40,7 @@ def generate_multi_charater_repalce_list(num):
     return replace_list_multi_charactor
 
 
+
 def replaceText(file_path, replace_list):
     with open(file_path, 'r', encoding='utf-8') as f:
         text = f.read()
@@ -48,10 +49,15 @@ def replaceText(file_path, replace_list):
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(text)
 
+def text_replace(path,replace_list):
+    listdir = os.listdir(path)
 
+<<<<<<< HEAD
 def text_replace(path, replace_list):
     listdir = os.listdir(path)
 
+=======
+>>>>>>> 98dcff0e9d2917404dbbca9dffcc128b4cc41fcc
     #replace_list.append(["", " $$\sigma$ "])
     for i in range(len(listdir)):
 
@@ -73,6 +79,7 @@ def text_replace(path, replace_list):
                 line = linelist[i]
                 for j in range(len(replace_list)):
                     # idx = line.find(replace_list[j][0])
+<<<<<<< HEAD
                     # if replace_list[j][0]==' fff':
                     #     print(replace_list[j])
                     #     idx2 = line.find(' fff')
@@ -86,6 +93,14 @@ def text_replace(path, replace_list):
 
 
 replace_list_back = [
+=======
+                    # idx2 = line.find("Ëx")
+                    # print(idx2)
+                    line = line.replace(
+                        replace_list[j][0], replace_list[j][1])
+                f2.write(line)
+replace_list = [
+>>>>>>> 98dcff0e9d2917404dbbca9dffcc128b4cc41fcc
     ["", " $$\sigma$ "],
     ["Ã¢Ë†Å¡2", "$$\sqrt\{2\}$"],
     ["ˆx", "$$\hat x$"],
@@ -203,6 +218,7 @@ replace_list_back = [
     [" \\vec{\\textbf{v}}vstart bold text, v, end bold text, with, vector, on top",
         " $\\vec{\\textbf{v}}$"],
 
+<<<<<<< HEAD
 
     ["{array}", "{bmatrix}"],
     ["{bmatrix}{c}", "{bmatrix}"],
@@ -212,6 +228,13 @@ replace_list_back = [
     # color+A  \textcolor{color} todolist
     ["\\blueD", "\\textcolor{#11accd}"],
     ["\\blueE", "\\textcolor{#0c7f99}"],
+=======
+    ["{cc}", ""],
+    ["{ccc}", ""],
+    ["{cccc}", ""],
+    #color+A  \textcolor{color} todolist
+    ["\\blueD", "\\textcolor{blue}"],
+>>>>>>> 98dcff0e9d2917404dbbca9dffcc128b4cc41fcc
     ["\\greenD", "\\textcolor{green}"],
     ["\\greenE", "\\textcolor{#0d923f}"],
     ["\\maroonD", "\\textcolor{maroon}"],
@@ -219,6 +242,7 @@ replace_list_back = [
     ["\\redD", "\\textcolor{#e84d39}"],
     ["\\redE", "\\textcolor{#bc2612}"],
     ["\\_", "_"],
+<<<<<<< HEAD
     ["start color #11accd, \\imath, with, hat, on top, end color #11accd",
         "\\textcolor{blue}{\\hat\\imath}"],
     ["start color #ca337c, \\jmath, with, hat, on top, end color #ca337c",
@@ -233,6 +257,18 @@ replace_list_back = [
         "\\frac{\\partial f}{\\partial y}"],
     ["f'f′f, prime", "f'"],
     ["\\nabla∇del", "\\nabla"],
+=======
+    ["start color #11accd, \\imath, with, hat, on top, end color #11accd", "\\textcolor{blue}{\\hat\\imath}"],
+    ["start color #ca337c, \\jmath, with, hat, on top, end color #ca337c", "\\textcolor{red}{\\hat\\jmath}"],
+    #[" 111 ", " 1 "],todolist 1 a A dx dy    , . ! - + = < > ? : ; / \ | ( ) [ ] { } * ^ & % $ # @ ~ ` " ' \n \t
+    #[" 111,", " 1 "],todolist
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+>>>>>>> 98dcff0e9d2917404dbbca9dffcc128b4cc41fcc
 
     ["left brace,", "{"],
     ["right brace,", "}"],
@@ -264,6 +300,7 @@ replace_list_back = [
     #["\\\\", "\\"],
     [", ,", ","],
 ]
+<<<<<<< HEAD
 replace_list2 = [
     [" ", " "],
 
@@ -346,3 +383,12 @@ if __name__ == '__main__':
     global replace_list
     replace_list = replace_list2+generate_multi_charater_repalce_list(3)+generate_multi_number_replace_list(3,500)
     main()
+=======
+def main():
+
+    path = os.getcwd()+"/"
+    text_replace(path,replace_list)
+
+if __name__ == '__main__':
+    main()
+>>>>>>> 98dcff0e9d2917404dbbca9dffcc128b4cc41fcc
