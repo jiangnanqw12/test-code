@@ -67,18 +67,21 @@ def generate_letters_equals_numbers_replace_list(num,TR_MODE):
 def generate_letters_subscript_numbers_replace_list(num,TR_MODE):
     replace_list_letters_subscript_numbers = []
     #[" t_0t0 t, start subscript, 0, end subscript", " $t_0$"],
-    str1="_"
-    str2=" "
-    str3=", start subscript, "
-    str4=", end subscript"
+    #str1="t_0t0 t, start subscript, 0, end subscript"
+    str1="{letter}_{subscript}{letter}{subscript} {letter}, start subscript, {subscript}, end subscript"
+
+    str2="${letter}_{subscript}$"
     for i in range(65, 91):
         c1=str(chr(i).encode('utf-8'))[2]
         for j in range(num):
-            replace_list_letters_subscript_numbers.append([" "+c1+str1+str(j)+c1+str(j)+str2+c1+str3+str(j)+str4," $"+c1+str1+str(j)+"$"])
+
+            replace_list_letters_subscript_numbers.append([str1.format(letter=c1,subscript=j),str2.format(letter=c1,subscript=j)])
+            #replace_list_letters_subscript_numbers.append([" "+c1+str1+str(j)+c1+str(j)+str2+c1+str3+str(j)+str4," $"+c1+str1+str(j)+"$"])
     for i in range(97, 97+26):
         c1=str(chr(i).encode('utf-8'))[2]
         for j in range(num):
-            replace_list_letters_subscript_numbers.append([" "+c1+str1+str(j)+c1+str(j)+str2+c1+str3+str(j)+str4," $"+c1+str1+str(j)+"$"])
+            replace_list_letters_subscript_numbers.append([str1.format(letter=c1,subscript=j),str2.format(letter=c1,subscript=j)])
+            #replace_list_letters_subscript_numbers.append([" "+c1+str1+str(j)+c1+str(j)+str2+c1+str3+str(j)+str4," $"+c1+str1+str(j)+"$"])
     if TR_MODE:
         print(replace_list_letters_subscript_numbers)
     return replace_list_letters_subscript_numbers
@@ -188,30 +191,25 @@ def generate_bold_vec_replace_list(TR_MODE):
     replace_list_bold_vec = []
 
     # \\vec{\\textbf{v}}vstart bold text, v, end bold text, with, vector, on top
-    str1 = " \\vec{\\textbf{"
-    str11=" $\\vec{\\textbf{"
-    str2="}}"
-    str22="}}$"
-    str3="start bold text, "
-    str4=", end bold text, with, vector, on top"
+    str0="\\vec{\\textbf{%s}}%sstart bold text, %s, end bold text, with, vector, on top"
+
+    str1="$\\vec{\\textbf{%s}}$"
+
     # Iterate through all the English letters
     for i in range(65, 91):
 
         # Convert the integer to a character
-        c = chr(i).encode('utf-8')
-        # print(c+c+c)
+        c2=str(chr(i).encode('utf-8'))[2]
+        replace_list_bold_vec.append([str0%(c2,c2,c2),str1%(c2)])
 
-        c2 = str(c)[2]
-        # print(c2[2])
 
-        replace_list_bold_vec.append([str1+c2+str2+c2+str3+c2+str4,str11+c2+str22])
 
     for i in range(97, 97+26):
-        c = chr(i).encode('utf-8')
+
         # Convert the integer to a character
-        c2 = str(c)[2]
-        # print(c2[2])
-        replace_list_bold_vec.append([str1+c2+str2+c2+str3+c2+str4,str1+c2+str2])
+        c2=str(chr(i).encode('utf-8'))[2]
+        replace_list_bold_vec.append([str0%(c2,c2,c2),str1%(c2)])
+
     if TR_MODE:
         print(replace_list_bold_vec)
     #print(replace_list_bold_vec)
@@ -305,10 +303,13 @@ def text_replace(path, replace_list):
                 f2.write(line)
 
 
-replace_list2 = [
+replace_list_khanacademy = [
     [" ", " "],
 
     ["​", " "],
+    ["", ""],
+    ["", ""],
+    ["", ""],
     ["", ""],
     ["", ""],
     ["", ""],
@@ -322,34 +323,48 @@ replace_list2 = [
     ["{bmatrix}{cc}", "{bmatrix}"],
     ["{bmatrix}{ccc}", "{bmatrix}"],
     ["{bmatrix}{cccc}", "{bmatrix}"],
+        ["{bmatrix}{ccccc}", "{bmatrix}"],
     # color+A  \textcolor{color} todolist
     ["\\blueD", "\\textcolor{#11accd}"],
     ["\\blueE", "\\textcolor{#0c7f99}"],
-    ["\\greenD", "\\textcolor{green}"],
+    ["\\greenD", "\\textcolor{#1fab54}"],
     ["\\greenE", "\\textcolor{#0d923f}"],
     ["\\maroonD", "\\textcolor{maroon}"],
     ["\\goldD", "\\textcolor{gold}"],
     ["\\redD", "\\textcolor{#e84d39}"],
     ["\\redE", "\\textcolor{#bc2612}"],
+    ["\\purpleC", "\\textcolor{purple}"],
     ["\\_", "_"],
 
 
     ["f(x, y)f(x,y)f, left parenthesis, x, comma, y, right parenthesis", "f(x,y)"],
     ["xyxyx, y", "xy"],
+["(x, y)(x,y)left parenthesis, x, comma, y, right parenthesis", "(x,y)"],
+    ["(x_0, y_0)(x0 ,y0 )left parenthesis, x, start subscript, 0, end subscript, comma, y, start subscript, 0, end subscript, right parenthesis", " $(x_0, y_0)$"],
+    ["f(x0,y0)f(x_0, y_0)f(x0,y0)f, left parenthesis, x, start subscript, 0, end subscript, comma, y, start subscript, 0, end subscript, right parenthesis", " $f(x_0, y_0)$"],
+    ["\kappaκ\kappa", " $\kappa$"],
+    ["\\vec{\\textbf{s}}(t)s(t)start bold text, s, end bold text, with, vector, on top, left parenthesis, t, right parenthesis", " $\\vec{\\textbf{s}}(t)$"],
 
-    [" (x_0, y_0)(x0 ,y0 )left parenthesis, x, start subscript, 0, end subscript, comma, y, start subscript, 0, end subscript, right parenthesis", " $(x_0, y_0)$"],
-    [" f(x0,y0)f(x_0, y_0)f(x0,y0)f, left parenthesis, x, start subscript, 0, end subscript, comma, y, start subscript, 0, end subscript, right parenthesis", " $f(x_0, y_0)$"],
-    [" \kappaκ\kappa", " $\kappa$"],
-    [" \\vec{\\textbf{s}}(t)s(t)start bold text, s, end bold text, with, vector, on top, left parenthesis, t, right parenthesis", " $\\vec{\\textbf{s}}(t)$"],
-
-    [" f(x, y, z)f(x,y,z)f, left parenthesis, x, comma, y, comma, z, right parenthesis", " f(x, y, z)"],
+    ["f(x, y, z)f(x,y,z)f, left parenthesis, x, comma, y, comma, z, right parenthesis", " f(x, y, z)"],
     #[" \\nabla f∇fdel, f", " $\\nabla f$"],
 
-    [" \dfrac{dT}{ds}dsdT start fraction, d, T, divided by, d, s, end fraction", " $\dfrac{dT}{ds}$"],
+    ["\dfrac{dT}{ds}dsdT start fraction, d, T, divided by, d, s, end fraction", " $\dfrac{dT}{ds}$"],
     #[" t_0t0 t, start subscript, 0, end subscript", "$t_0$"],
     #[" t = 3t=3t, equals, 3", "t = 3"],
+    ["[Hide explanation]", "Explanation"],
+    ["    A\n", ""],
+    ["    B\n", ""],
+    ["    C\n", ""],
+    ["    D\n", ""],
+        ["Check\n", ""],
+            ["Choose 1 answer:\n", ""],
     ["", ""],
     ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+
+
 
 ]
 
@@ -362,7 +377,7 @@ def main():
 
 if __name__ == '__main__':
     global replace_list
-    replace_list = replace_list2 + \
+    replace_list = replace_list_khanacademy + \
         generate_multi_charater_repalce_list(
             3,tr_off)+\
                 generate_multi_number_replace_list(3, 500,tr_off)+\
@@ -374,5 +389,5 @@ if __name__ == '__main__':
                                         generate_letters_subscript_numbers_replace_list(10,tr_off)+\
                                             generate_letters_equals_numbers_replace_list(10,tr_off)+\
                                                 generate_differential_variable_repalce_list(tr_off)+\
-                                                    generate_function_replace_list(tr_on)
+                                                    generate_function_replace_list(tr_off)
     main()
