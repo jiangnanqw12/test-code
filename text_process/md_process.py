@@ -114,7 +114,8 @@ def tianjiaxiahuaxian():
         for i in range(1, 38):
             for file in files:
                 if file[:3] == num2str_title(i):
-                    print(file)
+                    os.rename(os.path.join(root, file),
+                              os.path.join(root, file[:3]+"_"+file[3:]))
 
 
 def back_up_dir(path):
@@ -129,6 +130,54 @@ def back_up_dir(path):
     # copy all files in the current path to the back_path
     shutil.copytree(path, back_path)
 
+# remove multiple lines with space
+
+
+def remove_line_multi_space(path):
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.endswith('.md'):
+                with open(os.path.join(root, file), 'r', encoding='UTF-8') as f:
+                    lines = f.readlines()
+                with open(os.path.join(root, file), 'w', encoding='UTF-8') as f:
+                    for i in range(len(lines)):
+                        space_list = ["\n", "    \n"]
+                        if i != len(lines)-1:
+                            if lines[i] == ' ' and lines[i+1] == ' ':
+                                continue
+                            if lines[i] in space_list and lines[i+1] in space_list:
+                                continue
+                        f.write(lines[i])
+
+# copy all files in the current path into a single file
+
+
+def copy_all_files(path):
+    with open("all_files.md", 'w', encoding='UTF-8') as f:
+        for root, dirs, files in os.walk(path):
+            for i in range(1, 38):
+                for file in files:
+                    if file[:3] == num2str_title(i) and file.endswith('.md'):
+                        with open(os.path.join(root, file), 'r', encoding='UTF-8') as f1:
+                            lines = f1.readlines()
+                        for line in lines:
+                            f.write(line)
+
+
+def process_feiman_head2():
+    for root, dirs, files in os.walk("."):
+        for i in range(1, 38):
+            for file in files:
+                if file[:3] == num2str_title(i) and file.endswith('.md'):
+                    with open(os.path.join(root, file), 'r', encoding='UTF-8') as f:
+                        lines = f.readlines()
+                    with open(os.path.join(root, file), 'w', encoding='UTF-8') as f:
+                        for i in range(len(lines)):
+                            if lines[i][0:3] == "## " and lines[i+1] != "\n":
+                                f.write(lines[i][:-1])
+                            else:
+                                f.write(lines[i])
+
 
 if __name__ == '__main__':
     path = os.getcwd()
@@ -137,3 +186,7 @@ if __name__ == '__main__':
     # mulu_process(replace_list)
 
     back_up_dir(path)
+    # remove_line_multi_space(path)
+    # tianjiaxiahuaxian()
+    copy_all_files(path)
+    # process_feiman_head2()
