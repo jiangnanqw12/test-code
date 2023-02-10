@@ -28,5 +28,24 @@ you-get "" --no-proxy
 you-get -l "https://www.youtube.com/playlist?list=PLUl4u3cNGP63pfpS1gV5P9tDxxL_e4W8O" --socks-proxy 127.0.0.1:10809
 you-get -l "https://www.youtube.com/watch?v=TrcCbdWwCBc&list=PLSQl0a2vh4HC5feHa6Rc5c0wbRTx56nF7&ab_channel=KhanAcademy" --socks-proxy 127.0.0.1:1022
 you-get -l "" --socks-proxy 127.0.0.1:10809
-you-get -l "" --socks-proxy 127.0.0.1:10809
-you-get -l "" --socks-proxy 127.0.0.1:10809
+you-get "https://www.youtube.com/watch?v=ZbPg5RREXmU&ab_channel=3Blue1BrownClips" --socks-proxy 127.0.0.1:10808
+you-get -l "" --socks-proxy 127.0.0.1:10808
+you-get -l "" --socks-proxy 127.0.0.1:10808
+you-get -l "" --socks-proxy 127.0.0.1:10808
+you-get -l "" --socks-proxy 127.0.0.1:10808
+you-get -l "" --socks-proxy 127.0.0.1:10808
+you-get -l "" --socks-proxy 127.0.0.1:10808
+you-get "https://www.youtube.com/watch?v=rqnTQyO4GY4&ab_channel=3Blue1BrownClips" --socks-proxy 127.0.0.1:10808
+you-get "https://youtu.be/_mwMoEwwkvc" --socks-proxy 127.0.0.1:10808
+you-get "https://youtu.be/TC9MP-y1s_c" --socks-proxy 127.0.0.1:10808
+you-get "https://youtu.be/mBoezvLrUGw" --socks-proxy 127.0.0.1:10808
+you-get "https://youtu.be/4I5R4zhOzmU" --socks-proxy 127.0.0.1:10808
+you-get "" --socks-proxy 127.0.0.1:10808
+you-get "" --socks-proxy 127.0.0.1:10808
+you-get "" --socks-proxy 127.0.0.1:10808
+you-get "" --socks-proxy 127.0.0.1:10808
+you-get "" --socks-proxy 127.0.0.1:10808
+you-get "" --socks-proxy 127.0.0.1:10808
+you-get "" --socks-proxy 127.0.0.1:10808
+you-get "" --socks-proxy 127.0.0.1:10808
+you-get "" --socks-proxy 127.0.0.1:10808
