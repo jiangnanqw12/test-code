@@ -16,7 +16,8 @@ down_path = os.getcwd()
 f1 = open(down_path+"/re.downlist", 'r')
 linelist = f1.readlines()
 for line in linelist:
-    down_one("", "\""+line[:-1]+"\"", down_path=r'c:\bili',
-             proxy="-s 127.0.0.1:1024")
+    down_one("", "\""+line[:-1]+"\"", down_path=r'c:\bili')
+    # down_one("", "\""+line[:-1]+"\"", down_path=r'c:\bili',
+    #          proxy="-s 127.0.0.1:1024")
     # down_one("", "\""+line[:-1]+"\"", down_path=r'c:\bili',
     #          proxy="--socks-proxy 127.0.0.1:10809")
