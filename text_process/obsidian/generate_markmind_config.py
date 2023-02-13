@@ -77,8 +77,7 @@ def create_floder():
 
         os.mkdir(cwd + '/assets/pdfs')
 
-
-if __name__ == '__main__':
+def main():
     # get current working directory
     cwd = os.getcwd()
 
@@ -109,3 +108,5 @@ if __name__ == '__main__':
             # print(pdf_file_name)
 
     make_mindmap_file(cwd)
+if __name__ == '__main__':
+    main()
