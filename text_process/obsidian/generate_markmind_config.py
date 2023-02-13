@@ -5,8 +5,8 @@ import shutil
 
 def make_mindmap_file(cwd):
     # make a new file in the current directory named mindmap.md
-    f_mindmap = open(cwd + '/mindmap.md', 'w', encoding='utf-8')
-    str_mindmap = '''
+
+    str_mindmap_rich = '''
 ---
 
 mindmap-plugin: rich
@@ -18,7 +18,21 @@ mindmap-plugin: rich
 {"mindData":[[{"id":"4c8a77d7-a9e3-96ca","text":"Root","isRoot":true,"main":true,"x":4000,"y":4000,"isExpand":true,"layout":{"layoutName":"mindmap2","direct":"right"},"stroke":""}]],"induceData":[],"wireFrameData":[],"relateLinkData":[],"calloutData":[]}
 ```
 '''
-    f_mindmap.write(str_mindmap)
+    str_mindmap_basic = '''
+---
+
+mindmap-plugin: basic
+
+---
+
+
+'''
+    f_mindmap_rich = open(cwd + '/mindmap_rich.md', 'w', encoding='utf-8')
+    f_mindmap_rich.write(str_mindmap_rich)
+    f_mindmap_rich.close()
+    f_mindmap_basic = open(cwd + '/mindmap_basic.md', 'w', encoding='utf-8')
+    f_mindmap_basic.write(str_mindmap_basic)
+    f_mindmap_basic.close()
 
 
 def create_annotator_4pdf_file(file_name_with_endswith_pdf):
@@ -71,7 +85,7 @@ if __name__ == '__main__':
     # replace all the \ with /
     cwd = cwd.replace('\\', '/')
     # print(cwd)
-    obsidian_workspace = "GTD Information Flow/"
+    obsidian_workspace = "KG/"
     # get cwd after obsidian_workspace
     cwd_after_obsidian_workspace = cwd.split(obsidian_workspace)[1]
     print(cwd_after_obsidian_workspace)
