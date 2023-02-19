@@ -59,7 +59,7 @@ def create_annotator_4pdf_file(file_name_with_endswith_pdf):
     f_annotate.write("---\n")
 
 
-def create_floder():
+def create_floder(cwd):
     # if in the current folder there is a folder named assets
     if os.path.isdir(cwd + '/assets'):
         pass
@@ -90,7 +90,7 @@ def main():
     print(cwd_after_obsidian_workspace)
     # get current folder name
 
-    create_floder()
+    create_floder(cwd)
     # get all the files in the current directory
     files = os.listdir(cwd)
     # loop through all the files in the current directory

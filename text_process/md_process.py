@@ -94,21 +94,13 @@ def global_replace_list():
 
 def remove_line_test1():
     path = os.getcwd()
-<<<<<<< HEAD
     search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
-=======
-    search_list = ["- created: 2022", "- source: https://www.zhihu.com"]
->>>>>>> 6a11dd8ca7f98eea3e3e7b406d787a9f81b7b7e7
     remove_line(path, search_list)
 
 
 def rename_files_end_test1():
     path = os.getcwd()
-<<<<<<< HEAD
     rename_files_end(path, '.md', '.md', 14, 14)
-=======
-    rename_files_end(path, '.md', '.md', 1, 1)
->>>>>>> 6a11dd8ca7f98eea3e3e7b406d787a9f81b7b7e7
 
 
 def replace_name_test1():
