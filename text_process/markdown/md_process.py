@@ -5,6 +5,7 @@ import datetime
 import shutil
 
 
+
 def rename_files_end(path, old_extension, new_extension, file_remove_length=0, dir_remove_length=0):
     for root, dirs, files in os.walk(path):
         for file in files:
@@ -16,6 +17,32 @@ def rename_files_end(path, old_extension, new_extension, file_remove_length=0, d
                 os.rename(os.path.join(root, dir), os.path.join(
                     root, dir[:-(dir_remove_length)]))
 
+def rename_files_start(num_remove,extensions=None):
+    # 获取当前目录下所有文件的文件名
+    files = os.listdir()
+
+    for filename in files:
+        # 如果文件名以"."开头，说明是隐藏文件，跳过
+        if filename.startswith("."):
+            continue
+
+        # 获取文件名的后缀名
+        suffix = os.path.splitext(filename)[-1]
+        # 如果设置了扩展名过滤器，且当前文件扩展名不在过滤器中，跳过
+        if extensions and suffix not in extensions:
+            continue
+        # 获取文件名的新名称（去除前四位）
+        new_filename = filename[num_remove:]
+
+        # 生成文件的旧路径和新路径
+        old_path = os.path.join(os.getcwd(), filename)
+        new_path = os.path.join(os.getcwd(), new_filename)
+
+        # 重命名文件
+        os.rename(old_path, new_path)
+
+        # 输出修改后的文件名
+        print("文件名从 {} 变为 {}".format(filename, new_filename))
 
 def rename_files(path, replace_list):
     for root, dirs, files in os.walk(path):
@@ -206,18 +233,49 @@ def base_on_mulu_markdown_rename_files():
                 os.rename(os.path.join(root, line[:-1]+'.md'),
                           os.path.join(root, num2str_title(counter)+"_"+line[:-1]+'.md'))
 
+import os
+
+def create_md_files_from_markdown_file(markdown_file):
+    """
+    读取markdown文件，将每一行内容生成一个md文件，并根据行号、内容、扩展名为文件命名。
+    如果该文件已经存在，则跳过该行，继续生成下一行的文件。
+
+    :param markdown_file: 要读取的markdown文件名
+    """
+    with open(markdown_file, encoding='utf-8') as f:
+        lines = f.readlines()
+        for i, line in enumerate(lines):
+            # 构造文件名
+            filename = num2str_title(i+1)+f"_{line.strip()}.md"
+            # 检查文件是否已存在，如果是则跳过
+            if os.path.exists(filename):
+                continue
+            # 创建新的md文件并写入内容
+            with open(filename, 'w', encoding='utf-8') as new_file:
+                #new_file.write(line)
+                pass
+
+def test_create_md_files_from_markdown_file():
+
+    create_md_files_from_markdown_file('test.md')
+    # 检查生成的文件是否存在
+    assert os.path.exists('1_第一行_.md')
+    assert os.path.exists('2_第二行_.md')
+    assert os.path.exists('3_第三行_.md')
+    # # 删除测试用的markdown文件和生成的md文件
+    # os.remove('test.md')
+    # os.remove('1_第一行_.md')
+    # os.remove('2_第二行_.md')
+    # os.remove('3_第三行_.md')
+import glob
+import os
+
+def delete_non_example_md_files():
+    for file_path in glob.glob('*.md'):
+        if file_path != 'example.md' and file_path.endswith('.md'):
+            os.remove(file_path)
 
 if __name__ == '__main__':
-    path = os.getcwd()
-
-    back_up_dir(path)
-    # rename_files_end_test1()
-
-    # remove_line_multi_space(path)
-    # remove_line_test1()
-    #search_in_mulu()
-    base_on_mulu_markdown_rename_files()
-
-    # tianjiaxiahuaxian()
-    # copy_all_files(path)
-    # process_feiman_head2()
+    # create_md_files_from_markdown_file('example.md')
+    # delete_non_example_md_files()
+    pass
