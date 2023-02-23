@@ -145,7 +145,7 @@ def tianjiaxiahuaxian():
                               os.path.join(root, file[:3]+"_"+file[3:]))
 
 
-def back_up_dir(path):
+def back_up_dir_tree(path):
 
     time_str = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     # get the father path
@@ -156,6 +156,24 @@ def back_up_dir(path):
     # os.mkdir(back_path)
     # copy all files in the current path to the back_path
     shutil.copytree(path, back_path)
+
+def back_up_dir(src_dir):
+
+    time_str = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    # get the father path
+    father_path = os.path.abspath(os.path.dirname(src_dir) + os.path.sep + ".")
+    # get current dir name
+    dir_name = os.path.basename(src_dir)
+    back_path = os.path.join(father_path, dir_name+"_"+time_str)
+    # os.mkdir(back_path)
+    if not os.path.exists(back_path):
+        os.makedirs(back_path)
+    # copy all files in the current path to the back_path
+    for filename in os.listdir(src_dir):
+        src_path = os.path.join(src_dir, filename)
+        dst_path = os.path.join(back_path, filename)
+        if os.path.isfile(src_path):
+            shutil.copy2(src_path, dst_path)
 
 # remove multiple lines with space
 
@@ -274,8 +292,76 @@ def delete_non_example_md_files():
     for file_path in glob.glob('*.md'):
         if file_path != 'example.md' and file_path.endswith('.md'):
             os.remove(file_path)
+def open_folder_in_windows(folder_path):
+    """根据文件夹路径在Windows文件管理器中打开文件夹。
 
-if __name__ == '__main__':
-    # create_md_files_from_markdown_file('example.md')
-    # delete_non_example_md_files()
-    pass
+    参数:
+    folder_path (str): 要打开的文件夹路径。
+
+    返回:
+    无返回值。
+    """
+    if os.path.exists(folder_path):
+        os.startfile(folder_path)
+    else:
+        print(f"文件夹路径 {folder_path} 不存在。")
+
+def open_assets_folder():
+    CWD=os.getcwd()
+    #print(CWD)
+    assets_path_front="C:/BaiduSyncdisk/assets"
+    KG_path_front="C:\\BaiduSyncdisk\\assets\\KG"
+    #split paht CWD after KG, replace \ with /
+    KG_path_back=CWD.split("\KG")[1].replace("\\", "/")
+
+    #print(KG_path_back)
+    assets_path=assets_path_front+KG_path_back
+    #print(assets_path)
+    open_folder_in_windows(assets_path)
+
+import os
+import time
+
+
+def add_timestamp_to_filenames():
+    current_dir = os.getcwd()
+    timestamp = int(time.time())
+    for filename in os.listdir(current_dir):
+        if os.path.isfile(os.path.join(current_dir, filename)) and not filename.endswith(".py"):
+            filename_without_ext, ext = os.path.splitext(filename)
+            new_filename = f"{filename_without_ext}_{timestamp}{ext}"
+            os.rename(os.path.join(current_dir, filename), os.path.join(current_dir, new_filename))
+def text_replace(root_dir: str, replace_list: list):
+    dest_dir = os.path.join(root_dir, 'des')
+    if not os.path.isdir(dest_dir):
+        os.mkdir(dest_dir)
+
+    for filename_with_ext in os.listdir(root_dir):
+        if filename_with_ext.endswith('.md'):
+            src_path = os.path.join(root_dir, filename_with_ext)
+            dest_path = os.path.join(dest_dir, filename_with_ext)
+
+            with open(src_path, 'r', encoding='UTF-8') as f_src, open(dest_path, 'w', encoding='UTF-8') as f_dest:
+                for line in f_src:
+                    for replace_item in replace_list:
+                        line = line.replace(replace_item[0], replace_item[1])
+                    f_dest.write(line)
+def test_text_replace():
+    text_replace_list_mdx2md=[[r'<Figure image="', r'![]('],
+                              ['" id="distribution"/>', r')'],
+                              ['<Figure video="', r'![]('],
+                              ['"/>', r')'],['" />', r')'],
+                              ['.png', r'_1676880280.png'],
+                              ['.mp4', r'_1676880280.mp4'],
+                              ["</LessonLink>",""],
+                              ['<LessonLink id="differential-equations">',"(differential-equations) "],
+                              ['<LessonLink id="fourier-series">',"(fourier-series) "]]
+    cwd=os.getcwd()
+    text_replace(cwd, text_replace_list_mdx2md)
+if __name__ == "__main__":
+    path=os.getcwd()
+    back_up_dir(path)
+    test_text_replace()
+
+
+

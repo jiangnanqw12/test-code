@@ -269,8 +269,6 @@ def replaceText(file_path, replace_list):
 
 def text_replace(path, replace_list):
     listdir = os.listdir(path)
-
-    #replace_list.append(["", " $$\sigma$ "])
     for i in range(len(listdir)):
 
         filename = listdir[i]
@@ -290,14 +288,6 @@ def text_replace(path, replace_list):
 
                 line = linelist[i]
                 for j in range(len(replace_list)):
-                    # idx = line.find(replace_list[j][0])
-                    # if replace_list[j][0]==' fff':
-                    #     print(replace_list[j])
-                    #     idx2 = line.find(' fff')
-                    #     if idx2!=-1:
-                    #         print(line)
-                    #         print(idx2)
-
                     line = line.replace(
                         replace_list[j][0], replace_list[j][1])
                 f2.write(line)
@@ -390,4 +380,5 @@ if __name__ == '__main__':
                                             generate_letters_equals_numbers_replace_list(10,tr_off)+\
                                                 generate_differential_variable_repalce_list(tr_off)+\
                                                     generate_function_replace_list(tr_off)
+    replace_list=[]
     main()
