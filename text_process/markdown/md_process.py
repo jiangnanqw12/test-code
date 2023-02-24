@@ -346,22 +346,40 @@ def text_replace(root_dir: str, replace_list: list):
                     for replace_item in replace_list:
                         line = line.replace(replace_item[0], replace_item[1])
                     f_dest.write(line)
-def test_text_replace():
+def test_text_replace(timestamp: int = 1676880280):
     text_replace_list_mdx2md=[[r'<Figure image="', r'![]('],
                               ['" id="distribution"/>', r')'],
                               ['<Figure video="', r'![]('],
+                               ['" show="video"/>', r')'],
+                            ['" show="video" />', r')'],
                               ['"/>', r')'],['" />', r')'],
-                              ['.png', r'_1676880280.png'],
-                              ['.mp4', r'_1676880280.mp4'],
+                              ['" image="', ')'+'\n'+'![]('],
+                            ['" video="', ')'+'\n'+'![]('],
+                                ["question=","- question"+"\n"],
+                                ["choice1=","- choice1 "],
+                                ["choice2=","- choice2 "],
+                                ["choice3=","- choice3 "],
+                                ["choice4=","- choice4 "],
+                                ["answer=","- answer "],
+                                ["",""],
+                                ["",""],
+                                ["",""],
+                                ["</Question>",""],
                               ["</LessonLink>",""],
                               ['<LessonLink id="differential-equations">',"(differential-equations) "],
                               ['<LessonLink id="fourier-series">',"(fourier-series) "]]
+    text_replace_list_mdx2md2=[['.png', r'_'+str(timestamp)+'.png'],
+                              ['.jpeg', r'_'+str(timestamp)+'.jpeg'],
+                              ['.mp4', r'_'+str(timestamp)+'.mp4'],
+                              ]
+    replace_list=text_replace_list_mdx2md
+    #+text_replace_list_mdx2md2
     cwd=os.getcwd()
-    text_replace(cwd, text_replace_list_mdx2md)
+    text_replace(cwd, replace_list)
 if __name__ == "__main__":
     path=os.getcwd()
     back_up_dir(path)
-    test_text_replace()
+    test_text_replace(1677211210)
 
 
 

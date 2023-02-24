@@ -1,8 +1,8 @@
 
 import os
 import shutil
-
-
+import time
+import re
 def make_mindmap_file(cwd):
     # make a new file in the current directory named mindmap.md
 
@@ -34,18 +34,28 @@ mindmap-plugin: basic
     f_mindmap_basic.write(str_mindmap_basic)
     f_mindmap_basic.close()
 
+def remove_chinese_characters(text):
+    # 匹配中文字符的正则表达式
+    chinese_pattern = re.compile("[\u4e00-\u9fa5]+")
 
-def create_annotator_4pdf_file(file_name_with_endswith_pdf):
+    # 将中文字符替换为空字符串
+    result = chinese_pattern.sub("", text)
+
+    return result
+def create_annotator_4pdf_file(file_name_with_endswith_pdf,f_annotate,cwd_after_obsidian_workspace):
     # get the file name without the .pdf
     file_name_without_pdf = file_name_with_endswith_pdf[:-4]
+    timestamp = int(time.time())
     # replace the space in the file name with underscore
     file_name_without_space = file_name_without_pdf.replace(' ', '_')
+    file_name_without_space = remove_chinese_characters(file_name_without_space)
     cwd_after_obsidian_workspace2 = cwd_after_obsidian_workspace.replace(
         " ", "_")
     cwd_after_obsidian_workspace2 = cwd_after_obsidian_workspace2.replace(
         "/", "_")
     cwd_after_obsidian_workspace2 = cwd_after_obsidian_workspace2.replace(
         "=", "_")
+    cwd_after_obsidian_workspace2=remove_chinese_characters(cwd_after_obsidian_workspace2)
     # Traversal the current directory
 
     f_annotate.write('---\n')
@@ -55,7 +65,7 @@ def create_annotator_4pdf_file(file_name_with_endswith_pdf):
     f_annotate.write("annotate-image-target: " +
                      cwd_after_obsidian_workspace + "/assets/images\n")
     f_annotate.write("id: " + cwd_after_obsidian_workspace2 +
-                     file_name_without_space + "\n")
+                     file_name_without_space + "_"+str(timestamp)+"\n")
     f_annotate.write("---\n")
 
 
@@ -104,7 +114,7 @@ def main():
 
             f_annotate = open(
                 cwd + '/assets/pdfs/' + file_name_without_pdf + '_annotate.md', 'w', encoding='utf-8')
-            create_annotator_4pdf_file(file)
+            create_annotator_4pdf_file(file,f_annotate,cwd_after_obsidian_workspace)
             # print(pdf_file_name)
 
     make_mindmap_file(cwd)
