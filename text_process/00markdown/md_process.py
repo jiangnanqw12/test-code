@@ -127,7 +127,7 @@ def remove_line_test1():
 
 def rename_files_end_test1():
     path = os.getcwd()
-    rename_files_end(path, '.md', '.md', 14, 14)
+    rename_files_end(path, '.md', '.md', 2, 2)
 
 
 def replace_name_test1():
@@ -164,7 +164,7 @@ def back_up_dir(src_dir):
     father_path = os.path.abspath(os.path.dirname(src_dir) + os.path.sep + ".")
     # get current dir name
     dir_name = os.path.basename(src_dir)
-    back_path = os.path.join(father_path, dir_name+"_"+time_str)
+    back_path = os.path.join(src_dir, dir_name+"_"+time_str)
     # os.mkdir(back_path)
     if not os.path.exists(back_path):
         os.makedirs(back_path)
@@ -376,10 +376,81 @@ def test_text_replace(timestamp: int = 1676880280):
     #+text_replace_list_mdx2md2
     cwd=os.getcwd()
     text_replace(cwd, replace_list)
+
+import difflib
+import os
+
+
+def compare_md_files(dir1, dir2):
+    """
+    比较两个目录下同名的md文件，并输出两个文件的差异。
+
+    Args:
+        dir1 (str): 第一个目录路径。
+        dir2 (str): 第二个目录路径。
+
+    Returns:
+        None
+
+    Raises:
+        FileNotFoundError: 如果任意一个目录不存在，则抛出异常。
+
+    """
+    if not os.path.exists(dir1):
+        raise FileNotFoundError(f"{dir1} not found!")
+    if not os.path.exists(dir2):
+        raise FileNotFoundError(f"{dir2} not found!")
+
+    md_files1 = [f for f in os.listdir(dir1) if f.endswith('.md')]
+    md_files2 = [f for f in os.listdir(dir2) if f.endswith('.md')]
+
+    common_files = set(md_files1).intersection(md_files2)
+
+    for f in common_files:
+        file1_path = os.path.join(dir1, f)
+        file2_path = os.path.join(dir2, f)
+
+        with open(file1_path, 'r', encoding='utf-8') as f1, open(file2_path, 'r', encoding='utf-8') as f2:
+            diff = difflib.unified_diff(f1.readlines(), f2.readlines(), lineterm='', fromfile=file1_path, tofile=file2_path)
+
+            # 输出不同之处
+            print(f"--- {file1_path}\n")
+            print(f"+++ {file2_path}\n")
+            print(''.join(diff))
+
+def process_md_files_filename_2_head():
+    md_files = [f for f in os.listdir() if f.endswith('.md')]
+    for file_name in md_files:
+        with open(file_name, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+        new_lines = []
+        if 'CHAPTER' in file_name:
+            new_lines.append('## ' +file_name[4:-3]+ lines[0])
+        else:
+            new_lines.append('### ' +file_name[4:-3]+ lines[0])
+        new_lines.extend(lines[1:])
+        with open(file_name, 'w', encoding='utf-8') as f:
+            f.writelines(new_lines)
+
+
+def zhihu_book_process():
+    path=os.getcwd()
+    back_up_dir_tree(path)
+    rename_files_end(path, '.md', '.md', 2, 2)
+    base_on_mulu_markdown_rename_files()
+    search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
+    remove_line(path, search_list)
+
 if __name__ == "__main__":
     path=os.getcwd()
-    back_up_dir(path)
-    test_text_replace(1677211210)
-
+    #back_up_dir_tree(path)
+    #back_up_dir(path)
+    #test_text_replace(1677211210)
+    #rename_files_end(path, '.md', '.md', 2, 2)
+    #base_on_mulu_markdown_rename_files()
+    # search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
+    # remove_line(path, search_list)
+    compare_md_files("mds", "mds_2023-02-26-22-12-57")
+    #process_md_files_filename_2_head()
 
 
