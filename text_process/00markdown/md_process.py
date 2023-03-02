@@ -446,11 +446,11 @@ if __name__ == "__main__":
     #back_up_dir_tree(path)
     #back_up_dir(path)
     #test_text_replace(1677211210)
-    #rename_files_end(path, '.md', '.md', 2, 2)
+    rename_files_end(path, '.md', '.md', 33, 33)
     #base_on_mulu_markdown_rename_files()
     # search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
     # remove_line(path, search_list)
-    compare_md_files("mds", "mds_2023-02-26-22-12-57")
+    #compare_md_files("mds", "mds_2023-02-26-22-12-57")
     #process_md_files_filename_2_head()
 
 
