@@ -1,0 +1,179 @@
+Part 03 : Radar
+Module 01: Lessons
+Lesson 01: Introduction
+Concept 01: Beta Testing
+Concept 02: Welcome!
+Concept 03: Introduction to Andrei
+Concept 04: MATLAB
+Lesson 02: Radar Principles
+Review Radar functionality, FMCW waveform, Radar Hardware, Schematic and the Radar Equation
+
+Concept 01: Why Use Radar?
+Concept 02: The Radar Sensor
+Concept 03: Signal Properties
+Concept 04: FMCW
+Concept 05: FMCW Hardware and Antenna
+Concept 06: Radar Cross Section
+Concept 07: Radar Range Equation
+Concept 08: What Does a Sensor Fusion Engineer Need to Know?
+Lesson 03: Range-Doppler Estimation
+Estimate the range and velocity of the target using the FMCW radar
+
+Concept 01: Range, Velocity, and Angle Resolution
+Concept 02: Range Estimation
+Concept 03: Doppler Estimation
+Concept 04: Fast Fourier Transform (FFT)
+Concept 05: The 2D FFT
+Concept 06: What Kind of Math Do Radar Engineers Use?
+Lesson 04: Clutter, CFAR, AoA
+Discuss - Clutter formation and then its removal using CFAR technique. After that
+
+Concept 01: Clutter, CFAR, AoA
+Concept 02: Clutter
+Concept 03: CFAR
+Concept 04: CA-CFAR
+Concept 05: CFAR 2D
+Concept 06: Angle of Arrival Introduction
+Lesson 05: Clustering and Tracking
+Concept 01: Clustering and Tracking
+Concept 02: Clustering
+Concept 03: Kalman Tracking
+Concept 04: MATLAB Sensor Fusion Guided Walkthrough
+Lesson 06: Radar Target Generation and Detection
+Project Description - Radar Target Generation and Detection
+
+Project Rubric - Radar Target Generation and Detection
+
+Concept 01: Project Overview
+Concept 02: Target Generation and Detection
+Concept 03: FFT Operation
+Concept 04: 2D CFAR
+Part 04 : Camera
+Module 01: Lessons
+Lesson 01: Introduction
+Lesson 02: Autonomous Vehicles and Computer Vision
+Lesson 03: Engineering a Collision Detection System
+Lesson 04: Tracking Image Features
+Lesson 05: Camera Based 2D Feature Tracking
+Project Description - Camera Based 2D Feature Tracking
+
+Project Rubric - Camera Based 2D Feature Tracking
+
+Lesson 06: Combining Camera and Lidar
+Lesson 07: Track an Object in 3D Space
+Project Description - Track an Object in 3D Space
+
+Project Rubric - Track an Object in 3D Space
+
+Lesson 08: Final Thoughts from Timo
+Part 05 : Kalman FIlters
+Module 01: Lessons
+Lesson 01: Introduction and Sensors
+Meet the team at Mercedes who will help you track objects in real-time with Sensor Fusion.
+
+Concept 01: The Benefits of Sensors
+Concept 02: Introduction
+Concept 03: Radar Strengths and Weaknesses
+Concept 04: Lidar Strengths and Weaknesses
+Concept 05: Live Data Walkthrough
+Concept 06: Outro
+Lesson 02: Kalman Filters
+Learn from the best! Sebastian Thrun will walk you through the usage and concepts of a Kalman Filter using Python.
+
+Concept 01: Introduction
+Concept 02: Tracking Intro
+Concept 03: Gaussian Intro
+Concept 04: Variance Comparison
+Concept 05: Preferred Gaussian
+Concept 06: Evaluate Gaussian
+Concept 07: Maximize Gaussian
+Concept 08: Measurement and Motion
+Concept 09: Shifting the Mean
+Concept 10: Predicting the Peak
+Concept 11: Parameter Update
+Concept 12: Parameter Update 2
+Concept 13: Separated Gaussians
+Concept 14: Separated Gaussians 2
+Concept 15: New Mean and Variance
+Concept 16: Gaussian Motion
+Concept 17: Predict Function
+Concept 18: Kalman Filter Code
+Concept 19: Kalman Prediction
+Concept 20: Kalman Filter Land
+Concept 21: Kalman Filter Prediciton
+Concept 22: Another Prediction
+Concept 23: More Kalman Filters
+Concept 24: Kalman Filter Design
+Concept 25: Kalman Matrices
+Concept 26: Conclusion
+Lesson 03: Lidar and Radar Fusion with Kalman Filters in C++
+In this lesson, you'll build a Kalman Filter in C++ that's capable of handling data from multiple sources. Why C++? Its performance enables the application of object tracking with a Kalman Filter in real-time.
+
+Concept 01: Kalman Filters in C++
+Concept 02: Intro
+Concept 03: Lesson Map and Fusion Flow
+Concept 04: Lesson Variables and Equations
+Concept 05: Estimation Problem Refresh
+Concept 06: Kalman Filter Intuition
+Concept 07: Kalman Filter Equations in C++ Part 1
+Concept 08: Kalman Filter Equations in C++ Part 2
+Concept 09: State Prediction
+Concept 10: Process Covariance Matrix
+Concept 11: Laser Measurements Part 1
+Concept 12: Laser Measurements Part 2
+Concept 13: Laser Measurements Part 3
+Concept 14: Laser Measurements Part 4
+Concept 15: Radar Measurements
+Concept 16: Mapping with a Nonlinear Function
+Concept 17: Extended Kalman Filter
+Concept 18: Multivariate Taylor Series Expansion
+Concept 19: Jacobian Matrix Part 1
+Concept 20: Jacobian Matrix Part 2
+Concept 21: EKF Algorithm Generalization
+Concept 22: Sensor Fusion General Flow
+Concept 23: Evaluating KF Performance Part 1
+Concept 24: Evaluating KF Performance 2
+Concept 25: Outro
+Lesson 04: Unscented Kalman Filters
+While Extended Kalman Filters work great for linear motion, real objects rarely move linearly. With Unscented Kalman Filters, you'll be able to accurately track non-linear motion!
+
+Concept 01: Introduction
+Concept 02: The CTRV Model
+Concept 03: The CTRV Model State Vector
+Concept 04: CTRV Differential Equation
+Concept 05: CTRV Integral 1
+Concept 06: CTRV Integral 2
+Concept 07: CTRV Zero Yaw Rate
+Concept 08: CTRV Process Noise Vector
+Concept 09: CTRV Process Noise Position
+Concept 10: UKF Process Chain
+Concept 11: What Problem Does the UKF Solve?
+Concept 12: UKF Basics Unscented Transformation
+Concept 13: Generating Sigma Points
+Concept 14: Generating Sigma Points Assignment 1
+Concept 15: Generating Sigma Points Assignment 2
+Concept 16: UKF Augmentation
+Concept 17: Augmentation Assignment 1
+Concept 18: Augmentation Assignment 2
+Concept 19: Sigma Point Prediction
+Concept 20: Sigma Point Prediction Assignment 1
+Concept 21: Sigma Point Prediction Assignment 2
+Concept 22: Predicted Mean and Covariance
+Concept 23: Predicted Mean and Covariance Assignment 1
+Concept 24: Predicted Mean and Covariance Assignment 2
+Concept 25: Measurement Prediction
+Concept 26: Predict Radar Measurement Assignment 1
+Concept 27: Predict Radar Measurement Assignment 2
+Concept 28: UKF Update
+Concept 29: UKF Update Assignment 1
+Concept 30: UKF Update Assignment 2
+Concept 31: Parameters and Consistency
+Concept 32: What to Expect from the Project
+Concept 33: Story Time
+Concept 34: Outro
+Concept 35: Bonus Round: Sensor Fusion [Optional]
+Lesson 05: Unscented Kalman Filter Highway Project
+In this lesson, students will submit the project that they have developed over the previous lessons.
+
+Concept 01: Submitting Your Project
+Concept 02: Additional Project Details
