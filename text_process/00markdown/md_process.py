@@ -440,17 +440,38 @@ def zhihu_book_process():
     base_on_mulu_markdown_rename_files()
     search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
     remove_line(path, search_list)
+def rename_files_and_dirs_sensor_fusion(path):
+    for root, dirs, files in os.walk(path):
+        for name in files + dirs:
+            # # 如果文件或目录名称包含空格，则用下划线替换
+            # if ' ' in name:
+            #     new_name = name.replace(' ', '_')
+            #     os.rename(os.path.join(root, name), os.path.join(root, new_name))
+            #     name = new_name
 
+            # 如果文件或目录名称以数字开头，则进行重新编号
+            if not (name[:3].isdigit()):
+                if name[:2].isdigit():
+                    prefix = name[:2]
+                    new_prefix = prefix.zfill(3)  # 将前缀转换为三位数
+                    if name[2]==" ":
+                        new_name=new_prefix+"_"+name[3:]
+                    elif name[2]=="_":
+                        new_name=new_prefix+name[2:]
+                    else:
+                        new_name=new_prefix+"_"+name[2:]
+
+                    os.rename(os.path.join(root, name), os.path.join(root, new_name))
 if __name__ == "__main__":
     path=os.getcwd()
     #back_up_dir_tree(path)
     #back_up_dir(path)
     #test_text_replace(1677211210)
-    rename_files_end(path, '.md', '.md', 33, 33)
+    #rename_files_end(path, '.md', '.md', 33, 33)
     #base_on_mulu_markdown_rename_files()
     # search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
     # remove_line(path, search_list)
     #compare_md_files("mds", "mds_2023-02-26-22-12-57")
     #process_md_files_filename_2_head()
-
+    rename_files_and_dirs_sensor_fusion(path)
 
