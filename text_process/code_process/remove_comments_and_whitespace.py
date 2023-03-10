@@ -26,6 +26,8 @@ def remove_comments_and_whitespace(filename):
             if line_temp.startswith(comment_str) or not line_temp:
                 # If it is, skip this line
                 continue
+            if line=="\n":
+                continue
             # If it's not a comment or empty, write the line to the file
             if line[-1]!="\n":
                 file.write(line + '\n')
@@ -33,4 +35,4 @@ def remove_comments_and_whitespace(filename):
                 file.write(line)
 if __name__ == '__main__':
     # Call the function
-    remove_comments_and_whitespace('scenario_student.m')
+    remove_comments_and_whitespace('student_Radar_Target_Generation_and_Detection.m')
