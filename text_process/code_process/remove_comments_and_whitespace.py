@@ -1,3 +1,4 @@
+import os
 def remove_comments_and_whitespace(filename):
     file_extention = filename.split(".")[-1]
     comment_list=[["py","#"],["m","%"],["cpp","//"],["c","//"],["h","//"]]
@@ -8,7 +9,10 @@ def remove_comments_and_whitespace(filename):
             #print(comment_list[comment_index][1])
             break
     comment_str=comment_list[comment_index][1]
-
+    current_path = os.getcwd()
+    release_path = os.path.join(current_path, "release")
+    if not os.path.exists(release_path):
+        os.mkdir(release_path)
     # Open the file in read mode
     with open(filename, 'r',encoding='UTF-8') as file:
         # Read all lines into a list
@@ -16,7 +20,7 @@ def remove_comments_and_whitespace(filename):
 
     # Open the file again in write mode
     new_file_name = filename[:-(len(file_extention)+1)] + "_release." + file_extention
-    with open(new_file_name, 'w',encoding='UTF-8') as file:
+    with open(os.path.join(release_path,new_file_name), 'w',encoding='UTF-8') as file:
         # Loop through each line in the list
         for line in lines:
 
@@ -33,6 +37,13 @@ def remove_comments_and_whitespace(filename):
                 file.write(line + '\n')
             elif line[-1]=="\n":
                 file.write(line)
+def test_remove_comments_and_whitespace_m():
+    file_list = os.listdir(os.getcwd())
+    for file in file_list:
+        if file.endswith(".m"):
+            remove_comments_and_whitespace(file)
+
 if __name__ == '__main__':
     # Call the function
-    remove_comments_and_whitespace('student_Radar_Target_Generation_and_Detection.m')
+    #remove_comments_and_whitespace('student_Radar_Target_Generation_and_Detection.m')
+    test_remove_comments_and_whitespace_m()
