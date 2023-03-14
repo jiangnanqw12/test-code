@@ -53,5 +53,5 @@ def test_remove_comments_and_whitespace_m():
 if __name__ == '__main__':
     # Call the function
     remove_comments_and_whitespace(
-        'AAPL.c')
+        't.c')
     # test_remove_comments_and_whitespace_m()
