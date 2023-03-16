@@ -24,6 +24,12 @@ you-get "https://www.youtube.com/watch?v=Yayt-Hb9FaM&ab_channel=3Blue1BrownClips
 you-get "https://www.youtube.com/watch?v=PLWC6kwBO6Y&ab_channel=3Blue1BrownClips" --socks-proxy 127.0.0.1:1022 --debug
 you-get "https://www.youtube.com/watch?v=2BOmmqxgw3U&ab_channel=3Blue1BrownClips" --socks-proxy 127.0.0.1:1022 --debug
 you-get "https://youtu.be/SHko2gnx6YE" --socks-proxy 127.0.0.1:1022 --debug
+you-get "https://youtu.be/_EhY31MSbNM" --socks-proxy 127.0.0.1:1022 --debug
+you-get "" --socks-proxy 127.0.0.1:1022 --debug
+you-get "" --socks-proxy 127.0.0.1:1022 --debug
+you-get "" --socks-proxy 127.0.0.1:1022 --debug
+you-get "" --socks-proxy 127.0.0.1:1022 --debug
+you-get "" --socks-proxy 127.0.0.1:1022 --debug
 you-get "" --socks-proxy 127.0.0.1:1022 --debug
 you-get "" --socks-proxy 127.0.0.1:1022 --debug
 
