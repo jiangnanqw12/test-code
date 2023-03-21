@@ -1,7 +1,0 @@
-• Scale-space keypoint detection: Points of interest are
-identified across both the image and scale dimensions using
-a saliency criterion. In order to boost efficiency of
-computation, keypoints are detected in octave layers of
-the image pyramid as well as in layers in-between. The
-location and the scale of each keypoint are obtained in
-the continuous domain via quadratic function fitting.
