@@ -64,7 +64,7 @@ def create_annotator_4pdf_file(file_name_with_endswith_pdf,f_annotate,cwd_after_
     f_annotate.write("annotate-type: pdf\n")
     f_annotate.write("annotate-image-target: " +
                      cwd_after_obsidian_workspace + "/assets/images\n")
-    f_annotate.write("id: " + cwd_after_obsidian_workspace2 +
+    f_annotate.write("id: "  +
                      file_name_without_space + "_"+str(timestamp)+"\n")
     f_annotate.write("---\n")
 
