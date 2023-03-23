@@ -76,11 +76,11 @@ def create_floder(cwd):
     else:
         # make a new folder in the current directory named assets
         os.mkdir(cwd + '/assets')
-    if os.path.isdir(cwd + '/assets/images'):
+    if os.path.isdir(cwd + '/assets/imgs'):
         pass
     else:
         # make a new folder in the assets folder named images
-        os.mkdir(cwd + '/assets/images')
+        os.mkdir(cwd + '/assets/imgs')
     if os.path.isdir(cwd + '/assets/pdfs'):
         pass
     else:
