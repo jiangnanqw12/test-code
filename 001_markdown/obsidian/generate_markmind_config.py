@@ -27,14 +27,38 @@ mindmap-plugin: basic
 
 
 '''
-    f_mindmap_rich = open(cwd + '/mindmap_rich.md', 'w', encoding='utf-8')
-    f_mindmap_rich.write(str_mindmap_rich)
-    f_mindmap_rich.close()
-    f_mindmap_basic = open(cwd + '/mindmap_basic.md', 'w', encoding='utf-8')
-    f_mindmap_basic.write(str_mindmap_basic)
-    f_mindmap_basic.close()
+    with open(os.path.join(cwd, 'mindmap_rich.md'), 'w', encoding='utf-8') as f_mindmap_rich:
+        f_mindmap_rich.write(str_mindmap_rich)
+
+    with open(os.path.join(cwd, 'mindmap_basic.md'), 'w', encoding='utf-8') as f_mindmap_basic:
+        f_mindmap_basic.write(str_mindmap_basic)
+
+    # f_mindmap_rich = open(cwd + '/mindmap_rich.md', 'w', encoding='utf-8')
+    # f_mindmap_rich.write(str_mindmap_rich)
+    # f_mindmap_rich.close()
+    # f_mindmap_basic = open(cwd + '/mindmap_basic.md', 'w', encoding='utf-8')
+    # f_mindmap_basic.write(str_mindmap_basic)
+    # f_mindmap_basic.close()
+def make_mindmap_basic_file(cwd,file_name_without_pdf):
+    # make a new file in the current directory named mindmap.md
+
+
+    str_mindmap_basic = '''
+---
+
+mindmap-plugin: basic
+
+---
+
+
+'''
+
+
+    with open(os.path.join(cwd, file_name_without_pdf+'_mindmap_basic.md'), 'w', encoding='utf-8') as f_mindmap_basic:
+        f_mindmap_basic.write(str_mindmap_basic+"# "+file_name_without_pdf)
 
 def remove_chinese_characters(text):
+
     # 匹配中文字符的正则表达式
     chinese_pattern = re.compile("[\u4e00-\u9fa5]+")
 
@@ -109,14 +133,24 @@ def main():
         if file.endswith('.pdf'):
             # get current file name without filename extension
             file_name_without_pdf = file[:-4]
-            # copy the pdf file to the pdfs folder in the assets folder
-            shutil.copy(cwd + '/' + file, cwd + '/assets/pdfs/')
-
-            f_annotate = open(
-                cwd + '/assets/pdfs/' + file_name_without_pdf + '_annotate.md', 'w', encoding='utf-8')
-            create_annotator_4pdf_file(file,f_annotate,cwd_after_obsidian_workspace)
+            src_file = os.path.join(cwd, file)
+            dest_file = os.path.join(cwd, 'assets', 'pdfs', file)
+            if not os.path.isfile(dest_file):
+                # copy the pdf file to the pdfs folder in the assets folder
+                shutil.copy(src_file, dest_file)
+            annotate_file = os.path.join(cwd, 'assets', 'pdfs', f"{file_name_without_pdf}_annotate.md")
+            if not os.path.isfile(annotate_file):
+                with open(annotate_file, 'w', encoding='utf-8') as f_annotate:
+                    create_annotator_4pdf_file(file, f_annotate, cwd_after_obsidian_workspace)
+            mindmap_basic_file=os.path.join(cwd, file_name_without_pdf+'_mindmap_basic.md')
+            if not os.path.isfile(mindmap_basic_file):
+                make_mindmap_basic_file(cwd,file_name_without_pdf)
+            # check if there is a file named file_name_without_pdf + '_annotate.md' exists
+            # if not os.path.isfile(cwd + '/assets/pdfs/' + file_name_without_pdf + '_annotate.md'):
+            #     f_annotate = open(cwd + '/assets/pdfs/' + file_name_without_pdf + '_annotate.md', 'w', encoding='utf-8')
+            #     create_annotator_4pdf_file(file,f_annotate,cwd_after_obsidian_workspace)
             # print(pdf_file_name)
 
-    make_mindmap_file(cwd)
+
 if __name__ == '__main__':
     main()
