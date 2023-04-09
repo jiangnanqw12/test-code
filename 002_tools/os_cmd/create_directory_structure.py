@@ -3,6 +3,7 @@ import argparse
 def create_directory_assets_imgs():
     dirs = [
         "assets/imgs",
+        "assets/vids"
     ]
 
     for directory in dirs:

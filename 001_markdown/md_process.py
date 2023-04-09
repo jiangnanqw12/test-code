@@ -3,10 +3,10 @@
 import os
 import datetime
 import shutil
+import argparse
 
 
-
-def rename_files_end(path, old_extension, new_extension, file_remove_length=0, dir_remove_length=0):
+def remove_filesname_end(path, old_extension, new_extension, file_remove_length=0, dir_remove_length=0):
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(old_extension):
@@ -127,7 +127,7 @@ def remove_line_test1():
 
 def rename_files_end_test1():
     path = os.getcwd()
-    rename_files_end(path, '.md', '.md', 2, 2)
+    remove_filesname_end(path, '.md', '.md', 2, 2)
 
 
 def replace_name_test1():
@@ -462,7 +462,7 @@ def rename_files_and_dirs_sensor_fusion(path):
                         new_name=new_prefix+"_"+name[2:]
 
                     os.rename(os.path.join(root, name), os.path.join(root, new_name))
-if __name__ == "__main__":
+def test():
     path=os.getcwd()
     #back_up_dir_tree(path)
     #back_up_dir(path)
@@ -475,3 +475,23 @@ if __name__ == "__main__":
     #process_md_files_filename_2_head()
     rename_files_and_dirs_sensor_fusion(path)
 
+def main():
+    # create a parser object
+    parser = argparse.ArgumentParser()
+
+    # add arguments for each function
+    parser.add_argument('-rfe', '--remove_filesname_end', action='store_true', help='call remove_filesname_end')
+    parser.add_argument('-ds', '--rename_files_and_dirs_sensor_fusion', action='store_true', help='call rename_files_and_dirs_sensor_fusion')
+
+    # parse the command-line arguments
+    args = parser.parse_args()
+
+    # call the appropriate function based on the arguments
+    if args.remove_filesname_end:
+        rename_files_end_test1()
+    elif args.rename_files_and_dirs_sensor_fusion:
+        rename_files_and_dirs_sensor_fusion()
+    else:
+        print("Invalid argument")
+if __name__ == "__main__":
+    main()
