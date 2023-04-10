@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import re
+import difflib
+import time
+import glob
 import os
 import datetime
 import shutil
@@ -17,7 +21,8 @@ def remove_filesname_end(path, old_extension, new_extension, file_remove_length=
                 os.rename(os.path.join(root, dir), os.path.join(
                     root, dir[:-(dir_remove_length)]))
 
-def rename_files_start(num_remove,extensions=None):
+
+def rename_files_start(num_remove, extensions=None):
     # 获取当前目录下所有文件的文件名
     files = os.listdir()
 
@@ -43,6 +48,7 @@ def rename_files_start(num_remove,extensions=None):
 
         # 输出修改后的文件名
         print("文件名从 {} 变为 {}".format(filename, new_filename))
+
 
 def rename_files(path, replace_list):
     for root, dirs, files in os.walk(path):
@@ -157,6 +163,7 @@ def back_up_dir_tree(path):
     # copy all files in the current path to the back_path
     shutil.copytree(path, back_path)
 
+
 def back_up_dir(src_dir):
 
     time_str = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
@@ -251,7 +258,6 @@ def base_on_mulu_markdown_rename_files():
                 os.rename(os.path.join(root, line[:-1]+'.md'),
                           os.path.join(root, num2str_title(counter)+"_"+line[:-1]+'.md'))
 
-import os
 
 def create_md_files_from_markdown_file(markdown_file):
     """
@@ -270,8 +276,9 @@ def create_md_files_from_markdown_file(markdown_file):
                 continue
             # 创建新的md文件并写入内容
             with open(filename, 'w', encoding='utf-8') as new_file:
-                #new_file.write(line)
+                # new_file.write(line)
                 pass
+
 
 def test_create_md_files_from_markdown_file():
 
@@ -280,18 +287,20 @@ def test_create_md_files_from_markdown_file():
     assert os.path.exists('1_第一行_.md')
     assert os.path.exists('2_第二行_.md')
     assert os.path.exists('3_第三行_.md')
+
     # # 删除测试用的markdown文件和生成的md文件
     # os.remove('test.md')
     # os.remove('1_第一行_.md')
     # os.remove('2_第二行_.md')
     # os.remove('3_第三行_.md')
-import glob
-import os
+
 
 def delete_non_example_md_files():
     for file_path in glob.glob('*.md'):
         if file_path != 'example.md' and file_path.endswith('.md'):
             os.remove(file_path)
+
+
 def open_folder_in_windows(folder_path):
     """根据文件夹路径在Windows文件管理器中打开文件夹。
 
@@ -306,21 +315,19 @@ def open_folder_in_windows(folder_path):
     else:
         print(f"文件夹路径 {folder_path} 不存在。")
 
+
 def open_assets_folder():
-    CWD=os.getcwd()
-    #print(CWD)
-    assets_path_front="C:/BaiduSyncdisk/assets"
-    KG_path_front="C:\\BaiduSyncdisk\\assets\\KG"
-    #split paht CWD after KG, replace \ with /
-    KG_path_back=CWD.split("\KG")[1].replace("\\", "/")
+    CWD = os.getcwd()
+    # print(CWD)
+    assets_path_front = "C:/BaiduSyncdisk/assets"
+    KG_path_front = "C:\\BaiduSyncdisk\\assets\\KG"
+    # split paht CWD after KG, replace \ with /
+    KG_path_back = CWD.split("\KG")[1].replace("\\", "/")
 
-    #print(KG_path_back)
-    assets_path=assets_path_front+KG_path_back
-    #print(assets_path)
+    # print(KG_path_back)
+    assets_path = assets_path_front+KG_path_back
+    # print(assets_path)
     open_folder_in_windows(assets_path)
-
-import os
-import time
 
 
 def add_timestamp_to_filenames():
@@ -330,7 +337,10 @@ def add_timestamp_to_filenames():
         if os.path.isfile(os.path.join(current_dir, filename)) and not filename.endswith(".py"):
             filename_without_ext, ext = os.path.splitext(filename)
             new_filename = f"{filename_without_ext}_{timestamp}{ext}"
-            os.rename(os.path.join(current_dir, filename), os.path.join(current_dir, new_filename))
+            os.rename(os.path.join(current_dir, filename),
+                      os.path.join(current_dir, new_filename))
+
+
 def text_replace(root_dir: str, replace_list: list):
     dest_dir = os.path.join(root_dir, 'des')
     if not os.path.isdir(dest_dir):
@@ -346,39 +356,98 @@ def text_replace(root_dir: str, replace_list: list):
                     for replace_item in replace_list:
                         line = line.replace(replace_item[0], replace_item[1])
                     f_dest.write(line)
-def test_text_replace(timestamp: int = 1676880280):
-    text_replace_list_mdx2md=[[r'<Figure image="', r'![]('],
-                              ['" id="distribution"/>', r')'],
-                              ['<Figure video="', r'![]('],
-                               ['" show="video"/>', r')'],
-                            ['" show="video" />', r')'],
-                              ['"/>', r')'],['" />', r')'],
-                              ['" image="', ')'+'\n'+'![]('],
-                            ['" video="', ')'+'\n'+'![]('],
-                                ["question=","- question"+"\n"],
-                                ["choice1=","- choice1 "],
-                                ["choice2=","- choice2 "],
-                                ["choice3=","- choice3 "],
-                                ["choice4=","- choice4 "],
-                                ["answer=","- answer "],
-                                ["",""],
-                                ["",""],
-                                ["",""],
-                                ["</Question>",""],
-                              ["</LessonLink>",""],
-                              ['<LessonLink id="differential-equations">',"(differential-equations) "],
-                              ['<LessonLink id="fourier-series">',"(fourier-series) "]]
-    text_replace_list_mdx2md2=[['.png', r'_'+str(timestamp)+'.png'],
-                              ['.jpeg', r'_'+str(timestamp)+'.jpeg'],
-                              ['.mp4', r'_'+str(timestamp)+'.mp4'],
-                              ]
-    replace_list=text_replace_list_mdx2md
-    #+text_replace_list_mdx2md2
-    cwd=os.getcwd()
+
+
+def mdx2md_b1(timestamp: int = 1676880280):
+    text_replace_list_mdx2md1 = [[r'<Figure image="', r'![]('],
+                                 ['" id="distribution"/>', r')'],
+                                 ['<Figure video="', r'![]('],
+                                 ['" show="video"/>', r')'],
+                                 ['" show="video" />', r')'],
+                                 ['"/>', r')'], ['" />', r')'],
+                                 ['" image="', ')'+'\n'+'![]('],
+                                 ['" video="', ')'+'\n'+'![]('],
+                                 ["question=", "- question"+"\n"],
+                                 ["choice1=", "- choice1 "],
+                                 ["choice2=", "- choice2 "],
+                                 ["choice3=", "- choice3 "],
+                                 ["choice4=", "- choice4 "],
+                                 ["answer=", "- answer "],
+                                 ["", ""],
+                                 ["", ""],
+                                 ["", ""],
+                                 ["</Question>", ""],
+                                 ["</LessonLink>", ""],
+                                 ['<LessonLink id="differential-equations">',
+                                 "(differential-equations) "],
+                                 ['<LessonLink id="fourier-series">', "(fourier-series) "]]
+    text_replace_list_mdx2md2 = [['.png', r'_'+str(timestamp)+'.png'],
+                                 ['.jpeg', r'_'+str(timestamp)+'.jpeg'],
+                                 ['.mp4', r'_'+str(timestamp)+'.mp4'],
+                                 ]
+    text_replace_list_mdx2md3 = [[r'<Figure', r''],
+                                 ['/>', r''],
+                                 ["<PiCreature", ""],
+                                 ["show=\"video\"", ""],
+                                 ["", ""],
+                                 ["", ""],
+                                 ["<Question", "---"],
+                                 ["</Question>", "---"],
+                                 ]
+    replace_list = text_replace_list_mdx2md3
+    # +text_replace_list_mdx2md2
+    cwd = os.getcwd()
     text_replace(cwd, replace_list)
 
-import difflib
-import os
+
+def mdx2md():
+    cwd = os.getcwd()
+    dest_dir = os.path.join(cwd, 'des')
+    if not os.path.isdir(dest_dir):
+        os.mkdir(dest_dir)
+    text_replace_list_mdx2md3 = [[r'<Figure', r''],
+                                 ['/>', r''],
+                                 ["<PiCreature", ""],
+                                 ["show=\"video\"\n", ""],
+                                 ["<!--", ""],
+                                 ["-->", ""],
+                                 ["<Question", "---"],
+                                 ["</Question>", "---"],
+                                 ]
+    replace_list = text_replace_list_mdx2md3
+    # <Figure
+    for filename_with_ext in os.listdir(cwd):
+        if filename_with_ext.endswith('.md'):
+            src_path = os.path.join(cwd, filename_with_ext)
+            dest_path = os.path.join(dest_dir, filename_with_ext)
+
+            with open(src_path, 'r', encoding='UTF-8') as f_src, open(dest_path, 'w', encoding='UTF-8') as f_dest:
+                for line in f_src:
+                    for replace_item in replace_list:
+                        line = line.replace(replace_item[0], replace_item[1])
+                    f_dest.write(line)
+            with open(dest_path, 'r', encoding='UTF-8') as f_src:
+                content = f_src.read()
+            # Define the regex pattern and replacement string
+
+            replace_list_regex = [[r'image="(.+)(\.svg|\.png|\.jpg)"', r'![](\1_1681100776\2)'],
+                                  [r'video=".+\.mp4"\n', r''],
+                                  [r'<Accordion\stitle=".+">\n', r''],
+                                  [r'</Accordion>\n', r''],
+                                  [r'emotion="\w+"\s+\n', r''],
+                                  [r'flip=\{(true|false)\}\n', r''],
+                                  [r'((\s){0,}\n){3,}', r'\1\1'],
+                                  [r'answer={(\d)}(\s){0,}\n>', r'<details><summary>answer</summary><p>\1</p></details>\n\nExplanation']]
+
+            for i in range(len(replace_list_regex)):
+                pattern = replace_list_regex[i][0]
+                replacement = replace_list_regex[i][1]
+
+                # Perform the regex replacement
+                content = re.sub(pattern, replacement, content)
+            # Write the modified content to the output Markdown file with UTF-8 encoding
+            with open(dest_path, 'w', encoding='utf-8') as file:
+                file.write(content)
 
 
 def compare_md_files(dir1, dir2):
@@ -411,12 +480,14 @@ def compare_md_files(dir1, dir2):
         file2_path = os.path.join(dir2, f)
 
         with open(file1_path, 'r', encoding='utf-8') as f1, open(file2_path, 'r', encoding='utf-8') as f2:
-            diff = difflib.unified_diff(f1.readlines(), f2.readlines(), lineterm='', fromfile=file1_path, tofile=file2_path)
+            diff = difflib.unified_diff(f1.readlines(), f2.readlines(
+            ), lineterm='', fromfile=file1_path, tofile=file2_path)
 
             # 输出不同之处
             print(f"--- {file1_path}\n")
             print(f"+++ {file2_path}\n")
             print(''.join(diff))
+
 
 def process_md_files_filename_2_head():
     md_files = [f for f in os.listdir() if f.endswith('.md')]
@@ -425,21 +496,23 @@ def process_md_files_filename_2_head():
             lines = f.readlines()
         new_lines = []
         if 'CHAPTER' in file_name:
-            new_lines.append('## ' +file_name[4:-3]+ lines[0])
+            new_lines.append('## ' + file_name[4:-3] + lines[0])
         else:
-            new_lines.append('### ' +file_name[4:-3]+ lines[0])
+            new_lines.append('### ' + file_name[4:-3] + lines[0])
         new_lines.extend(lines[1:])
         with open(file_name, 'w', encoding='utf-8') as f:
             f.writelines(new_lines)
 
 
 def zhihu_book_process():
-    path=os.getcwd()
+    path = os.getcwd()
     back_up_dir_tree(path)
     rename_files_end(path, '.md', '.md', 2, 2)
     base_on_mulu_markdown_rename_files()
     search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
     remove_line(path, search_list)
+
+
 def rename_files_and_dirs_sensor_fusion(path):
     for root, dirs, files in os.walk(path):
         for name in files + dirs:
@@ -454,34 +527,42 @@ def rename_files_and_dirs_sensor_fusion(path):
                 if name[:2].isdigit():
                     prefix = name[:2]
                     new_prefix = prefix.zfill(3)  # 将前缀转换为三位数
-                    if name[2]==" ":
-                        new_name=new_prefix+"_"+name[3:]
-                    elif name[2]=="_":
-                        new_name=new_prefix+name[2:]
+                    if name[2] == " ":
+                        new_name = new_prefix+"_"+name[3:]
+                    elif name[2] == "_":
+                        new_name = new_prefix+name[2:]
                     else:
-                        new_name=new_prefix+"_"+name[2:]
+                        new_name = new_prefix+"_"+name[2:]
 
-                    os.rename(os.path.join(root, name), os.path.join(root, new_name))
+                    os.rename(os.path.join(root, name),
+                              os.path.join(root, new_name))
+
+
 def test():
-    path=os.getcwd()
-    #back_up_dir_tree(path)
-    #back_up_dir(path)
-    #test_text_replace(1677211210)
-    #rename_files_end(path, '.md', '.md', 33, 33)
-    #base_on_mulu_markdown_rename_files()
+    path = os.getcwd()
+    # back_up_dir_tree(path)
+    # back_up_dir(path)
+    # test_text_replace(1677211210)
+    # rename_files_end(path, '.md', '.md', 33, 33)
+    # base_on_mulu_markdown_rename_files()
     # search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
     # remove_line(path, search_list)
-    #compare_md_files("mds", "mds_2023-02-26-22-12-57")
-    #process_md_files_filename_2_head()
+    # compare_md_files("mds", "mds_2023-02-26-22-12-57")
+    # process_md_files_filename_2_head()
     rename_files_and_dirs_sensor_fusion(path)
+
 
 def main():
     # create a parser object
     parser = argparse.ArgumentParser()
 
     # add arguments for each function
-    parser.add_argument('-rfe', '--remove_filesname_end', action='store_true', help='call remove_filesname_end')
-    parser.add_argument('-ds', '--rename_files_and_dirs_sensor_fusion', action='store_true', help='call rename_files_and_dirs_sensor_fusion')
+    parser.add_argument('-mdx', '--mdx2md',
+                        action='store_true', help='call mdx2md')
+    parser.add_argument('-rfe', '--remove_filesname_end',
+                        action='store_true', help='call remove_filesname_end')
+    parser.add_argument('-ds', '--rename_files_and_dirs_sensor_fusion',
+                        action='store_true', help='call rename_files_and_dirs_sensor_fusion')
 
     # parse the command-line arguments
     args = parser.parse_args()
@@ -491,7 +572,11 @@ def main():
         rename_files_end_test1()
     elif args.rename_files_and_dirs_sensor_fusion:
         rename_files_and_dirs_sensor_fusion()
+    elif args.mdx2md:
+        mdx2md()
     else:
         print("Invalid argument")
+
+
 if __name__ == "__main__":
     main()
