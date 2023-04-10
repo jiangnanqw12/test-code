@@ -430,7 +430,7 @@ def mdx2md():
                 content = f_src.read()
             # Define the regex pattern and replacement string
 
-            replace_list_regex = [[r'image="(.+)(\.svg|\.png|\.jpg)"', r'![](\1_1681100776\2)'],
+            replace_list_regex = [[r'image="(.+)(\.svg|\.png|\.jpg)"', r'![](\1_1681139765\2)'],
                                   [r'video=".+\.mp4"\n', r''],
                                   [r'<Accordion\stitle=".+">\n', r''],
                                   [r'</Accordion>\n', r''],
