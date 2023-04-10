@@ -400,7 +400,7 @@ def mdx2md_b1(timestamp: int = 1676880280):
     text_replace(cwd, replace_list)
 
 
-def mdx2md():
+def mdx2md(timestamp: int = 1676880280):
     cwd = os.getcwd()
     dest_dir = os.path.join(cwd, 'des')
     if not os.path.isdir(dest_dir):
@@ -430,7 +430,7 @@ def mdx2md():
                 content = f_src.read()
             # Define the regex pattern and replacement string
 
-            replace_list_regex = [[r'image="(.+)(\.svg|\.png|\.jpg)"', r'![](\1_1681139765\2)'],
+            replace_list_regex = [[r'image="(.+)(\.svg|\.png|\.jpg)"', r'![](\1_'+str(timestamp)+r'\2)'],
                                   [r'video=".+\.mp4"\n', r''],
                                   [r'<Accordion\stitle=".+">\n', r''],
                                   [r'</Accordion>\n', r''],
@@ -563,7 +563,8 @@ def main():
                         action='store_true', help='call remove_filesname_end')
     parser.add_argument('-ds', '--rename_files_and_dirs_sensor_fusion',
                         action='store_true', help='call rename_files_and_dirs_sensor_fusion')
-
+    parser.add_argument('-t', '--timestamp', type=str, default=r'1676880280',
+                        help='input parameter to pass to the function')
     # parse the command-line arguments
     args = parser.parse_args()
 
@@ -573,7 +574,7 @@ def main():
     elif args.rename_files_and_dirs_sensor_fusion:
         rename_files_and_dirs_sensor_fusion()
     elif args.mdx2md:
-        mdx2md()
+        mdx2md(args.timestamp)
     else:
         print("Invalid argument")
 
