@@ -406,13 +406,13 @@ def mdx2md(timestamp: int = 1676880280):
     if not os.path.isdir(dest_dir):
         os.mkdir(dest_dir)
     text_replace_list_mdx2md3 = [[r'<Figure', r''],
-                                 ['/>', r''],
-                                 ["<PiCreature", ""],
-                                 ["show=\"video\"\n", ""],
-                                 ["<!--", ""],
-                                 ["-->", ""],
-                                 ["<Question", "---"],
-                                 ["</Question>", "---"],
+                                 [r'/>', r''],
+                                 [r"<PiCreature", r""],
+                                 [r"show=\"video\"\n", r""],
+                                 [r"<!--", r""],
+                                 [r"-->", r""],
+                                 [r"<Question", r"---"],
+                                 [r"</Question>", r"---"],
                                  ]
     replace_list = text_replace_list_mdx2md3
     # <Figure
