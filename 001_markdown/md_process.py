@@ -430,14 +430,21 @@ def mdx2md(timestamp: int = 1676880280):
                 content = f_src.read()
             # Define the regex pattern and replacement string
 
-            replace_list_regex = [[r'image="(.+)(\.svg|\.png|\.jpg)"', r'![](\1_'+str(timestamp)+r'\2)'],
-                                  [r'video=".+\.mp4"\n', r''],
+            replace_list_regex = [[r'image="figures/(.+)(\.svg|\.png|\.jpg)"', r'![](\1_'+str(timestamp)+r'\2)'],
                                   [r'<Accordion\stitle=".+">\n', r''],
                                   [r'</Accordion>\n', r''],
-                                  [r'emotion="\w+"\s+\n', r''],
+                                  [r'emotion="\w+"[ \t]+\n', r''],
                                   [r'flip=\{(true|false)\}\n', r''],
-                                  [r'((\s){0,}\n){3,}', r'\1\1'],
-                                  [r'answer={(\d)}(\s){0,}\n>', r'<details><summary>answer</summary><p>\1</p></details>\n\nExplanation']]
+
+                                  [r'answer={(\d)}[ \t]{0,}\n>', r'\n<details><summary>answer</summary><p>\1</p></details>\n\n- **Explanation**'],
+                                  [r'[ \t]{0,}question="(.+\?)"',r'- **Question**\n\t\1'],
+                                  [r'[ \t]{0,}choice1="(.+)"',r'    - **Choice 1=** \1'],
+                                  [r'[ \t]{0,}choice2="(.+)"',r'    - **Choice 2=** \1'],
+                                    [r'[ \t]{0,}choice3="(.+)"',r'    - **Choice 3=** \1'],
+                                    [r'[ \t]{0,}choice4="(.+)"',r'    - **Choice 4=** \1'],
+                                    [r'video=".+\.mp4"', r''],
+                                    [r'show="video"', r''],
+                                    [r'([ \t]{0,}\n){3,}', r'\1\1'],]
 
             for i in range(len(replace_list_regex)):
                 pattern = replace_list_regex[i][0]
