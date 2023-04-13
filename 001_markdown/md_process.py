@@ -405,38 +405,41 @@ def mdx2md(timestamp: int = 1676880280):
     dest_dir = os.path.join(cwd, 'des')
     if not os.path.isdir(dest_dir):
         os.mkdir(dest_dir)
-    text_replace_list_mdx2md3 = [[r'<Figure', r''],
-                                 [r'/>', r''],
-                                 [r"<PiCreature", r""],
-                                 [r"show=\"video\"\n", r""],
-                                 [r"<!--", r""],
-                                 [r"-->", r""],
-                                 [r"<Question", r"---"],
-                                 [r"</Question>", r"---"],
-                                 ]
-    replace_list = text_replace_list_mdx2md3
+    # text_replace_list_mdx2md3 = [
+    #                              ]
+    # replace_list = text_replace_list_mdx2md3
     # <Figure
     for filename_with_ext in os.listdir(cwd):
         if filename_with_ext.endswith('.md'):
             src_path = os.path.join(cwd, filename_with_ext)
             dest_path = os.path.join(dest_dir, filename_with_ext)
 
-            with open(src_path, 'r', encoding='UTF-8') as f_src, open(dest_path, 'w', encoding='UTF-8') as f_dest:
-                for line in f_src:
-                    for replace_item in replace_list:
-                        line = line.replace(replace_item[0], replace_item[1])
-                    f_dest.write(line)
-            with open(dest_path, 'r', encoding='UTF-8') as f_src:
+            # with open(src_path, 'r', encoding='UTF-8') as f_src, open(dest_path, 'w', encoding='UTF-8') as f_dest:
+            #     for line in f_src:
+            #         for replace_item in replace_list:
+            #             line = line.replace(replace_item[0], replace_item[1])
+            #         f_dest.write(line)
+            with open(src_path, 'r', encoding='UTF-8') as f_src:
                 content = f_src.read()
             # Define the regex pattern and replacement string
 
-            replace_list_regex = [[r'image="figures/(.+)(\.svg|\.png|\.jpg)"', r'![](\1_'+str(timestamp)+r'\2)'],
+            replace_list_regex = [[r'<Figure', r''],
+                                 [r'/>', r''],
+                                 [r"<PiCreature", r""],
+                                 [r"show=\"video\"\n", r""],
+                                 [r"<!--", r""],
+                                 [r"-->", r""],
+                                 [r"<Question", r"---"],
+                                 [r"<FreeResponse>", r"---"],
+                                    [r"</FreeResponse>", r"---"],
+                                 [r"</Question>", r"---"],
+                [r'image="figures/(.+)(\.svg|\.png|\.jpg)"', r'![](\1_'+str(timestamp)+r'\2)'],
                                   [r'<Accordion\stitle=".+">\n', r''],
                                   [r'</Accordion>\n', r''],
                                   [r'emotion="\w+"[ \t]+\n', r''],
                                   [r'flip=\{(true|false)\}\n', r''],
 
-                                  [r'answer={(\d)}[ \t]{0,}\n>', r'\n<details><summary>answer</summary><p>\1</p></details>\n\n- **Explanation**'],
+                                  [r'answer={(\d)}[ \t]{0,}\n>', r'\n<details><summary>answer</summary><p>Choice= \1</p></details>\n\n- **Explanation**'],
                                   [r'[ \t]{0,}question="(.+\?)"',r'- **Question**\n\t\1'],
                                   [r'[ \t]{0,}choice1="(.+)"',r'    - **Choice 1=** \1'],
                                   [r'[ \t]{0,}choice2="(.+)"',r'    - **Choice 2=** \1'],
@@ -455,6 +458,65 @@ def mdx2md(timestamp: int = 1676880280):
             # Write the modified content to the output Markdown file with UTF-8 encoding
             with open(dest_path, 'w', encoding='utf-8') as file:
                 file.write(content)
+def copy_timestamps_and_index_2_root():
+    cwd = os.getcwd()
+    current_foulder_name=os.path.basename(cwd)
+    filelist=os.listdir(cwd)
+    for file in filelist:
+        if file.find("timestamps")!=-1:
+            new_file_name1="timestamps_"+current_foulder_name+".md"
+            #如果已经存在怎么处理? 要不要检查是否存在??
+            des_path1=os.path.join(cwd,'../..',new_file_name1)
+            shutil.copy(file,des_path1)
+        if file.endswith(".mdx"):
+
+            if file.find("index")!=-1:
+
+                new_file_name=current_foulder_name+".md"
+                des_path=os.path.join(cwd,'../..',new_file_name)
+                shutil.copy(file,des_path)
+
+
+def timestamps_3blue1brown_2_timeline(str_url):
+    #process url
+    #str_url=r'![007_limits.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C007_limits.mp4)'
+    #'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
+    match1=re.search(r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))', str_url)
+    if not match1:
+        raise Exception('No match found')
+    #timestamps file
+    file_list=os.listdir(os.getcwd())
+    list_timestamps=[]
+    for file in file_list:
+        if file.endswith(".md") or file.endswith(".txt"):
+            if file.find("timestamps")!=-1:
+                with open(os.path.join(os.getcwd(), file), 'r', encoding='UTF-8') as f:
+                    lines = f.readlines()
+
+
+                for line in lines:
+                    match=re.search(r'(\d{1,2}):(\d{1,2})[ ]([^\n]+)', line)
+                    if match:
+                        time_sec=int(match.group(1))*60+int(match.group(2))
+                        list_timestamps.append([time_sec, match.group(3)])
+                        #print(time_sec)
+
+                    else:
+                        print("No match found")
+                print(list_timestamps)
+                des_dir=os.path.join(os.getcwd(), 'des')
+                if not os.path.isdir(des_dir):
+                    os.mkdir(des_dir)
+                filename_without_ext=os.path.splitext(file)[0]
+                with open(os.path.join(des_dir, filename_without_ext+'.md'), 'w', encoding='UTF-8') as f:
+                    for i in range(len(list_timestamps)):
+                        if i==len(list_timestamps)-1:
+                            str3=match1.group(1)+"#t={},{}".format(list_timestamps[i][0], 9999)+match1.group(3)
+                        else:
+                            str3=match1.group(1)+"#t={},{}".format(list_timestamps[i][0], list_timestamps[i+1][0])+match1.group(3)
+                        f.write("## {}\n\n".format(list_timestamps[i][1]))
+                        f.write("{}\n\n".format(str3))
+
 
 
 def compare_md_files(dir1, dir2):
@@ -570,8 +632,14 @@ def main():
                         action='store_true', help='call remove_filesname_end')
     parser.add_argument('-ds', '--rename_files_and_dirs_sensor_fusion',
                         action='store_true', help='call rename_files_and_dirs_sensor_fusion')
+    parser.add_argument('-tt', '--timestamps_3blue1brown_2_timeline',
+                    action='store_true', help='call timestamps_3blue1brown_2_timeline')
+    parser.add_argument('-cti', '--copy_timestamps_and_index_2_root',
+                action='store_true', help='call copy_timestamps_and_index_2_root')
     parser.add_argument('-t', '--timestamp', type=str, default=r'1676880280',
-                        help='input parameter to pass to the function')
+                        help='input timestamp to pass to the function')
+    parser.add_argument('-u', '--str_url', type=str, default=r'test',
+                    help='input str_url to pass to the function')
     # parse the command-line arguments
     args = parser.parse_args()
 
@@ -580,8 +648,12 @@ def main():
         rename_files_end_test1()
     elif args.rename_files_and_dirs_sensor_fusion:
         rename_files_and_dirs_sensor_fusion()
+    elif args.copy_timestamps_and_index_2_root:
+        copy_timestamps_and_index_2_root()
     elif args.mdx2md:
         mdx2md(args.timestamp)
+    elif args.timestamps_3blue1brown_2_timeline:
+        timestamps_3blue1brown_2_timeline(args.str_url)
     else:
         print("Invalid argument")
 

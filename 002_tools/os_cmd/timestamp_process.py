@@ -8,6 +8,7 @@ def get_current_timestamp():
 def add_timestamp_to_filenames():
     current_dir = os.getcwd()
     timestamp = int(time.time())
+    print("add_timestamp is : ",timestamp)
     for filename in os.listdir(current_dir):
         if os.path.isfile(os.path.join(current_dir, filename)) and not filename.endswith(".py"):
             filename_without_ext, ext = os.path.splitext(filename)
