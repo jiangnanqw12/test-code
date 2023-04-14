@@ -476,60 +476,97 @@ def copy_timestamps_and_index_2_root():
                 des_path=os.path.join(cwd,'../..',new_file_name)
                 shutil.copy(file,des_path)
 
-
-def timestamps_3blue1brown_2_timeline(str_url):
-    #process url
-    #str_url=r'![007_limits.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C007_limits.mp4)'
-    #'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
-    match1=re.search(r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))', str_url)
+def search_str_url_4_file_vid(str_url):
+    url_pattern_4_file_vid=r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
+    match1=re.search(url_pattern_4_file_vid, str_url)
     if not match1:
         raise Exception('No match found')
-    #timestamps file
-    file_list=os.listdir(os.getcwd())
-    list_timestamps=[]
-    for file in file_list:
-        if file.endswith(".md") or file.endswith(".txt"):
-            if file.find("timestamps")!=-1:
-                with open(os.path.join(os.getcwd(), file), 'r', encoding='UTF-8') as f:
-                    lines = f.readlines()
+    return match1
 
-
-                for line in lines:
-                    match=re.search(r'(\d{1,2}):(\d{1,2})[ ]([^\n]+)', line)
-                    if match:
-                        time_sec=int(match.group(1))*60+int(match.group(2))
-                        list_timestamps.append([time_sec, match.group(3)])
-                        #print(time_sec)
-
-                    else:
-                        print("No match found")
-                print(list_timestamps)
-                des_dir=os.path.join(os.getcwd(), 'des')
-                if not os.path.isdir(des_dir):
-                    os.mkdir(des_dir)
-                filename_without_ext=os.path.splitext(file)[0]
-                with open(os.path.join(des_dir, filename_without_ext+'.md'), 'w', encoding='UTF-8') as f:
-                    for i in range(len(list_timestamps)):
-                        if i==len(list_timestamps)-1:
-                            str3=match1.group(1)+"#t={},{}".format(list_timestamps[i][0], 9999)+match1.group(3)
-                        else:
-                            str3=match1.group(1)+"#t={},{}".format(list_timestamps[i][0], list_timestamps[i+1][0])+match1.group(3)
-                        f.write("## {}\n\n".format(list_timestamps[i][1]))
-                        f.write("{}\n\n".format(str3))
 def min_sec_2_seconds(str_time):
     match=re.search(r'(\d{1,2}):(\d{1,2})', str_time)
     if match:
         time_sec=int(match.group(1))*60+int(match.group(2))
         return time_sec
     else:
-        print("No match found")
+        return None
+def list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1):
+    print(list_time_head_textshort_text)
+
+    des_dir=os.path.join(os.getcwd(), 'des')
+    if not os.path.isdir(des_dir):
+        os.mkdir(des_dir)
+    if not file.endswith('.md'):
+        filename_without_ext=os.path.splitext(file)[0]
+        new_file_name=filename_without_ext+'.md'
+    else:
+        new_file_name=file
+    print(new_file_name)
+    with open(os.path.join(des_dir, new_file_name), 'w', encoding='UTF-8') as f:
+        for i in range(len(list_time_head_textshort_text)):
+            start_time_sec=int(list_time_head_textshort_text[i][0])
+            head="## "+list_time_head_textshort_text[i][1]
+            if i==len(list_time_head_textshort_text)-1:
+                end_time_sec=int(start_time_sec+999)
+            else:
+                end_time_sec=int(list_time_head_textshort_text[i+1][0])
+
+            f.write(head+"\n\n")
+
+            vid_line=match1.group(1)+"#t={},{}".format(start_time_sec,end_time_sec)+match1.group(3)
+            f.write(vid_line+"\n\n")
+
+            if list_time_head_textshort_text[i][2]:
+                f.write(list_time_head_textshort_text[i][2]+"\n\n")
+            if list_time_head_textshort_text[i][3]:
+                f.write(list_time_head_textshort_text[i][3]+"\n\n")
+
+
+def get_list_time_head_textshort_text_4_file(file):
+
+    list_time_head_textshort_text=[]
+    with open(os.path.join(os.getcwd(), file), 'r', encoding='UTF-8') as f:
+        lines = f.readlines()
+
+
+    for line in lines:
+        time_sec=min_sec_2_seconds(line)
+        if time_sec!=None:
+            number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)'
+            match=re.search(number_list_head_time_text_pattern_str, line)
+            if match:
+                print("match time head textshort")
+                list_time_head_textshort_text.append([time_sec, match.group(4),match.group(6),None])
+            else:
+
+                number_list_head_time_text_pattern_str=r'(\d{1,2}):(\d{1,2})\s+(.+)'
+                match=re.search(number_list_head_time_text_pattern_str, line)
+                if match:
+                    print("match time head")
+                    list_time_head_textshort_text.append([time_sec, match.group(3),None,None])
+    return list_time_head_textshort_text
+
+def timestamps_3blue1brown_2_timeline(str_url):
+    #process url
+    #str_url=r'![007_limits.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C007_limits.mp4)'
+    #'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
+    match1=search_str_url_4_file_vid(str_url)
+    #timestamps file
+    file_list=os.listdir(os.getcwd())
+    for file in file_list:
+        if file.endswith(".md") or file.endswith(".txt"):
+            if file.find("timestamps")!=-1:
+                list_time_head_textshort_text=get_list_time_head_textshort_text_4_file(file)
+
+                list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
+
+
 def convert_subtitle_chatgpt_summary_to_markdown():
 
     str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
-    match_raw_str_url=r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
-    match1=re.search(match_raw_str_url, str_url)
-    if not match1:
-        raise Exception('No match found')
+
+    match1=search_str_url_4_file_vid(str_url)
+
 
     cwd=os.getcwd()
     file_list=os.listdir(cwd)
@@ -542,53 +579,9 @@ def convert_subtitle_chatgpt_summary_to_markdown():
     for file in file_list:
         if file.endswith(".md"):
             if file.find("summary_base_on_chatgpt")!=-1:
-                list_timestamps_summary=[]
-                new_file=os.path.join(des_dir, file)
+                list_time_head_textshort_text=get_list_time_head_textshort_text_4_file(file)
+                list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
-                with open(os.path.join(cwd, file), 'r', encoding='UTF-8') as f:
-                    lines = f.readlines()
-                with open(new_file, 'w', encoding='UTF-8') as f:
-                    for line in lines:
-                        match=re.search(r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)', line)
-                        if match:
-                            list_match=[]
-                            head=match.group(4)
-                            str_head="## {}\n\n".format(head)
-                            list_match.append(str_head)
-                            start_time=match.group(5)
-                            start_time_sec=min_sec_2_seconds(start_time)
-                            list_match.append(start_time_sec)
-                            #print(min_sec_2_seconds(time))
-                            text=match.group(6)
-                            list_match.append(text)
-                            list_timestamps_summary.append(list_match)
-                    for i in range(list_timestamps_summary):
-                        if i==len(list_timestamps_summary)-1:
-                            str3=list_timestamps_summary[i][0]+"#t={},{}".format(list_timestamps_summary[i][1], 9999)+list_timestamps_summary[i][2]
-                        else:
-                            str3=list_timestamps_summary[i][0]+"#t={},{}".format(list_timestamps_summary[i][1], 9999)+list_timestamps_summary[i][2]
-                        f.write("## {}\n\n".format(list_timestamps_summary[i][1]))
-                        f.write("{}\n\n".format(str3))
-            if file.find("subtitle")!=-1:
-                new_file=os.path.join(des_dir, file)
-
-                with open(os.path.join(cwd, file), 'r', encoding='UTF-8') as f:
-                    lines = f.readlines()
-                with open(new_file, 'w', encoding='UTF-8') as f:
-                    for line in lines:
-                        match=re.search(r'\((\d{1,2}:\d{1,2})\)[ ](.+\.)', line)
-                        if match:
-                            list_match=[]
-                            head=match.group(4)
-                            str_head="## {}\n\n".format(head)
-                            list_match.append(str_head)
-                            start_time=match.group(5)
-                            start_time_sec=min_sec_2_seconds(start_time)
-                            list_match.append(start_time_sec)
-                            #print(min_sec_2_seconds(time))
-                            text=match.group(6)
-                            list_match.append(text)
-                            list_timestamps_summary.append(list_match)
 
 
 
