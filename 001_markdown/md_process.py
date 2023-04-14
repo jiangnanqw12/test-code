@@ -516,6 +516,87 @@ def timestamps_3blue1brown_2_timeline(str_url):
                             str3=match1.group(1)+"#t={},{}".format(list_timestamps[i][0], list_timestamps[i+1][0])+match1.group(3)
                         f.write("## {}\n\n".format(list_timestamps[i][1]))
                         f.write("{}\n\n".format(str3))
+def min_sec_2_seconds(str_time):
+    match=re.search(r'(\d{1,2}):(\d{1,2})', str_time)
+    if match:
+        time_sec=int(match.group(1))*60+int(match.group(2))
+        return time_sec
+    else:
+        print("No match found")
+def convert_subtitle_chatgpt_summary_to_markdown():
+
+    str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
+    match_raw_str_url=r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
+    match1=re.search(match_raw_str_url, str_url)
+    if not match1:
+        raise Exception('No match found')
+
+    cwd=os.getcwd()
+    file_list=os.listdir(cwd)
+    des_dir=os.path.join(cwd, 'des')
+
+    if not os.path.isdir(des_dir):
+        os.mkdir(des_dir)
+
+    list_timestamps_subtitle=[]
+    for file in file_list:
+        if file.endswith(".md"):
+            if file.find("summary_base_on_chatgpt")!=-1:
+                list_timestamps_summary=[]
+                new_file=os.path.join(des_dir, file)
+
+                with open(os.path.join(cwd, file), 'r', encoding='UTF-8') as f:
+                    lines = f.readlines()
+                with open(new_file, 'w', encoding='UTF-8') as f:
+                    for line in lines:
+                        match=re.search(r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)', line)
+                        if match:
+                            list_match=[]
+                            head=match.group(4)
+                            str_head="## {}\n\n".format(head)
+                            list_match.append(str_head)
+                            start_time=match.group(5)
+                            start_time_sec=min_sec_2_seconds(start_time)
+                            list_match.append(start_time_sec)
+                            #print(min_sec_2_seconds(time))
+                            text=match.group(6)
+                            list_match.append(text)
+                            list_timestamps_summary.append(list_match)
+                    for i in range(list_timestamps_summary):
+                        if i==len(list_timestamps_summary)-1:
+                            str3=list_timestamps_summary[i][0]+"#t={},{}".format(list_timestamps_summary[i][1], 9999)+list_timestamps_summary[i][2]
+                        else:
+                            str3=list_timestamps_summary[i][0]+"#t={},{}".format(list_timestamps_summary[i][1], 9999)+list_timestamps_summary[i][2]
+                        f.write("## {}\n\n".format(list_timestamps_summary[i][1]))
+                        f.write("{}\n\n".format(str3))
+            if file.find("subtitle")!=-1:
+                new_file=os.path.join(des_dir, file)
+
+                with open(os.path.join(cwd, file), 'r', encoding='UTF-8') as f:
+                    lines = f.readlines()
+                with open(new_file, 'w', encoding='UTF-8') as f:
+                    for line in lines:
+                        match=re.search(r'\((\d{1,2}:\d{1,2})\)[ ](.+\.)', line)
+                        if match:
+                            list_match=[]
+                            head=match.group(4)
+                            str_head="## {}\n\n".format(head)
+                            list_match.append(str_head)
+                            start_time=match.group(5)
+                            start_time_sec=min_sec_2_seconds(start_time)
+                            list_match.append(start_time_sec)
+                            #print(min_sec_2_seconds(time))
+                            text=match.group(6)
+                            list_match.append(text)
+                            list_timestamps_summary.append(list_match)
+
+
+
+
+
+
+
+
 
 
 
@@ -636,6 +717,8 @@ def main():
                     action='store_true', help='call timestamps_3blue1brown_2_timeline')
     parser.add_argument('-cti', '--copy_timestamps_and_index_2_root',
                 action='store_true', help='call copy_timestamps_and_index_2_root')
+    parser.add_argument('-csm', '--convert_subtitle_chatgpt_summary_to_markdown',
+                action='store_true', help='call convert_subtitle_chatgpt_summary_to_markdown')
     parser.add_argument('-t', '--timestamp', type=str, default=r'1676880280',
                         help='input timestamp to pass to the function')
     parser.add_argument('-u', '--str_url', type=str, default=r'test',
@@ -650,6 +733,8 @@ def main():
         rename_files_and_dirs_sensor_fusion()
     elif args.copy_timestamps_and_index_2_root:
         copy_timestamps_and_index_2_root()
+    elif args.convert_subtitle_chatgpt_summary_to_markdown:
+        convert_subtitle_chatgpt_summary_to_markdown()
     elif args.mdx2md:
         mdx2md(args.timestamp)
     elif args.timestamps_3blue1brown_2_timeline:
