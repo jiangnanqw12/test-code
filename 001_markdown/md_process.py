@@ -490,40 +490,74 @@ def min_sec_2_seconds(str_time):
         return time_sec
     else:
         return None
-def list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1):
-    print(list_time_head_textshort_text)
-
+def make_output_des_dir_in_cwd():
     des_dir=os.path.join(os.getcwd(), 'des')
     if not os.path.isdir(des_dir):
         os.mkdir(des_dir)
+    return des_dir
+
+def create_new_file_name(file):
     if not file.endswith('.md'):
         filename_without_ext=os.path.splitext(file)[0]
         new_file_name=filename_without_ext+'.md'
     else:
         new_file_name=file
     print(new_file_name)
+    return new_file_name
+
+def list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1):
+    print(list_time_head_textshort_text)
+
+    des_dir=make_output_des_dir_in_cwd()
+    new_file_name=create_new_file_name(file)
     with open(os.path.join(des_dir, new_file_name), 'w', encoding='UTF-8') as f:
         for i in range(len(list_time_head_textshort_text)):
             start_time_sec=int(list_time_head_textshort_text[i][0])
-            head="## "+list_time_head_textshort_text[i][1]
+
             if i==len(list_time_head_textshort_text)-1:
                 end_time_sec=int(start_time_sec+999)
             else:
                 end_time_sec=int(list_time_head_textshort_text[i+1][0])
+            if list_time_head_textshort_text[i][1]:
+                head="## "+list_time_head_textshort_text[i][1]
+                f.write(head+"\n\n")
 
-            f.write(head+"\n\n")
+                i_temp=i
+                flag_find_next_head=False
+                while i_temp<len(list_time_head_textshort_text)-1:
+                    i_temp+=1
+                    if list_time_head_textshort_text[i_temp][1]:
+                        end_time_sec2=int(list_time_head_textshort_text[i_temp][0])
+                        vid_line=match1.group(1)+"#t={},{}".format(start_time_sec,end_time_sec2)+match1.group(3)
+                        f.write(vid_line+"\n\n")
+                        flag_find_next_head=True
+                        break
+                if not flag_find_next_head:
+                    vid_line=match1.group(1)+"#t={}".format(start_time_sec)+match1.group(3)
+                    f.write(vid_line+"\n\n")
 
-            vid_line=match1.group(1)+"#t={},{}".format(start_time_sec,end_time_sec)+match1.group(3)
-            f.write(vid_line+"\n\n")
+
+
+
 
             if list_time_head_textshort_text[i][2]:
-                f.write(list_time_head_textshort_text[i][2]+"\n\n")
+                f.write("- "+list_time_head_textshort_text[i][2]+"\n\n")
+            if list_time_head_textshort_text[i][2] or list_time_head_textshort_text[i][3]:
+                if list_time_head_textshort_text[i][0]:
+                    vid_line=match1.group(1)+"#t={},{}".format(start_time_sec,end_time_sec)+match1.group(3)
+                    f.write(vid_line+"\n\n")
             if list_time_head_textshort_text[i][3]:
                 f.write(list_time_head_textshort_text[i][3]+"\n\n")
 
 
-def get_list_time_head_textshort_text_4_file(file):
-
+def get_list_time_head_textshort_text_4_file(file,key_word):
+    number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)'
+    number_list_head_time_pattern_str=r'(\d{1,2}):(\d{1,2})\s+(.+)'
+    time_text_pattern_str=r'\((\d{1,2}):(\d{1,2})\)[ ]{0,}([^\n]+)[\n]{0,}'
+    pattern_dict=dict()
+    pattern_dict["timestamps"]=number_list_head_time_pattern_str
+    pattern_dict["summary_base_on_chatgpt"]=number_list_head_time_text_pattern_str
+    pattern_dict["subtitle"]=time_text_pattern_str
     list_time_head_textshort_text=[]
     with open(os.path.join(os.getcwd(), file), 'r', encoding='UTF-8') as f:
         lines = f.readlines()
@@ -532,18 +566,17 @@ def get_list_time_head_textshort_text_4_file(file):
     for line in lines:
         time_sec=min_sec_2_seconds(line)
         if time_sec!=None:
-            number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)'
-            match=re.search(number_list_head_time_text_pattern_str, line)
-            if match:
-                print("match time head textshort")
-                list_time_head_textshort_text.append([time_sec, match.group(4),match.group(6),None])
-            else:
-
-                number_list_head_time_text_pattern_str=r'(\d{1,2}):(\d{1,2})\s+(.+)'
-                match=re.search(number_list_head_time_text_pattern_str, line)
+            if key_word in pattern_dict:
+                pattern_str=pattern_dict[key_word]
+                match=re.search(pattern_str, line)
                 if match:
-                    print("match time head")
-                    list_time_head_textshort_text.append([time_sec, match.group(3),None,None])
+                    if key_word=="timestamps":
+                        list_time_head_textshort_text.append([time_sec, match.group(3),None,None])
+                    elif key_word=="summary_base_on_chatgpt":
+                        list_time_head_textshort_text.append([time_sec, match.group(4),match.group(6),None])
+                    elif key_word=="subtitle":
+                        list_time_head_textshort_text.append([time_sec, None,None,match.group(3)])
+
     return list_time_head_textshort_text
 
 def timestamps_3blue1brown_2_timeline(str_url):
@@ -556,7 +589,8 @@ def timestamps_3blue1brown_2_timeline(str_url):
     for file in file_list:
         if file.endswith(".md") or file.endswith(".txt"):
             if file.find("timestamps")!=-1:
-                list_time_head_textshort_text=get_list_time_head_textshort_text_4_file(file)
+                key_word="timestamps"
+                list_time_head_textshort_text=get_list_time_head_textshort_text_4_file(file,key_word)
 
                 list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
@@ -566,25 +600,94 @@ def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
     #str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
 
     match1=search_str_url_4_file_vid(str_url)
-
-
     cwd=os.getcwd()
     file_list=os.listdir(cwd)
-    des_dir=os.path.join(cwd, 'des')
 
-    if not os.path.isdir(des_dir):
-        os.mkdir(des_dir)
+    make_output_des_dir_in_cwd()
 
-    list_timestamps_subtitle=[]
+
     for file in file_list:
         if file.endswith(".md"):
             if file.find("summary_base_on_chatgpt")!=-1:
-                list_time_head_textshort_text=get_list_time_head_textshort_text_4_file(file)
+                key_word="summary_base_on_chatgpt"
+                list_time_head_textshort_text=get_list_time_head_textshort_text_4_file(file,key_word)
                 list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
+def merge_list_time_head_textshort_text(list_time_text,list_time_head_textshort):
+    print("list_time_head_textshort is :")
+    print(list_time_head_textshort)
+    print("list_time_text is :")
+    print(list_time_text)
 
 
+    for i in range(len(list_time_head_textshort)):
+        #print(list_time_head_textshort[i][0])
+        for j in range(len(list_time_text)):
+            if list_time_head_textshort[i][0]==list_time_text[j][0]:
 
+                time_text=list_time_text.pop(j)
+                print(time_text)
+                list_time_head_textshort[i][3]=time_text[3]
+                #list_time_head_textshort.append([list_time_head_textshort[i][0],list_time_head_textshort[i][1],list_time_head_textshort[i][2],time_text[3]])
+                break
+    print("first merge list_time_head_textshort_text is :")
+    print(list_time_head_textshort)
+    list_time_head_textshort_text=list_time_head_textshort
+    if len(list_time_text)>0:
+        #print("remain:",list_time_text)
+
+        list_pop=[]
+        for i in range(len(list_time_text)):
+            for j in range(len(list_time_head_textshort_text)):
+                time_text=int(list_time_text[i][0])
+                time_shorttext=int(list_time_head_textshort_text[j][0])
+                if j!=len(list_time_head_textshort_text)-1:
+                    time_shorttext_next=int(list_time_head_textshort_text[j+1][0])
+
+                    if time_text>time_shorttext and time_text<time_shorttext_next:
+
+                        list_time_head_textshort_text.insert(j+1,[list_time_text[i][0],None,None,list_time_text[i][3]])
+                        list_pop.append(list_time_text[i])
+                        break
+                else:
+                    if time_text>time_shorttext:
+                        list_time_head_textshort_text.append([list_time_text[i][0],None,None,list_time_text[i][3]])
+                        list_pop.append(list_time_text[i])
+                        break
+        for elment in list_pop:
+            index=list_time_text.index(elment)
+            list_time_text.pop(index)
+    if len(list_time_text)>0:
+        print("remain:",list_time_text)
+
+    return list_time_head_textshort_text
+def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
+
+    #str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
+
+    match1=search_str_url_4_file_vid(str_url)
+    cwd=os.getcwd()
+    file_list=os.listdir(cwd)
+
+    make_output_des_dir_in_cwd()
+
+    for file in file_list:
+        if file.endswith(".md"):
+            if file.find("subtitle")!=-1:
+                key_word="subtitle"
+                list_time_text=get_list_time_head_textshort_text_4_file(file,key_word)
+                #list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
+
+            if file.find("summary_base_on_chatgpt")!=-1:
+                key_word="summary_base_on_chatgpt"
+                list_time_head_textshort=get_list_time_head_textshort_text_4_file(file,key_word)
+                #list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
+
+
+    list_time_head_textshort_text=merge_list_time_head_textshort_text(list_time_text,list_time_head_textshort)
+    print("final is:")
+    print(list_time_head_textshort_text)
+    list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
 
 
@@ -712,6 +815,8 @@ def main():
                 action='store_true', help='call copy_timestamps_and_index_2_root')
     parser.add_argument('-csm', '--convert_subtitle_chatgpt_summary_to_markdown_vid_timeline',
                 action='store_true', help='call convert_subtitle_chatgpt_summary_to_markdown_vid_timeline')
+    parser.add_argument('-cssm', '--convert_subtitle_and_summary_to_markdown_vid_timeline',
+                action='store_true', help='call convert_subtitle_and_summary_to_markdown_vid_timeline')
     parser.add_argument('-t', '--timestamp', type=str, default=r'1676880280',
                         help='input timestamp to pass to the function')
     parser.add_argument('-u', '--str_url', type=str, default=r'test',
@@ -728,6 +833,8 @@ def main():
         copy_timestamps_and_index_2_root()
     elif args.convert_subtitle_chatgpt_summary_to_markdown_vid_timeline:
         convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(args.str_url)
+    elif args.convert_subtitle_and_summary_to_markdown_vid_timeline:
+        convert_subtitle_and_summary_to_markdown_vid_timeline(args.str_url)
     elif args.mdx2md:
         mdx2md(args.timestamp)
     elif args.timestamps_3blue1brown_2_timeline:
