@@ -342,14 +342,12 @@ def add_timestamp_to_filenames():
 
 
 def text_replace(root_dir: str, replace_list: list):
-    dest_dir = os.path.join(root_dir, 'des')
-    if not os.path.isdir(dest_dir):
-        os.mkdir(dest_dir)
 
+    output_dir=create_output_directory()
     for filename_with_ext in os.listdir(root_dir):
         if filename_with_ext.endswith('.md'):
             src_path = os.path.join(root_dir, filename_with_ext)
-            dest_path = os.path.join(dest_dir, filename_with_ext)
+            dest_path = os.path.join(output_dir, filename_with_ext)
 
             with open(src_path, 'r', encoding='UTF-8') as f_src, open(dest_path, 'w', encoding='UTF-8') as f_dest:
                 for line in f_src:
@@ -401,10 +399,8 @@ def mdx2md_b1(timestamp: int = 1676880280):
 
 
 def mdx2md(timestamp: int = 1676880280):
+    output_dir = create_output_directory()
     cwd = os.getcwd()
-    dest_dir = os.path.join(cwd, 'des')
-    if not os.path.isdir(dest_dir):
-        os.mkdir(dest_dir)
     # text_replace_list_mdx2md3 = [
     #                              ]
     # replace_list = text_replace_list_mdx2md3
@@ -412,7 +408,7 @@ def mdx2md(timestamp: int = 1676880280):
     for filename_with_ext in os.listdir(cwd):
         if filename_with_ext.endswith('.md'):
             src_path = os.path.join(cwd, filename_with_ext)
-            dest_path = os.path.join(dest_dir, filename_with_ext)
+            dest_path = os.path.join(output_dir, filename_with_ext)
 
             # with open(src_path, 'r', encoding='UTF-8') as f_src, open(dest_path, 'w', encoding='UTF-8') as f_dest:
             #     for line in f_src:
@@ -497,18 +493,19 @@ def search_str_url_4_file_vid(str_url):
         raise Exception('No match found')
     return match1
 
-def min_sec_2_seconds(str_time):
-    match=re.search(r'(\d{1,2}):(\d{1,2})', str_time)
+def convert_min_sec_to_seconds(time_str):
+    match = re.search(r'(\d{1,2}):(\d{1,2})', time_str)
     if match:
-        time_sec=int(match.group(1))*60+int(match.group(2))
-        return time_sec
+        time_seconds = int(match.group(1)) * 60 + int(match.group(2))
+        return time_seconds
     else:
         return None
-def make_output_des_dir_in_cwd():
-    des_dir=os.path.join(os.getcwd(), 'des')
-    if not os.path.isdir(des_dir):
-        os.mkdir(des_dir)
-    return des_dir
+
+def create_output_directory():
+    output_dir=os.path.join(os.getcwd(), 'output')
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
+    return output_dir
 
 def create_new_file_name(file):
     if not file.endswith('.md'):
@@ -519,12 +516,13 @@ def create_new_file_name(file):
     print(new_file_name)
     return new_file_name
 
+#0
 def list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1):
     print(list_time_head_textshort_text)
 
-    des_dir=make_output_des_dir_in_cwd()
+    output_dir=create_output_directory()
     new_file_name=create_new_file_name(file)
-    with open(os.path.join(des_dir, new_file_name), 'w', encoding='UTF-8') as f:
+    with open(os.path.join(output_dir, new_file_name), 'w', encoding='UTF-8') as f:
         for i in range(len(list_time_head_textshort_text)):
             start_time_sec=int(list_time_head_textshort_text[i][0])
 
@@ -573,7 +571,7 @@ def get_list_time_head_textshort_text_4_file(file,key_word):
         lines = f.readlines()
 
     for line in lines:
-        time_sec=min_sec_2_seconds(line)
+        time_sec=convert_min_sec_to_seconds(line)
         if time_sec!=None:
             if key_word in pattern_dict:
                 pattern_str=pattern_dict[key_word]
@@ -612,7 +610,7 @@ def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
     cwd=os.getcwd()
     file_list=os.listdir(cwd)
 
-    make_output_des_dir_in_cwd()
+    create_output_directory()
 
 
     for file in file_list:
@@ -678,7 +676,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     cwd=os.getcwd()
     file_list=os.listdir(cwd)
 
-    make_output_des_dir_in_cwd()
+    create_output_directory()
 
     for file in file_list:
         if file.endswith(".md"):
