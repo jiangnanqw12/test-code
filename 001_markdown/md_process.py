@@ -458,23 +458,37 @@ def mdx2md(timestamp: int = 1676880280):
             # Write the modified content to the output Markdown file with UTF-8 encoding
             with open(dest_path, 'w', encoding='utf-8') as file:
                 file.write(content)
-def copy_timestamps_and_index_2_root():
-    cwd = os.getcwd()
-    current_foulder_name=os.path.basename(cwd)
-    filelist=os.listdir(cwd)
+
+
+def copy_timestamps_and_index_2_root(directory=None):
+    """
+    Copies files with 'timestamps' in their name and '.mdx' extension to the root directory
+    with an updated name. Also copies files with 'index' in their name and '.mdx' extension
+    to the root directory with an updated name.
+    """
+    if directory is None:
+        directory = os.getcwd()
+
+    current_folder_name = os.path.basename(directory)
+    filelist = os.listdir(directory)
+
     for file in filelist:
-        if file.find("timestamps")!=-1:
-            new_file_name1="timestamps_"+current_foulder_name+".md"
-            #如果已经存在怎么处理? 要不要检查是否存在??
-            des_path1=os.path.join(cwd,'../..',new_file_name1)
-            shutil.copy(file,des_path1)
-        if file.endswith(".mdx"):
+        file_name, file_extension = os.path.splitext(file)
 
-            if file.find("index")!=-1:
+        if "timestamps" in file_name and file_extension == '.md':
+            new_file_name1 = f"timestamps_{current_folder_name}.md"
+            dest_path1 = os.path.join(directory, '../..', new_file_name1)
 
-                new_file_name=current_foulder_name+".md"
-                des_path=os.path.join(cwd,'../..',new_file_name)
-                shutil.copy(file,des_path)
+            if not os.path.exists(dest_path1):
+                shutil.copy(file, dest_path1)
+
+        if file_extension == '.mdx':
+            if "index" in file_name:
+                new_file_name = f"{current_folder_name}.md"
+                dest_path = os.path.join(directory, '../..', new_file_name)
+
+                if not os.path.exists(dest_path):
+                    shutil.copy(file, dest_path)
 
 def search_str_url_4_file_vid(str_url):
     url_pattern_4_file_vid=r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
@@ -536,10 +550,6 @@ def list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_te
                     vid_line=match1.group(1)+"#t={}".format(start_time_sec)+match1.group(3)
                     f.write(vid_line+"\n\n")
 
-
-
-
-
             if list_time_head_textshort_text[i][2]:
                 f.write("- "+list_time_head_textshort_text[i][2]+"\n\n")
             if list_time_head_textshort_text[i][2] or list_time_head_textshort_text[i][3]:
@@ -561,7 +571,6 @@ def get_list_time_head_textshort_text_4_file(file,key_word):
     list_time_head_textshort_text=[]
     with open(os.path.join(os.getcwd(), file), 'r', encoding='UTF-8') as f:
         lines = f.readlines()
-
 
     for line in lines:
         time_sec=min_sec_2_seconds(line)
