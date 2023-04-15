@@ -517,45 +517,48 @@ def create_new_file_name(file):
     return new_file_name
 
 #0
-def list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1):
-    print(list_time_head_textshort_text)
+def list_time_head_textshort_text_to_vid_timeline_md(timeline_data,file,match):
+    print(timeline_data)
 
     output_dir=create_output_directory()
     new_file_name=create_new_file_name(file)
     with open(os.path.join(output_dir, new_file_name), 'w', encoding='UTF-8') as f:
-        for i in range(len(list_time_head_textshort_text)):
-            start_time_sec=int(list_time_head_textshort_text[i][0])
+        for i, (start_time, heading, short_text, text) in enumerate(timeline_data):
+            start_time_sec = int(start_time)
 
-            if i==len(list_time_head_textshort_text)-1:
-                end_time_sec=int(start_time_sec+999)
+            if i == len(timeline_data) - 1:
+                end_time_sec = start_time_sec + 999
             else:
-                end_time_sec=int(list_time_head_textshort_text[i+1][0])
-            if list_time_head_textshort_text[i][1]:
-                head="## "+list_time_head_textshort_text[i][1]
-                f.write(head+"\n\n")
+                end_time_sec = int(timeline_data[i + 1][0])
 
-                i_temp=i
-                flag_find_next_head=False
-                while i_temp<len(list_time_head_textshort_text)-1:
-                    i_temp+=1
-                    if list_time_head_textshort_text[i_temp][1]:
-                        end_time_sec2=int(list_time_head_textshort_text[i_temp][0])
-                        vid_line=match1.group(1)+"#t={},{}".format(start_time_sec,end_time_sec2)+match1.group(3)
-                        f.write(vid_line+"\n\n")
-                        flag_find_next_head=True
+            if heading:
+                f.write(f"## {heading}\n\n")
+
+                i_temp = i
+                flag_find_next_head = False
+                while i_temp < len(timeline_data) - 1:
+                    i_temp += 1
+                    if timeline_data[i_temp][1]:
+                        end_time_sec2 = int(timeline_data[i_temp][0])
+                        vid_line = f"{match.group(1)}#t={start_time_sec},{end_time_sec2}{match.group(3)}"
+                        f.write(f"{vid_line}\n\n")
+                        flag_find_next_head = True
                         break
-                if not flag_find_next_head:
-                    vid_line=match1.group(1)+"#t={}".format(start_time_sec)+match1.group(3)
-                    f.write(vid_line+"\n\n")
 
-            if list_time_head_textshort_text[i][2]:
-                f.write("- "+list_time_head_textshort_text[i][2]+"\n\n")
-            if list_time_head_textshort_text[i][2] or list_time_head_textshort_text[i][3]:
-                if list_time_head_textshort_text[i][0]:
-                    vid_line=match1.group(1)+"#t={},{}".format(start_time_sec,end_time_sec)+match1.group(3)
-                    f.write(vid_line+"\n\n")
-            if list_time_head_textshort_text[i][3]:
-                f.write(list_time_head_textshort_text[i][3]+"\n\n")
+                if not flag_find_next_head:
+                    vid_line = f"{match.group(1)}#t={start_time_sec}{match.group(3)}"
+                    f.write(f"{vid_line}\n\n")
+
+            if short_text:
+                f.write(f"- {short_text}\n\n")
+
+            if short_text or text:
+                vid_line = f"{match.group(1)}#t={start_time_sec},{end_time_sec}{match.group(3)}"
+                f.write(f"{vid_line}\n\n")
+
+            if text:
+                f.write(f"{text}\n\n")
+
 
 
 def get_list_time_head_textshort_text_4_file(file,key_word):
