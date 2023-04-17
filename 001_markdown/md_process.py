@@ -494,12 +494,21 @@ def search_str_url_4_file_vid(str_url):
     return match1
 
 def convert_min_sec_to_seconds(time_str):
-    match = re.search(r'(\d{1,2}):(\d{1,2})', time_str)
+    time_line_pattern_str=r'\((\d{1,2}:\d{1,2})-(\d{1,2}:\d{1,2})\)[ ]{1,}'
+    time_stamp_pattern_str=r'(\d{1,2}):(\d{1,2})'
+    match=re.search(time_line_pattern_str, time_str)
     if match:
-        time_seconds = int(match.group(1)) * 60 + int(match.group(2))
-        return time_seconds
+        time_line_start=match.group(1)
+        time_line_end=match.group(2)
+        time_line_start_seconds=int(time_line_start.split(':')[0])*60+int(time_line_start.split(':')[1])
+        return time_line_start_seconds
     else:
-        return None
+        match = re.search(time_stamp_pattern_str, time_str)
+        if match:
+            time_seconds = int(match.group(1)) * 60 + int(match.group(2))
+            return time_seconds
+        else:
+            return None
 
 def create_output_directory():
     output_dir=os.path.join(os.getcwd(), 'output')
@@ -562,9 +571,18 @@ def list_time_head_textshort_text_to_vid_timeline_md(timeline_data,file,match):
 
 
 def get_list_time_head_textshort_text_4_file(file,key_word):
-    number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)'
+    print("start to generate time line for video and head text:")
+    number_list_bullet_pattern_str=r'((\d{1,2}\.)|-)[ ]{1,}'
+    head_pattern_str=r'(([\w:-]+ ){1,})'
+    time_line_pattern_str=r'\((\d{1,2}:\d{1,2})-{0,1}(\d{1,2}:\d{1,2}){0,1}\)[ ]{1,}'
+    time_stamp_pattern_str=r'\((\d{1,2}):(\d{1,2})\)'
+    text_pattern_str=r'(.+)\n{0,1}'
+    #number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)'
+    number_list_head_time_text_pattern_str=number_list_bullet_pattern_str+head_pattern_str+time_stamp_pattern_str+text_pattern_str
     number_list_head_time_pattern_str=r'(\d{1,2}):(\d{1,2})\s+(.+)'
+
     time_text_pattern_str=r'\((\d{1,2}):(\d{1,2})\)[ ]{0,}([^\n]+)[\n]{0,}'
+
     pattern_dict=dict()
     pattern_dict["timestamps"]=number_list_head_time_pattern_str
     pattern_dict["summary_base_on_chatgpt"]=number_list_head_time_text_pattern_str
@@ -574,19 +592,25 @@ def get_list_time_head_textshort_text_4_file(file,key_word):
         lines = f.readlines()
 
     for line in lines:
-        time_sec=convert_min_sec_to_seconds(line)
-        if time_sec!=None:
+        time_line_start_seconds=convert_min_sec_to_seconds(line)
+        if time_line_start_seconds!=None:
             if key_word in pattern_dict:
                 pattern_str=pattern_dict[key_word]
                 match=re.search(pattern_str, line)
                 if match:
                     if key_word=="timestamps":
-                        list_time_head_textshort_text.append([time_sec, match.group(3),None,None])
+                        list_time_head_textshort_text.append([time_line_start_seconds, match.group(3),None,None])
                     elif key_word=="summary_base_on_chatgpt":
-                        list_time_head_textshort_text.append([time_sec, match.group(4),match.group(6),None])
+                        for i in range(len(match.groups())):
+                            print(i,match.group(i))
+                        list_time_head_textshort_text.append([time_line_start_seconds, match.group(3),match.group(7),None])
                     elif key_word=="subtitle":
-                        list_time_head_textshort_text.append([time_sec, None,None,match.group(3)])
-
+                        list_time_head_textshort_text.append([time_line_start_seconds, None,None,match.group(3)])
+                else:
+                    print("no match for line:",line)
+                    print(key_word)
+    print("List of time, heading, short text, text:")
+    print(list_time_head_textshort_text)
     return list_time_head_textshort_text
 
 def timestamps_3blue1brown_2_timeline(str_url):
@@ -763,7 +787,7 @@ def process_md_files_filename_2_head():
 def zhihu_book_process():
     path = os.getcwd()
     back_up_dir_tree(path)
-    rename_files_end(path, '.md', '.md', 2, 2)
+    #rename_files_end(path, '.md', '.md', 2, 2)
     base_on_mulu_markdown_rename_files()
     search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
     remove_line(path, search_list)
