@@ -419,8 +419,7 @@ def mdx2md(timestamp: int = 1676880280):
                 content = f_src.read()
             # Define the regex pattern and replacement string
 
-            replace_list_regex = [[r'<Figure', r''],
-                                 [r'/>', r''],
+            replace_list_regex = [
                                  [r"<PiCreature", r""],
                                  [r"show=\"video\"\n", r""],
                                  [r"<!--", r""],
@@ -429,7 +428,7 @@ def mdx2md(timestamp: int = 1676880280):
                                  [r"<FreeResponse>", r"---"],
                                     [r"</FreeResponse>", r"---"],
                                  [r"</Question>", r"---"],
-                [r'image="figures/(.+)(\.svg|\.png|\.jpg)"', r'![](\1_'+str(timestamp)+r'\2)'],
+                [r'<Figure[\n ]{1,}image="(.+)(\.svg|\.png|\.jpg)".{0,}/>', r'![](\1_'+str(timestamp)+r'\2)'],
                                   [r'<Accordion\stitle=".+">\n', r''],
                                   [r'</Accordion>\n', r''],
                                   [r'emotion="\w+"[ \t]+\n', r''],
@@ -443,7 +442,8 @@ def mdx2md(timestamp: int = 1676880280):
                                     [r'[ \t]{0,}choice4="(.+)"',r'    - **Choice 4=** \1'],
                                     [r'video=".+\.mp4"', r''],
                                     [r'show="video"', r''],
-                                    [r'([ \t]{0,}\n){3,}', r'\1\1'],]
+                                    [r'([ \t]{0,}\n){3,}', r'\1\1'],
+                                    ['/>', r''],]
 
             for i in range(len(replace_list_regex)):
                 pattern = replace_list_regex[i][0]
