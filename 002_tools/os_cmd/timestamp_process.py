@@ -19,16 +19,16 @@ def main():
     parser = argparse.ArgumentParser()
 
     # add arguments for each function
-    parser.add_argument('-gt', '--gettimestamp', action='store_true', help='call get_current_timestamp')
-    parser.add_argument('-at', '--addtimestamp', action='store_true', help='call add_timestamp_to_filenames')
+    parser.add_argument('-gt', '--get_timestamp', action='store_true', help='call get_current_timestamp')
+    parser.add_argument('-at', '--add_timestamp', action='store_true', help='call add_timestamp_to_filenames')
 
     # parse the command-line arguments
     args = parser.parse_args()
 
     # call the appropriate function based on the arguments
-    if args.gettimestamp:
+    if args.get_timestamp:
         get_current_timestamp()
-    elif args.addtimestamp:
+    elif args.add_timestamp:
         add_timestamp_to_filenames()
     else:
         print("Invalid argument")

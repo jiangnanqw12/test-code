@@ -726,52 +726,8 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
 
 
 
-def get_current_timestamp():
-    timestamp = int(time.time())
-    print(timestamp)
-    return timestamp
-def add_timestamp_to_filenames():
-    current_dir = os.getcwd()
-    timestamp = int(time.time())
-    print("add_timestamp is : ",timestamp)
-    for filename in os.listdir(current_dir):
-        if os.path.isfile(os.path.join(current_dir, filename)) and not filename.endswith(".py"):
-            filename_without_ext, ext = os.path.splitext(filename)
-            new_filename = f"{filename_without_ext}_{timestamp}{ext}"
-            os.rename(os.path.join(current_dir, filename), os.path.join(current_dir, new_filename))
 
-def create_directory_assets_imgs():
-    dirs = [
-        "assets/imgs",
-        "assets/vids"
-    ]
 
-    for directory in dirs:
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-            print(f"Created directory: {directory}")
-        else:
-            print(f"Directory already exists: {directory}")
-def create_directory_assets_concept_structure():
-    dirs = [
-        "assets/imgs",
-        "assets/lectures",
-        "assets/paper"
-    ]
-
-    for directory in dirs:
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-            print(f"Created directory: {directory}")
-        else:
-            print(f"Directory already exists: {directory}")
-
-def create_file_subtitle_summary_base_on_chatgpt_md():
-    # Create a file named subtitle.md and summary_base_on_chatgpt.md
-    with open(os.path.join(os.getcwd(), "subtitle.md"), "w") as f:
-        pass
-    with open(os.path.join(os.getcwd(), "summary_base_on_chatgpt.md"), "w") as f:
-        pass
 
 
 def compare_md_files(dir1, dir2):
@@ -899,12 +855,6 @@ def main():
                         help='input timestamp to pass to the function')
     parser.add_argument('-u', '--str_url', type=str, default=r'test',
                     help='input str_url to pass to the function')
-    parser.add_argument('-gt', '--get_timestamp', action='store_true', help='call get_current_timestamp')
-    parser.add_argument('-at', '--addt_imestamp', action='store_true', help='call add_timestamp_to_filenames')
-    parser.add_argument('-ci', '--create_imgs_folder', action='store_true', help='call create_directory_assets_imgs')
-    parser.add_argument('-cc', '--creat_concept_folder', action='store_true', help='call create_directory_assets_concept_structure')
-    parser.add_argument('-css', '--creat_subtitle_summary', action='store_true', help='call create_file_subtitle_summary_base_on_chatgpt_md')
-
     # parse the command-line arguments
     args = parser.parse_args()
 
@@ -923,16 +873,6 @@ def main():
         mdx2md(args.timestamp)
     elif args.timestamps_3blue1brown_2_timeline:
         timestamps_3blue1brown_2_timeline(args.str_url)
-    elif args.get_timestamp:
-        get_current_timestamp()
-    elif args.add_timestamp:
-        add_timestamp_to_filenames()
-    elif args.create_imgs_folder:
-        create_directory_assets_imgs()
-    elif args.creat_concept_folder:
-        create_directory_assets_concept_structure()
-    elif args.creat_subtitle_summary:
-        create_file_subtitle_summary_base_on_chatgpt_md()
     else:
         print("Invalid argument")
 
