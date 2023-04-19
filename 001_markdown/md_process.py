@@ -768,6 +768,7 @@ def create_directory_assets_concept_structure():
 
 def create_file_subtitle_summary_base_on_chatgpt_md():
     # Create a file named subtitle.md and summary_base_on_chatgpt.md
+    print("create_file_subtitle_summary_base_on_chatgpt_md")
     with open(os.path.join(os.getcwd(), "subtitle.md"), "w") as f:
         pass
     with open(os.path.join(os.getcwd(), "summary_base_on_chatgpt.md"), "w") as f:
@@ -900,7 +901,7 @@ def main():
     parser.add_argument('-u', '--str_url', type=str, default=r'test',
                     help='input str_url to pass to the function')
     parser.add_argument('-gt', '--get_timestamp', action='store_true', help='call get_current_timestamp')
-    parser.add_argument('-at', '--addt_imestamp', action='store_true', help='call add_timestamp_to_filenames')
+    parser.add_argument('-at', '--add_timestamp', action='store_true', help='call add_timestamp_to_filenames')
     parser.add_argument('-ci', '--create_imgs_folder', action='store_true', help='call create_directory_assets_imgs')
     parser.add_argument('-cc', '--creat_concept_folder', action='store_true', help='call create_directory_assets_concept_structure')
     parser.add_argument('-css', '--creat_subtitle_summary', action='store_true', help='call create_file_subtitle_summary_base_on_chatgpt_md')
