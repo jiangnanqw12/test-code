@@ -572,6 +572,8 @@ def list_time_head_textshort_text_to_vid_timeline_md(timeline_data,file,match):
 
 def get_list_time_head_textshort_text_4_file(file,key_word):
     print("start to generate time line for video and head text:")
+    find1=r'Part \d:\nTitle: ([\w ]+)\nTimestamp: (\(\d{1,2}:\d{1,2}\))\nSummary: ([\w , .]+)'
+    replace1=r'- $1 $2 $3'
     number_list_bullet_pattern_str=r'((\d{1,2}\.)|-)[ ]{1,}'
     head_pattern_str=r'(([\w:-]+ ){1,})'
     time_line_pattern_str=r'\((\d{1,2}:\d{1,2})-{0,1}(\d{1,2}:\d{1,2}){0,1}\)[ ]{1,}'
