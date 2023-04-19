@@ -37,17 +37,17 @@ def main():
     parser = argparse.ArgumentParser()
 
     # add arguments for each function
-    parser.add_argument('-ci', '--createimgs', action='store_true', help='call create_directory_assets_imgs')
-    parser.add_argument('-cc', '--creatconcept', action='store_true', help='call create_directory_assets_concept_structure')
+    parser.add_argument('-ci', '--create_imgs_folder', action='store_true', help='call create_directory_assets_imgs')
+    parser.add_argument('-cc', '--creat_concept_folder', action='store_true', help='call create_directory_assets_concept_structure')
     parser.add_argument('-css', '--creat_subtitle_summary', action='store_true', help='call create_file_subtitle_summary_base_on_chatgpt_md')
 
     # parse the command-line arguments
     args = parser.parse_args()
 
     # call the appropriate function based on the arguments
-    if args.createimgs:
+    if args.create_imgs_folder:
         create_directory_assets_imgs()
-    elif args.creatconcept:
+    elif args.creat_concept_folder:
         create_directory_assets_concept_structure()
     elif args.creat_subtitle_summary:
         create_file_subtitle_summary_base_on_chatgpt_md()
