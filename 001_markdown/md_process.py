@@ -428,7 +428,7 @@ def mdx2md(timestamp: int = 1676880280):
                                  [r"<FreeResponse>", r"---"],
                                     [r"</FreeResponse>", r"---"],
                                  [r"</Question>", r"---"],
-                [r'<Figure[\n ]{1,}image="(.+)(\.svg|\.png|\.jpg)".{0,}/>', r'![](\1_'+str(timestamp)+r'\2)'],
+                [r'<Figure[\n ]{1,}image="(.+)(\.svg|\.png|\.jpg)"[\w ._="\'\n]{0,}/>', r'![](\1_'+str(timestamp)+r'\2)'],
                                   [r'<Accordion\stitle=".+">\n', r''],
                                   [r'</Accordion>\n', r''],
                                   [r'emotion="\w+"[ \t]+\n', r''],
@@ -510,8 +510,34 @@ def convert_min_sec_to_seconds(time_str):
         else:
             return None
 
+def get_father_path(path):
+    return os.path.dirname(path)
+
+
 def create_output_directory():
-    output_dir=os.path.join(os.getcwd(), 'output')
+    cwd=os.getcwd()
+    cwd_floder_name=os.path.basename(cwd)
+
+    if cwd_floder_name=="assets":
+
+        father_path=os.path.dirname(cwd)
+        output_dir=os.path.join(father_path, 'output')
+    else:
+        father_floder_name=os.path.basename(os.path.dirname(cwd))
+        if father_floder_name=="assets":
+            father_father_path=os.path.dirname(os.path.dirname(cwd))
+            output_dir=os.path.join(father_father_path, 'output')
+        else:
+            father_father_floder_name=os.path.basename(os.path.dirname(os.path.dirname(cwd)))
+            if father_father_floder_name=="assets":
+                father_father_father_path=os.path.dirname(os.path.dirname(os.path.dirname(cwd)))
+                output_dir=os.path.join(father_father_father_path, 'output')
+            else:
+                output_dir=os.path.join(cwd, 'output')
+
+
+
+
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
     return output_dir
@@ -574,6 +600,8 @@ def get_list_time_head_textshort_text_4_file(file,key_word):
     print("start to generate time line for video and head text:")
     find1=r'Part \d:\nTitle: ([\w ]+)\nTimestamp: (\(\d{1,2}:\d{1,2}\))\nSummary: ([\w , .]+)'
     replace1=r'- $1 $2 $3'
+    find2=r'(\(\d{1,2}:\d{1,2}\)) ([\w ]+)\n'
+    replace2=r'- $2 $1 '
     number_list_bullet_pattern_str=r'((\d{1,2}\.)|-)[ ]{1,}'
     head_pattern_str=r'(([\w:-]+ ){1,})'
     time_line_pattern_str=r'\((\d{1,2}:\d{1,2})-{0,1}(\d{1,2}:\d{1,2}){0,1}\)[ ]{1,}'
@@ -603,8 +631,8 @@ def get_list_time_head_textshort_text_4_file(file,key_word):
                     if key_word=="timestamps":
                         list_time_head_textshort_text.append([time_line_start_seconds, match.group(3),None,None])
                     elif key_word=="summary_base_on_chatgpt":
-                        for i in range(len(match.groups())):
-                            print(i,match.group(i))
+                        # for i in range(len(match.groups())):
+                        #     print(i,match.group(i))
                         list_time_head_textshort_text.append([time_line_start_seconds, match.group(3),match.group(7),None])
                     elif key_word=="subtitle":
                         list_time_head_textshort_text.append([time_line_start_seconds, None,None,match.group(3)])
