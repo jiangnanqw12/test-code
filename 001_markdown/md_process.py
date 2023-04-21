@@ -428,13 +428,14 @@ def mdx2md(timestamp: int = 1676880280):
                                  [r"<FreeResponse>", r"---"],
                                     [r"</FreeResponse>", r"---"],
                                  [r"</Question>", r"---"],
-                [r'<Figure[\n ]{1,}image="(.+)(\.svg|\.png|\.jpg)"[\w ._="\'\n]{0,}/>', r'![](\1_'+str(timestamp)+r'\2)'],
+                [r'''<Figure[\n ]{1,}image="(.+)(\.svg|\.png|\.jpg)"[\w ._="'\n_%]{0,}/>''', r'![](\1_'+str(timestamp)+r'\2)'],
                                   [r'<Accordion\stitle=".+">\n', r''],
                                   [r'</Accordion>\n', r''],
                                   [r'emotion="\w+"[ \t]+\n', r''],
                                   [r'flip=\{(true|false)\}\n', r''],
-
-                                  [r'answer={(\d)}[ \t]{0,}\n>', r'\n<details><summary>answer</summary><p>Choice= \1</p></details>\n\n- **Explanation**'],
+#[r'(?s)<Question .+?</Question>', r'tttttttttttttttttttt'],
+                                  [r'answer=\{(\d)\}[ \n\t]{0,}>', r'\n<details><summary>answer</summary><p>Choice= \1</p></details>\n\n- **Explanation**'],
+                                  #[r'''<Question[\n \t]{0,}question="(.+)"[\n \t]{0,}choice1="(.+)"[\n \t]{0,}choice2="(.+)"[\n \t]{0,}choice3="(.+)"[\n \t]{0,}choice4="(.+)"[\n \t]answer=\{(\d)\}[\n \t]{0,}>''',r'- **Question**\n\t\1']
                                   [r'[ \t]{0,}question="(.+\?)"',r'- **Question**\n\t\1'],
                                   [r'[ \t]{0,}choice1="(.+)"',r'    - **Choice 1=** \1'],
                                   [r'[ \t]{0,}choice2="(.+)"',r'    - **Choice 2=** \1'],
@@ -443,11 +444,21 @@ def mdx2md(timestamp: int = 1676880280):
                                     [r'video=".+\.mp4"', r''],
                                     [r'show="video"', r''],
                                     [r'([ \t]{0,}\n){3,}', r'\1\1'],
-                                    ['/>', r''],]
+                                    #['/>', r''],
+                                    ]
 
             for i in range(len(replace_list_regex)):
                 pattern = replace_list_regex[i][0]
                 replacement = replace_list_regex[i][1]
+                # pattern2=r'''<Question[\n \t]{0,}question="(.+)"([\n \t]{0,}choice\d="(.+)"){1,}[\n \t]{0,}answer=\{(\d)\}[\n \t]{0,}>'''
+                # match=re.search(pattern2, content)
+                # if match:
+                #     print(len(match.groups()))
+                #     # print(match.group(0))
+                #     # print(match.group(1))
+                #     # print(match.group(2))
+                #     print(match.group(3))
+                #     #print(match.group(4))
 
                 # Perform the regex replacement
                 content = re.sub(pattern, replacement, content)
