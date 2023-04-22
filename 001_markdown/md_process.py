@@ -754,6 +754,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
                 #list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
             if file.find("summary_base_on_chatgpt")!=-1:
+                file_summary=file
                 key_word="summary_base_on_chatgpt"
                 list_time_head_textshort=get_list_time_head_textshort_text_4_file(file,key_word)
                 #list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
@@ -762,7 +763,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     list_time_head_textshort_text=merge_list_time_head_textshort_text(list_time_text,list_time_head_textshort)
     print("final is:")
     print(list_time_head_textshort_text)
-    list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
+    list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file_summary,match1)
 
 
 
@@ -923,6 +924,12 @@ def main():
     parser = argparse.ArgumentParser()
 
     # add arguments for each function
+    parser.add_argument('-t', '--timestamp', type=str, default=r'1676880280',
+                        help='input timestamp to pass to the function')
+    parser.add_argument('-u', '--str_url', type=str, default=r'test',
+                    help='input str_url to pass to the function')
+    parser.add_argument('-gt', '--get_timestamp', action='store_true', help='call get_current_timestamp')
+    parser.add_argument('-at', '--add_timestamp', action='store_true', help='call add_timestamp_to_filenames')
     parser.add_argument('-mdx', '--mdx2md',
                         action='store_true', help='call mdx2md')
     parser.add_argument('-rfe', '--remove_filesname_end',
@@ -937,12 +944,7 @@ def main():
                 action='store_true', help='call convert_subtitle_chatgpt_summary_to_markdown_vid_timeline')
     parser.add_argument('-cssm', '--convert_subtitle_and_summary_to_markdown_vid_timeline',
                 action='store_true', help='call convert_subtitle_and_summary_to_markdown_vid_timeline')
-    parser.add_argument('-t', '--timestamp', type=str, default=r'1676880280',
-                        help='input timestamp to pass to the function')
-    parser.add_argument('-u', '--str_url', type=str, default=r'test',
-                    help='input str_url to pass to the function')
-    parser.add_argument('-gt', '--get_timestamp', action='store_true', help='call get_current_timestamp')
-    parser.add_argument('-at', '--add_timestamp', action='store_true', help='call add_timestamp_to_filenames')
+
     parser.add_argument('-ci', '--create_imgs_folder', action='store_true', help='call create_directory_assets_imgs')
     parser.add_argument('-cc', '--creat_concept_folder', action='store_true', help='call create_directory_assets_concept_structure')
     parser.add_argument('-css', '--creat_subtitle_summary', action='store_true', help='call create_file_subtitle_summary_base_on_chatgpt_md')
