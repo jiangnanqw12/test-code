@@ -619,7 +619,8 @@ def get_list_time_head_textshort_text_4_file(file,key_word):
     time_stamp_pattern_str=r'\((\d{1,2}):(\d{1,2})\)'
     text_pattern_str=r'(.+)\n{0,1}'
     #number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)'
-    number_list_head_time_text_pattern_str=number_list_bullet_pattern_str+head_pattern_str+time_stamp_pattern_str+text_pattern_str
+    #number_list_head_time_text_pattern_str=number_list_bullet_pattern_str+head_pattern_str+time_stamp_pattern_str+text_pattern_str
+    number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|-)[ ]{1,}(.+) \((\d{1,2}):(\d{1,2})\) (.+)'
     number_list_head_time_pattern_str=r'(\d{1,2}):(\d{1,2})\s+(.+)'
 
     time_text_pattern_str=r'\((\d{1,2}):(\d{1,2})\)[ ]{0,}([^\n]+)[\n]{0,}'
@@ -644,7 +645,7 @@ def get_list_time_head_textshort_text_4_file(file,key_word):
                     elif key_word=="summary_base_on_chatgpt":
                         # for i in range(len(match.groups())):
                         #     print(i,match.group(i))
-                        list_time_head_textshort_text.append([time_line_start_seconds, match.group(3),match.group(7),None])
+                        list_time_head_textshort_text.append([time_line_start_seconds, match.group(3),match.group(6),None])
                     elif key_word=="subtitle":
                         list_time_head_textshort_text.append([time_line_start_seconds, None,None,match.group(3)])
                 else:
@@ -754,7 +755,8 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
                 #list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
             if file.find("summary_base_on_chatgpt")!=-1:
-                file_summary=file
+                cwd_floder_name=os.path.basename(cwd)
+                file_summary=cwd_floder_name+"_"+file
                 key_word="summary_base_on_chatgpt"
                 list_time_head_textshort=get_list_time_head_textshort_text_4_file(file,key_word)
                 #list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
