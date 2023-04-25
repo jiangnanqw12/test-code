@@ -564,7 +564,7 @@ def create_new_file_name(file):
 
 #0
 def list_time_head_textshort_text_to_vid_timeline_md(timeline_data,file,match):
-    print(timeline_data)
+    #print(timeline_data)
 
     output_dir=create_output_directory()
     new_file_name=create_new_file_name(file)
@@ -651,8 +651,8 @@ def get_list_time_head_textshort_text_4_file(file,key_word):
                 else:
                     print("no match for line:",line)
                     print(key_word)
-    print("List of time, heading, short text, text:")
-    print(list_time_head_textshort_text)
+    # print("List of time, heading, short text, text:")
+    # print(list_time_head_textshort_text)
     return list_time_head_textshort_text
 
 def timestamps_3blue1brown_2_timeline(str_url):
@@ -690,10 +690,10 @@ def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
                 list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
 def merge_list_time_head_textshort_text(list_time_text,list_time_head_textshort):
-    print("list_time_head_textshort is :")
-    print(list_time_head_textshort)
-    print("list_time_text is :")
-    print(list_time_text)
+    # print("list_time_head_textshort is :")
+    # print(list_time_head_textshort)
+    # print("list_time_text is :")
+    # print(list_time_text)
 
 
     for i in range(len(list_time_head_textshort)):
@@ -706,8 +706,8 @@ def merge_list_time_head_textshort_text(list_time_text,list_time_head_textshort)
                 list_time_head_textshort[i][3]=time_text[3]
                 #list_time_head_textshort.append([list_time_head_textshort[i][0],list_time_head_textshort[i][1],list_time_head_textshort[i][2],time_text[3]])
                 break
-    print("first merge list_time_head_textshort_text is :")
-    print(list_time_head_textshort)
+    # print("first merge list_time_head_textshort_text is :")
+    # print(list_time_head_textshort)
     list_time_head_textshort_text=list_time_head_textshort
     if len(list_time_text)>0:
         #print("remain:",list_time_text)
