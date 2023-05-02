@@ -1,30 +1,41 @@
+
 import os
 
 def open_folder_in_windows(folder_path):
-    """根据文件夹路径在Windows文件管理器中打开文件夹。
+    """Open a folder in Windows File Explorer based on the folder path.
 
-    参数:
-    folder_path (str): 要打开的文件夹路径。
+    Args:
+    folder_path (str): The folder path to open.
 
-    返回:
-    无返回值。
+    Returns:
+    None
     """
     if os.path.exists(folder_path):
         os.startfile(folder_path)
     else:
-        print(f"文件夹路径 {folder_path} 不存在。")
+        print(f"Folder path {folder_path} does not exist.")
 
 def open_assets_folder():
-    CWD=os.getcwd()
-    #print(CWD)
-    assets_path_front="C:/BaiduSyncdisk/assets"
-    KG_path_front="C:\\BaiduSyncdisk\\assets\\KG"
-    #split paht CWD after KG, replace \ with /
-    KG_path_back=CWD.split("\KG")[1].replace("\\", "/")
+    cwd = os.getcwd()
+    print(cwd)
+    if cwd.find("OneDrive") == -1:
+        raise Exception("This script is only for use with OneDrive.")
+    assets_path_front = "C:/BaiduSyncdisk/assets"
 
-    #print(KG_path_back)
-    assets_path=assets_path_front+KG_path_back
-    #print(assets_path)
+    # Split the path after 'KG' and replace backslashes with forward slashes
+    kg_path_back = cwd.split("\\KG")[1].replace("\\", "/")
+
+    # Remove the leading forward slash from kg_path_back
+    kg_path_back = kg_path_back.lstrip("/")
+
+    assets_path = os.path.join(assets_path_front, kg_path_back)
+    if assets_path.find("BaiduSyncdisk") == -1:
+        raise Exception("The assets path is not in BaiduSyncdisk.")
     open_folder_in_windows(assets_path)
 
-open_assets_folder()
+def main():
+    open_assets_folder()
+
+
+if __name__ == "__main__":
+    main()

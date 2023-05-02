@@ -818,6 +818,38 @@ def create_file_subtitle_summary_base_on_chatgpt_md():
     with open(os.path.join(os.getcwd(), "summary_base_on_chatgpt.md"), "w") as f:
         pass
 
+def open_folder_in_windows(folder_path):
+    """Open a folder in Windows File Explorer based on the folder path.
+
+    Args:
+    folder_path (str): The folder path to open.
+
+    Returns:
+    None
+    """
+    if os.path.exists(folder_path):
+        os.startfile(folder_path)
+    else:
+        print(f"Folder path {folder_path} does not exist.")
+
+def open_assets_folder():
+    cwd = os.getcwd()
+    print(cwd)
+    if cwd.find("OneDrive") == -1:
+        raise Exception("This script is only for use with OneDrive.")
+    assets_path_front = "C:/BaiduSyncdisk/assets"
+
+    # Split the path after 'KG' and replace backslashes with forward slashes
+    kg_path_back = cwd.split("\\KG")[1].replace("\\", "/")
+
+    # Remove the leading forward slash from kg_path_back
+    kg_path_back = kg_path_back.lstrip("/")
+
+    assets_path = os.path.join(assets_path_front, kg_path_back)
+    if assets_path.find("BaiduSyncdisk") == -1:
+        raise Exception("The assets path is not in BaiduSyncdisk.")
+    open_folder_in_windows(assets_path)
+
 
 def compare_md_files(dir1, dir2):
     """
@@ -934,6 +966,8 @@ def main():
     parser.add_argument('-at', '--add_timestamp', action='store_true', help='call add_timestamp_to_filenames')
     parser.add_argument('-mdx', '--mdx2md',
                         action='store_true', help='call mdx2md')
+    parser.add_argument('-oaf', '--open_assets_folder',
+                        action='store_true', help='call open_assets_folder')
     parser.add_argument('-rfe', '--remove_filesname_end',
                         action='store_true', help='call remove_filesname_end')
     parser.add_argument('-ds', '--rename_files_and_dirs_sensor_fusion',
@@ -967,6 +1001,8 @@ def main():
         convert_subtitle_and_summary_to_markdown_vid_timeline(args.str_url)
     elif args.mdx2md:
         mdx2md(args.timestamp)
+    elif args.open_assets_folder:
+        open_assets_folder()
     elif args.timestamps_3blue1brown_2_timeline:
         timestamps_3blue1brown_2_timeline(args.str_url)
     elif args.get_timestamp:
