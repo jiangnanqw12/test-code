@@ -8,17 +8,18 @@ import os
 import datetime
 import shutil
 import argparse
-
+import aspose.words as aw
+import urllib.parse
 
 def remove_filesname_end(path, old_extension, new_extension, file_remove_length=0, dir_remove_length=0):
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(old_extension):
-                os.rename(os.path.join(root, file),
+                os.replace(os.path.join(root, file),
                           os.path.join(root, file[:-(len(old_extension)+file_remove_length)]+new_extension))
         for dir in dirs:
             if dir_remove_length > 0:
-                os.rename(os.path.join(root, dir), os.path.join(
+                os.replace(os.path.join(root, dir), os.path.join(
                     root, dir[:-(dir_remove_length)]))
 
 
@@ -44,7 +45,7 @@ def rename_files_start(num_remove, extensions=None):
         new_path = os.path.join(os.getcwd(), new_filename)
 
         # 重命名文件
-        os.rename(old_path, new_path)
+        os.replace(old_path, new_path)
 
         # 输出修改后的文件名
         print("文件名从 {} 变为 {}".format(filename, new_filename))
@@ -57,14 +58,14 @@ def rename_files(path, replace_list):
             for replace_str in replace_list:
                 if file.find(replace_str[0]) != -1:
                     file = file.replace(replace_str[0], replace_str[1])
-            os.rename(os.path.join(root, file_old),
+            os.replace(os.path.join(root, file_old),
                       os.path.join(root, file))
         for dir in dirs:
             dir_old = dir
             for replace_str in replace_list:
                 if dir.find(replace_str[0]) != -1:
                     dir = dir.replace(replace_str[0], replace_str[1])
-            os.rename(os.path.join(root, dir_old),
+            os.replace(os.path.join(root, dir_old),
                       os.path.join(root, dir))
 
 # remove line with search_str
@@ -114,7 +115,7 @@ def search_file(path):
             for line in lines:
                 if line[:-1]+'.md' in files:
                     counter = counter+1
-                    os.rename(os.path.join(
+                    os.replace(os.path.join(
                         root, line[:-1]+'.md'), os.path.join(root, num2str_title(counter)+line[:-1]+'.md'))
                     print(line[:-1]+'.md')
 
@@ -147,7 +148,7 @@ def tianjiaxiahuaxian():
         for i in range(1, 38):
             for file in files:
                 if file[:3] == num2str_title(i):
-                    os.rename(os.path.join(root, file),
+                    os.replace(os.path.join(root, file),
                               os.path.join(root, file[:3]+"_"+file[3:]))
 
 
@@ -255,7 +256,7 @@ def base_on_mulu_markdown_rename_files():
             if line[:-1]+'.md' in files:
                 counter = counter+1
                 # print(line[:-1]+'.md')
-                os.rename(os.path.join(root, line[:-1]+'.md'),
+                os.replace(os.path.join(root, line[:-1]+'.md'),
                           os.path.join(root, num2str_title(counter)+"_"+line[:-1]+'.md'))
 
 
@@ -337,7 +338,7 @@ def add_timestamp_to_filenames():
         if os.path.isfile(os.path.join(current_dir, filename)) and not filename.endswith(".py"):
             filename_without_ext, ext = os.path.splitext(filename)
             new_filename = f"{filename_without_ext}_{timestamp}{ext}"
-            os.rename(os.path.join(current_dir, filename),
+            os.replace(os.path.join(current_dir, filename),
                       os.path.join(current_dir, new_filename))
 
 
@@ -782,7 +783,7 @@ def add_timestamp_to_filenames():
         if os.path.isfile(os.path.join(current_dir, filename)) and not filename.endswith(".py"):
             filename_without_ext, ext = os.path.splitext(filename)
             new_filename = f"{filename_without_ext}_{timestamp}{ext}"
-            os.rename(os.path.join(current_dir, filename), os.path.join(current_dir, new_filename))
+            os.replace(os.path.join(current_dir, filename), os.path.join(current_dir, new_filename))
 
 def create_directory_assets_imgs():
     dirs = [
@@ -851,6 +852,158 @@ def open_assets_folder():
     open_folder_in_windows(assets_path)
 
 
+def rename_files_sensor_fusion(path=None):
+    if path==None:
+        path = os.getcwd()
+    file_list=os.listdir(path)
+    for name in file_list:
+
+        if name.endswith(".md"):
+            # 如果文件或目录名称以数字开头，则进行重新编号
+            if not (name[:3].isdigit()):
+                if name[:2].isdigit():
+                    prefix = name[:2]
+                    new_prefix = prefix.zfill(3)  # 将前缀转换为三位数
+                    if name[2] == " ":
+                        new_name = new_prefix+"_"+name[3:]
+                    elif name[2] == "_":
+                        new_name = new_prefix+name[2:]
+                    elif name[2] == ".":
+                        if name[3]==" ":
+                            new_name = new_prefix+"_"+name[4:]
+                        else:
+                            new_name = new_prefix+"_"+name[3:]
+                    else:
+                        new_name = new_prefix+"_"+name[2:]
+                    try:
+                        os.replace(os.path.join(path, name),
+                            os.path.join(path, new_name))
+                    except FileExistsError:
+                        os.remove(os.path.join(path, new_name))
+                        os.replace(os.path.join(path, name),
+                            os.path.join(path, new_name))
+def html2md(path=None):
+    if path is None:
+        path = os.getcwd()
+
+    intput_path=path
+    input_floder_name = os.path.basename(intput_path)
+    #replace_list_regex2=[[r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)',r'0\1_\2'],]
+    input_floder_name=re.sub(r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)',r'0\1_\2',input_floder_name)
+    #Part 01-Module 01-Lesson 01_Welcome to the C++ Developer Nanodegree Program
+    input_floder_name=input_floder_name.replace(" ","_")
+    output_path=os.path.join("C://output//",input_floder_name)
+    os.makedirs(output_path, exist_ok=True)
+
+
+    listfiles = os.listdir(intput_path)
+    mp4_list = [filename for filename in listfiles if filename.endswith(".mp4")]
+    # print(listfiles)
+    for i in range(len(listfiles)):
+        filename = listfiles[i]  # get all file list
+        if filename.endswith(".html"):
+            input_file=os.path.join(intput_path,filename)
+            doc = aw.Document(input_file)
+            output_file=os.path.join(output_path,filename.replace(".html",".md"))
+            #print(output_path)
+
+            doc.save(output_file)
+
+    output_files_list=os.listdir(output_path)
+    replace_list_regex=[[r'!\[\]\(.+\.001\.png\)',r''],
+
+                        [r'\*\*Evaluation Only\. Created with Aspose\.Words\. Copyright 2003-2023 Aspose Pty Ltd\.\*\*',r''],
+                        [r'\*\*Created with an evaluation copy of Aspose.Words. To discover the full versions of our APIs please visit: https://products.aspose.com/words/\*\*',r''],
+                        [r'\[udacimak v1.4.1\]\(https://github.com/udacimak/udacimak#readme\)',r''],
+                        [r'\[.+\]\(.+\.html\)',r''],
+                        [r'\n{3,}',r'\n\n'],
+                        ]
+    for i in range(len(output_files_list)):
+        filename = output_files_list[i]
+        if filename.endswith(".001.png"):
+            os.remove(os.path.join(output_path,filename))
+            continue
+        if filename.endswith(".md"):
+            if filename=="index.md":
+                os.remove(os.path.join(output_path,filename))
+                continue
+            with open(os.path.join(output_path,filename), 'r', encoding='UTF-8') as f:
+                content = f.read()
+            with open(os.path.join(output_path,filename), 'w', encoding='UTF-8') as f:
+
+                for replace_list in replace_list_regex:
+                    content=re.sub(replace_list[0],replace_list[1],content)
+                #f.write(content)
+
+                lines = content.splitlines()
+                for line in lines:
+                    if len(line)>4:
+                        for file_mp4 in mp4_list:
+                            word_list=line.split(" ")
+                            flag=0
+                            flag_out=0
+                            for word in word_list:
+                                if file_mp4.find(word)>-1:
+                                    flag=flag+1
+                                elif file_mp4.find(word)==-1:
+                                    flag_out=flag_out+1
+                            if flag:
+                                if flag_out:
+                                    #print(line)
+                                    pass
+                                else:
+                                    path_mp4=os.path.join(intput_path,file_mp4)
+                                    url_path = urllib.parse.quote(os.path.abspath(path_mp4))
+                                    url = "file:///" + url_path.replace("\\", "/")
+                                    line=line+"\n\n"+f"[{file_mp4}]({url})\n"+f"![{file_mp4}]({url})"
+
+                    f.write(line+"\n")
+    rename_files_sensor_fusion(output_path)
+    output_files_list=os.listdir(output_path)
+
+
+    output_path_md=output_path
+
+    output_path_img=os.path.join(output_path_md,input_floder_name)
+    # Create the output directory and its subdirectory if they don't exist
+    try:
+        os.makedirs(output_path_img, exist_ok=True)
+    except FileNotFoundError as e:
+        if e.winerror == 206:
+            # Shorten the filename and try again
+            output_path_img=output_path_img=os.path.join(output_path_md,"imgs")
+            os.makedirs(output_path_img, exist_ok=True)
+
+        else:
+            # If it's not WinError 206, raise the original error
+            raise e
+    for i in range(len(output_files_list)):
+        filename = output_files_list[i]
+        if filename.endswith(".md"):
+            try:
+                os.replace(os.path.join(output_path,filename),os.path.join(output_path_md,filename))
+            except FileExistsError:
+                os.remove(os.path.join(output_path_md,filename))
+                os.replace(os.path.join(output_path,filename),os.path.join(output_path_md,filename))
+
+        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            try:
+                os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename))
+            except FileExistsError:
+                os.remove(os.path.join(output_path_img,filename))
+                os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename))
+            except FileNotFoundError as e:
+                if e.winerror == 3:
+
+                    output_path_img=output_path_img=os.path.join(output_path_md,"imgs")
+                    os.makedirs(output_path_img, exist_ok=True)
+                    os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename))
+                else:
+                    # If it's not WinError 206, raise the original error
+                    raise e
+
+
+
 def compare_md_files(dir1, dir2):
     """
     比较两个目录下同名的md文件，并输出两个文件的差异。
@@ -914,29 +1067,7 @@ def zhihu_book_process():
     remove_line(path, search_list)
 
 
-def rename_files_and_dirs_sensor_fusion(path):
-    for root, dirs, files in os.walk(path):
-        for name in files + dirs:
-            # # 如果文件或目录名称包含空格，则用下划线替换
-            # if ' ' in name:
-            #     new_name = name.replace(' ', '_')
-            #     os.rename(os.path.join(root, name), os.path.join(root, new_name))
-            #     name = new_name
 
-            # 如果文件或目录名称以数字开头，则进行重新编号
-            if not (name[:3].isdigit()):
-                if name[:2].isdigit():
-                    prefix = name[:2]
-                    new_prefix = prefix.zfill(3)  # 将前缀转换为三位数
-                    if name[2] == " ":
-                        new_name = new_prefix+"_"+name[3:]
-                    elif name[2] == "_":
-                        new_name = new_prefix+name[2:]
-                    else:
-                        new_name = new_prefix+"_"+name[2:]
-
-                    os.rename(os.path.join(root, name),
-                              os.path.join(root, new_name))
 
 
 def test():
@@ -950,7 +1081,7 @@ def test():
     # remove_line(path, search_list)
     # compare_md_files("mds", "mds_2023-02-26-22-12-57")
     # process_md_files_filename_2_head()
-    rename_files_and_dirs_sensor_fusion(path)
+    rename_files_sensor_fusion(path)
 
 
 def main():
@@ -970,8 +1101,8 @@ def main():
                         action='store_true', help='call open_assets_folder')
     parser.add_argument('-rfe', '--remove_filesname_end',
                         action='store_true', help='call remove_filesname_end')
-    parser.add_argument('-ds', '--rename_files_and_dirs_sensor_fusion',
-                        action='store_true', help='call rename_files_and_dirs_sensor_fusion')
+    parser.add_argument('-ds', '--rename_files_sensor_fusion',
+                        action='store_true', help='call rename_files_sensor_fusion')
     parser.add_argument('-tt', '--timestamps_3blue1brown_2_timeline',
                     action='store_true', help='call timestamps_3blue1brown_2_timeline')
     parser.add_argument('-cti', '--copy_timestamps_and_index_2_root',
@@ -984,6 +1115,7 @@ def main():
     parser.add_argument('-ci', '--create_imgs_folder', action='store_true', help='call create_directory_assets_imgs')
     parser.add_argument('-cc', '--creat_concept_folder', action='store_true', help='call create_directory_assets_concept_structure')
     parser.add_argument('-css', '--creat_subtitle_summary', action='store_true', help='call create_file_subtitle_summary_base_on_chatgpt_md')
+    parser.add_argument('-h2m', '--html2md', action='store_true', help='call html2md')
 
     # parse the command-line arguments
     args = parser.parse_args()
@@ -991,8 +1123,8 @@ def main():
     # call the appropriate function based on the arguments
     if args.remove_filesname_end:
         rename_files_end_test1()
-    elif args.rename_files_and_dirs_sensor_fusion:
-        rename_files_and_dirs_sensor_fusion()
+    elif args.rename_files_sensor_fusion:
+        rename_files_sensor_fusion()
     elif args.copy_timestamps_and_index_2_root:
         copy_timestamps_and_index_2_root()
     elif args.convert_subtitle_chatgpt_summary_to_markdown_vid_timeline:
@@ -1015,6 +1147,8 @@ def main():
         create_directory_assets_concept_structure()
     elif args.creat_subtitle_summary:
         create_file_subtitle_summary_base_on_chatgpt_md()
+    elif args.html2md:
+        html2md()
     else:
         print("Invalid argument")
 
