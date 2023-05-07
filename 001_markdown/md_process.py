@@ -892,7 +892,7 @@ def html2md(path=None):
     input_floder_name=re.sub(r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)',r'0\1_\2',input_floder_name)
     #Part 01-Module 01-Lesson 01_Welcome to the C++ Developer Nanodegree Program
     input_floder_name=input_floder_name.replace(" ","_")
-    output_path=os.path.join("C://output//",input_floder_name)
+    output_path=os.path.join("C://BaiduSyncdisk//output//",input_floder_name)
     os.makedirs(output_path, exist_ok=True)
 
 
