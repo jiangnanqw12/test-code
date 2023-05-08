@@ -38,7 +38,13 @@ def find_zero_files(directory):
                 #print(filepath)
     print("Total number of files==0: ",len(filepath_list))
     print("\n")
-    print("File list: ",filepath_list)
+    n2=0
+    for file_path in filepath_list:
+
+        n2+=1
+        print(file_path)
+        open_folder_in_windows(os.path.dirname(file_path))
+    print(n2)
     print("\n")
 def find_zero_files_open_it(directory):
     filepath_list=[]
@@ -58,4 +64,4 @@ if __name__ == '__main__':
 
     # Example usage:
     find_zero_files('.')
-    find_small_files('.',100)
+    #find_small_files('.',100)

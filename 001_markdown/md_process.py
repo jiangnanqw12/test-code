@@ -882,17 +882,17 @@ def rename_files_sensor_fusion(path=None):
                         os.remove(os.path.join(path, new_name))
                         os.replace(os.path.join(path, name),
                             os.path.join(path, new_name))
-def html2md(path=None):
+def html2md(path=None,output_root="C://Output//",output_folder_name=None):
     if path is None:
         path = os.getcwd()
-
+    timestamp=int(time.time())
     intput_path=path
     input_floder_name = os.path.basename(intput_path)
     #replace_list_regex2=[[r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)',r'0\1_\2'],]
     input_floder_name=re.sub(r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)',r'0\1_\2',input_floder_name)
     #Part 01-Module 01-Lesson 01_Welcome to the C++ Developer Nanodegree Program
     input_floder_name=input_floder_name.replace(" ","_")
-    output_path=os.path.join("C://BaiduSyncdisk//output//",input_floder_name)
+    output_path=os.path.join(output_root,output_folder_name,input_floder_name)
     os.makedirs(output_path, exist_ok=True)
 
 
@@ -911,7 +911,7 @@ def html2md(path=None):
 
     output_files_list=os.listdir(output_path)
     replace_list_regex=[[r'!\[\]\(.+\.001\.png\)',r''],
-
+                        [r'(!\[\]|!\[.+\])(\(.+)(\.png|\.jpg|\.gif|\.jpeg|\.svg|\.wbem)\)',r'\1\2'+f'_{timestamp}'+r'\3)'],
                         [r'\*\*Evaluation Only\. Created with Aspose\.Words\. Copyright 2003-2023 Aspose Pty Ltd\.\*\*',r''],
                         [r'\*\*Created with an evaluation copy of Aspose.Words. To discover the full versions of our APIs please visit: https://products.aspose.com/words/\*\*',r''],
                         [r'\[udacimak v1.4.1\]\(https://github.com/udacimak/udacimak#readme\)',r''],
@@ -963,8 +963,8 @@ def html2md(path=None):
 
 
     output_path_md=output_path
+    output_path_img=os.path.join(output_root,"imgs",output_folder_name,input_floder_name)
 
-    output_path_img=os.path.join(output_path_md,input_floder_name)
     # Create the output directory and its subdirectory if they don't exist
     try:
         os.makedirs(output_path_img, exist_ok=True)
@@ -986,22 +986,44 @@ def html2md(path=None):
                 os.remove(os.path.join(output_path_md,filename))
                 os.replace(os.path.join(output_path,filename),os.path.join(output_path_md,filename))
 
-        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
+        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".gif"):
+            filename_ext = os.path.splitext(filename)[1]
+            filename_without_ext = os.path.splitext(filename)[0]
+            filename_img=filename_without_ext+f'_{timestamp}'+filename_ext
             try:
-                os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename))
+                os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename_img))
             except FileExistsError:
-                os.remove(os.path.join(output_path_img,filename))
-                os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename))
+                os.remove(os.path.join(output_path_img,filename_img))
+                os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename_img))
             except FileNotFoundError as e:
                 if e.winerror == 3:
 
                     output_path_img=output_path_img=os.path.join(output_path_md,"imgs")
                     os.makedirs(output_path_img, exist_ok=True)
-                    os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename))
+                    os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename_img))
                 else:
                     # If it's not WinError 206, raise the original error
                     raise e
 
+
+def html2md_tree():
+    files = [f for f in os.listdir() if os.path.isfile(f)]
+    directories=[f for f in os.listdir() if os.path.isdir(f)]
+    output_folder_dict=dict()
+    for directory in directories:
+        search_str=r'Part (\d{2})_(.+)'
+        match=re.search(search_str,directory)
+        if match:
+            output_folder_dict[match.group(1)]='0'+match.group(1)+"_"+match.group(2)
+    for directory in directories:
+        search_str=r'Part (\d{2})-Module \d{2}-Lesson (\d{2})_(.+)'
+        match=re.search(search_str,directory)
+        if match:
+            output_folder1="C:\\Output\\"
+            output_folder2=output_folder_dict[match.group(1)]
+            #output_folder=os.path.join(output_folder1,output_folder2)
+            input_path=os.path.join(os.getcwd(),directory)
+            html2md(input_path,output_folder1,output_folder2)
 
 
 def compare_md_files(dir1, dir2):
@@ -1116,6 +1138,7 @@ def main():
     parser.add_argument('-cc', '--creat_concept_folder', action='store_true', help='call create_directory_assets_concept_structure')
     parser.add_argument('-css', '--creat_subtitle_summary', action='store_true', help='call create_file_subtitle_summary_base_on_chatgpt_md')
     parser.add_argument('-h2m', '--html2md', action='store_true', help='call html2md')
+    parser.add_argument('-h2mt', '--html2md_tree', action='store_true', help='call html2md_tree')
 
     # parse the command-line arguments
     args = parser.parse_args()
@@ -1149,6 +1172,8 @@ def main():
         create_file_subtitle_summary_base_on_chatgpt_md()
     elif args.html2md:
         html2md()
+    elif args.html2md_tree:
+        html2md_tree()
     else:
         print("Invalid argument")
 
