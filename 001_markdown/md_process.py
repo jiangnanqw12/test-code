@@ -917,6 +917,7 @@ def html2md(path=None,output_root="C://Output//",output_folder_name=None):
                         [r'\[udacimak v1.4.1\]\(https://github.com/udacimak/udacimak#readme\)',r''],
                         [r'\[.+\]\(.+\.html\)',r''],
                         [r'\n{3,}',r'\n\n'],
+                        [r'` [ ]+`',r'    '],
                         ]
     for i in range(len(output_files_list)):
         filename = output_files_list[i]
