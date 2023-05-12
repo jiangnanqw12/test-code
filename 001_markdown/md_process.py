@@ -757,7 +757,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
 
             if file.find("summary_base_on_chatgpt")!=-1:
                 cwd_floder_name=os.path.basename(cwd)
-                file_summary=cwd_floder_name+"_"+file
+                file_summary=file
                 key_word="summary_base_on_chatgpt"
                 list_time_head_textshort=get_list_time_head_textshort_text_4_file(file,key_word)
                 #list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
@@ -811,12 +811,14 @@ def create_directory_assets_concept_structure():
         else:
             print(f"Directory already exists: {directory}")
 
-def create_file_subtitle_summary_base_on_chatgpt_md():
+def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
     # Create a file named subtitle.md and summary_base_on_chatgpt.md
     print("create_file_subtitle_summary_base_on_chatgpt_md")
-    with open(os.path.join(os.getcwd(), "subtitle.md"), "w") as f:
+    if path is None:
+        path = os.getcwd()
+    with open(os.path.join(path, "subtitle.md"), "w") as f:
         pass
-    with open(os.path.join(os.getcwd(), "summary_base_on_chatgpt.md"), "w") as f:
+    with open(os.path.join(path, "summary_base_on_chatgpt.md"), "w") as f:
         pass
 
 def open_folder_in_windows(folder_path):
@@ -917,7 +919,7 @@ def html2md(path=None,output_root="C://Output//",output_folder_name=None):
                         [r'\[udacimak v1.4.1\]\(https://github.com/udacimak/udacimak#readme\)',r''],
                         [r'\[.+\]\(.+\.html\)',r''],
                         [r'\n{3,}',r'\n\n'],
-                        [r'` [ ]+`',r'    '],
+                        [r'`[ ]+`',r'    '],
                         ]
     for i in range(len(output_files_list)):
         filename = output_files_list[i]
@@ -1026,6 +1028,93 @@ def html2md_tree():
             input_path=os.path.join(os.getcwd(),directory)
             html2md(input_path,output_folder1,output_folder2)
 
+def vid_link_md_2_html(path=None):
+    if path is None:
+        path=os.getcwd()
+    files=[f for f in os.listdir(path) if os.path.isfile(f)]
+    output_path=os.path.join(path,"output")
+    os.makedirs(output_path, exist_ok=True)
+    replace_list_regex=[[r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)',r'<video src="\2" controls></video>']]
+    for file in files:
+        if file.endswith(".md"):
+            with open(file,"r",encoding="utf-8") as f:
+                content=f.read()
+            for replace_list in replace_list_regex:
+                content=re.sub(replace_list[0],replace_list[1],content)
+            with open(os.path.join(output_path,file),"w",encoding="utf-8") as f:
+                f.write(content)
+
+def init_note():
+    import os
+    import pyperclip
+    import time
+
+    # Function to get the parent directory
+    def get_parent_dir(directory):
+        return os.path.dirname(directory)
+
+    # Function to create a file
+    def create_file(path, content=""):
+        with open(path, 'w') as f:
+            f.write(content)
+
+    # Get content from clipboard
+    content = pyperclip.paste()
+
+    # Get current directory
+    current_dir = os.getcwd()
+
+    # Check for existing serial numbers (first three digits of filenames)
+    serial_numbers = [f[:3] for f in os.listdir(current_dir) if os.path.isfile(os.path.join(current_dir, f)) and f[:3].isdigit()]
+
+
+    # Generate filename
+    if serial_numbers:
+        max_serial_number = max(serial_numbers)
+
+        note_file = str(int(max_serial_number) + 1).zfill(3)+"_"+content+".md"
+
+    else:
+        note_file = "001"+"_"+content+".md"
+
+    # Add the filename to the current_dir
+    note_path = os.path.join(current_dir, note_file)
+    if not os.path.exists(note_path):
+        create_file(note_path)
+    # Check if assets folder is in the same directory
+    folder_list = []
+    folder_list.append(note_file[:-3])
+    folder_list.append(os.path.basename(current_dir))
+
+    current_dir = get_parent_dir(current_dir)
+    while True:
+
+        if 'assets' in os.listdir(current_dir):
+            folder_list.reverse()
+            if folder_list!=[]:
+                assets_dir_path=os.path.join(current_dir, 'assets')
+                for folder_name in folder_list:
+                    assets_dir_path = os.path.join(assets_dir_path, folder_name)
+                    print(assets_dir_path)
+                    #if os.path.isdir(assets_dir_path):
+                    if not os.path.exists(assets_dir_path):
+                        os.makedirs(assets_dir_path)
+                    # else:
+                    #     raise Exception('not a directory ',assets_dir_path)
+            else:
+                raise Exception("No folder name found")
+
+            break
+        else:
+            folder_list.append(os.path.basename(current_dir))
+            current_dir = get_parent_dir(current_dir)
+    create_file_subtitle_summary_base_on_chatgpt_md(assets_dir_path)
+
+
+    # # Add timestamp
+    # with open(os.path.join(current_dir, filename + ".md"), "a") as f:
+    #     f.write("\n\nTimestamp: " + time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 def compare_md_files(dir1, dir2):
     """
@@ -1089,6 +1178,17 @@ def zhihu_book_process():
     search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
     remove_line(path, search_list)
 
+def html2md2():
+    import html2markdown
+    files = [f for f in os.listdir() if os.path.isfile(f)]
+    for file in files:
+        if file.endswith(".html"):
+            with open(file, 'r', encoding='utf-8') as f:
+                html_string = f.read()
+            markdown_text = html2markdown.convert(html_string)
+            with open(file[:-4] + '.md', 'w', encoding='utf-8') as f:
+                f.write(markdown_text)
+
 
 
 
@@ -1139,7 +1239,11 @@ def main():
     parser.add_argument('-cc', '--creat_concept_folder', action='store_true', help='call create_directory_assets_concept_structure')
     parser.add_argument('-css', '--creat_subtitle_summary', action='store_true', help='call create_file_subtitle_summary_base_on_chatgpt_md')
     parser.add_argument('-h2m', '--html2md', action='store_true', help='call html2md')
+    parser.add_argument('-h2m2', '--html2md2', action='store_true', help='call html2md2')
+
     parser.add_argument('-h2mt', '--html2md_tree', action='store_true', help='call html2md_tree')
+    parser.add_argument('-m2hl', '--vid_link_md_2_html', action='store_true', help='call vid_link_md_2_html')
+    parser.add_argument('-init', '--init_note', action='store_true', help='call init_note')
 
     # parse the command-line arguments
     args = parser.parse_args()
@@ -1173,8 +1277,14 @@ def main():
         create_file_subtitle_summary_base_on_chatgpt_md()
     elif args.html2md:
         html2md()
+    elif args.html2md2:
+        html2md2()
     elif args.html2md_tree:
         html2md_tree()
+    elif args.vid_link_md_2_html:
+        vid_link_md_2_html()
+    elif args.init_note:
+        init_note()
     else:
         print("Invalid argument")
 
