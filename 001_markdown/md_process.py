@@ -816,9 +816,10 @@ def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
     print("create_file_subtitle_summary_base_on_chatgpt_md")
     if path is None:
         path = os.getcwd()
-    with open(os.path.join(path, "subtitle.md"), "w") as f:
+    time_stamp= get_current_timestamp()
+    with open(os.path.join(path, "subtitle_"+time_stamp+".md"), "w") as f:
         pass
-    with open(os.path.join(path, "summary_base_on_chatgpt.md"), "w") as f:
+    with open(os.path.join(path, "summary_base_on_chatgpt_"+time_stamp+".md"), "w") as f:
         pass
 
 def open_folder_in_windows(folder_path):
