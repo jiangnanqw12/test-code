@@ -11,12 +11,13 @@ import argparse
 import aspose.words as aw
 import urllib.parse
 
+
 def remove_filesname_end(path, old_extension, new_extension, file_remove_length=0, dir_remove_length=0):
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(old_extension):
                 os.replace(os.path.join(root, file),
-                          os.path.join(root, file[:-(len(old_extension)+file_remove_length)]+new_extension))
+                           os.path.join(root, file[:-(len(old_extension)+file_remove_length)]+new_extension))
         for dir in dirs:
             if dir_remove_length > 0:
                 os.replace(os.path.join(root, dir), os.path.join(
@@ -59,14 +60,14 @@ def rename_files(path, replace_list):
                 if file.find(replace_str[0]) != -1:
                     file = file.replace(replace_str[0], replace_str[1])
             os.replace(os.path.join(root, file_old),
-                      os.path.join(root, file))
+                       os.path.join(root, file))
         for dir in dirs:
             dir_old = dir
             for replace_str in replace_list:
                 if dir.find(replace_str[0]) != -1:
                     dir = dir.replace(replace_str[0], replace_str[1])
             os.replace(os.path.join(root, dir_old),
-                      os.path.join(root, dir))
+                       os.path.join(root, dir))
 
 # remove line with search_str
 
@@ -149,7 +150,7 @@ def tianjiaxiahuaxian():
             for file in files:
                 if file[:3] == num2str_title(i):
                     os.replace(os.path.join(root, file),
-                              os.path.join(root, file[:3]+"_"+file[3:]))
+                               os.path.join(root, file[:3]+"_"+file[3:]))
 
 
 def back_up_dir_tree(path):
@@ -257,7 +258,7 @@ def base_on_mulu_markdown_rename_files():
                 counter = counter+1
                 # print(line[:-1]+'.md')
                 os.replace(os.path.join(root, line[:-1]+'.md'),
-                          os.path.join(root, num2str_title(counter)+"_"+line[:-1]+'.md'))
+                           os.path.join(root, num2str_title(counter)+"_"+line[:-1]+'.md'))
 
 
 def create_md_files_from_markdown_file(markdown_file):
@@ -339,12 +340,12 @@ def add_timestamp_to_filenames():
             filename_without_ext, ext = os.path.splitext(filename)
             new_filename = f"{filename_without_ext}_{timestamp}{ext}"
             os.replace(os.path.join(current_dir, filename),
-                      os.path.join(current_dir, new_filename))
+                       os.path.join(current_dir, new_filename))
 
 
 def text_replace(root_dir: str, replace_list: list):
 
-    output_dir=create_output_directory()
+    output_dir = create_output_directory()
     for filename_with_ext in os.listdir(root_dir):
         if filename_with_ext.endswith('.md'):
             src_path = os.path.join(root_dir, filename_with_ext)
@@ -422,31 +423,36 @@ def mdx2md(timestamp: int = 1676880280):
 
             replace_list_regex = [
                                  [r"<PiCreature\n{0,}\s{0,}(.+)\n{0,}\s{0,}(.+)\n{0,}\s{0,}/>", r"\1\n\2\n"],
-                                 #[r"show=\"video\"\n", r""],
-                                #  [r"<!--", r""],
-                                #  [r"-->", r""],
+                #[r"show=\"video\"\n", r""],
+                #  [r"<!--", r""],
+                #  [r"-->", r""],
                                  [r"<Question", r"---"],
                                  [r"<FreeResponse>", r"---"],
-                                    [r"</FreeResponse>", r"---"],
-                                 [r"</Question>", r"---"],
-                [r'''<Figure[\n ]{1,}image="(.+)(\.svg|\.png|\.jpg)"[\w ._="'\n_%]{0,}/>''', r'![](\1_'+str(timestamp)+r'\2)'],
-                                  [r'<Accordion\stitle=".+">\n', r''],
-                                  [r'</Accordion>\n', r''],
-                                  #[r'emotion="\w+"[ \t]+\n', r''],
-                                  #[r'flip=\{(true|false)\}\n', r''],
-#[r'(?s)<Question .+?</Question>', r'tttttttttttttttttttt'],
-                                  [r'answer=\{(\d)\}[ \n\t]{0,}>', r'\n<details><summary>answer</summary><p>Choice= \1</p></details>\n\n- **Explanation**'],
-                                  #[r'''<Question[\n \t]{0,}question="(.+)"[\n \t]{0,}choice1="(.+)"[\n \t]{0,}choice2="(.+)"[\n \t]{0,}choice3="(.+)"[\n \t]{0,}choice4="(.+)"[\n \t]answer=\{(\d)\}[\n \t]{0,}>''',r'- **Question**\n\t\1']
-                                  [r'[ \t]{0,}question="(.+)"',r'- **Question**\n\t\1'],
-                                  [r'[ \t]{0,}choice1="(.+)"',r'    - **Choice 1=** \1'],
-                                  [r'[ \t]{0,}choice2="(.+)"',r'    - **Choice 2=** \1'],
-                                    [r'[ \t]{0,}choice3="(.+)"',r'    - **Choice 3=** \1'],
-                                    [r'[ \t]{0,}choice4="(.+)"',r'    - **Choice 4=** \1'],
-                                    #[r'video=".+\.mp4"', r''],
-                                    #[r'show="video"', r''],
-                                    [r'([ \t]{0,}\n){3,}', r'\1\1'],
-                                    #['/>', r''],
-                                    ]
+                [r"</FreeResponse>", r"---"],
+                [r"</Question>", r"---"],
+                [r'''<Figure[\n ]{1,}image="(.+)(\.svg|\.png|\.jpg)"[\w ._="'\n_%]{0,}/>''',
+                                     r'![](\1_'+str(timestamp)+r'\2)'],
+                [r'<Accordion\stitle=".+">\n', r''],
+                [r'</Accordion>\n', r''],
+                #[r'emotion="\w+"[ \t]+\n', r''],
+                #[r'flip=\{(true|false)\}\n', r''],
+                #[r'(?s)<Question .+?</Question>', r'tttttttttttttttttttt'],
+                [r'answer=\{(\d)\}[ \n\t]{0,}>',
+                                     r'\n<details><summary>answer</summary><p>Choice= \1</p></details>\n\n- **Explanation**'],
+                #[r'''<Question[\n \t]{0,}question="(.+)"[\n \t]{0,}choice1="(.+)"[\n \t]{0,}choice2="(.+)"[\n \t]{0,}choice3="(.+)"[\n \t]{0,}choice4="(.+)"[\n \t]answer=\{(\d)\}[\n \t]{0,}>''',r'- **Question**\n\t\1']
+                [r'[ \t]{0,}question="(.+)"',
+                                     r'- **Question**\n\t\1'],
+                [r'[ \t]{0,}choice1="(.+)"',
+                                     r'    - **Choice 1=** \1'],
+                [r'[ \t]{0,}choice2="(.+)"',
+                                     r'    - **Choice 2=** \1'],
+                [r'[ \t]{0,}choice3="(.+)"', r'    - **Choice 3=** \1'],
+                [r'[ \t]{0,}choice4="(.+)"', r'    - **Choice 4=** \1'],
+                #[r'video=".+\.mp4"', r''],
+                #[r'show="video"', r''],
+                [r'([ \t]{0,}\n){3,}', r'\1\1'],
+                #['/>', r''],
+            ]
 
             for i in range(len(replace_list_regex)):
                 pattern = replace_list_regex[i][0]
@@ -498,21 +504,24 @@ def copy_timestamps_and_index_2_root(directory=None):
                 if not os.path.exists(dest_path):
                     shutil.copy(file, dest_path)
 
+
 def search_str_url_4_file_vid(str_url):
-    url_pattern_4_file_vid=r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
-    match1=re.search(url_pattern_4_file_vid, str_url)
+    url_pattern_4_file_vid = r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
+    match1 = re.search(url_pattern_4_file_vid, str_url)
     if not match1:
         raise Exception('No match found')
     return match1
 
+
 def convert_min_sec_to_seconds(time_str):
-    time_line_pattern_str=r'\((\d{1,2}:\d{1,2})-(\d{1,2}:\d{1,2})\)[ ]{1,}'
-    time_stamp_pattern_str=r'(\d{1,2}):(\d{1,2})'
-    match=re.search(time_line_pattern_str, time_str)
+    time_line_pattern_str = r'\((\d{1,2}:\d{1,2})-(\d{1,2}:\d{1,2})\)[ ]{1,}'
+    time_stamp_pattern_str = r'(\d{1,2}):(\d{1,2})'
+    match = re.search(time_line_pattern_str, time_str)
     if match:
-        time_line_start=match.group(1)
-        time_line_end=match.group(2)
-        time_line_start_seconds=int(time_line_start.split(':')[0])*60+int(time_line_start.split(':')[1])
+        time_line_start = match.group(1)
+        time_line_end = match.group(2)
+        time_line_start_seconds = int(time_line_start.split(
+            ':')[0])*60+int(time_line_start.split(':')[1])
         return time_line_start_seconds
     else:
         match = re.search(time_stamp_pattern_str, time_str)
@@ -522,53 +531,56 @@ def convert_min_sec_to_seconds(time_str):
         else:
             return None
 
+
 def get_father_path(path):
     return os.path.dirname(path)
 
 
 def create_output_directory():
-    cwd=os.getcwd()
-    cwd_floder_name=os.path.basename(cwd)
+    cwd = os.getcwd()
+    cwd_floder_name = os.path.basename(cwd)
 
-    if cwd_floder_name=="assets":
+    if cwd_floder_name == "assets":
 
-        father_path=os.path.dirname(cwd)
-        output_dir=os.path.join(father_path, 'output')
+        father_path = os.path.dirname(cwd)
+        output_dir = os.path.join(father_path, 'output')
     else:
-        father_floder_name=os.path.basename(os.path.dirname(cwd))
-        if father_floder_name=="assets":
-            father_father_path=os.path.dirname(os.path.dirname(cwd))
-            output_dir=os.path.join(father_father_path, 'output')
+        father_floder_name = os.path.basename(os.path.dirname(cwd))
+        if father_floder_name == "assets":
+            father_father_path = os.path.dirname(os.path.dirname(cwd))
+            output_dir = os.path.join(father_father_path, 'output')
         else:
-            father_father_floder_name=os.path.basename(os.path.dirname(os.path.dirname(cwd)))
-            if father_father_floder_name=="assets":
-                father_father_father_path=os.path.dirname(os.path.dirname(os.path.dirname(cwd)))
-                output_dir=os.path.join(father_father_father_path, 'output')
+            father_father_floder_name = os.path.basename(
+                os.path.dirname(os.path.dirname(cwd)))
+            if father_father_floder_name == "assets":
+                father_father_father_path = os.path.dirname(
+                    os.path.dirname(os.path.dirname(cwd)))
+                output_dir = os.path.join(father_father_father_path, 'output')
             else:
-                output_dir=os.path.join(cwd, 'output')
-
-
-
+                output_dir = os.path.join(cwd, 'output')
 
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
     return output_dir
 
+
 def create_new_file_name(file):
     if not file.endswith('.md'):
-        filename_without_ext=os.path.splitext(file)[0]
-        new_file_name=filename_without_ext+'.md'
+        filename_without_ext = os.path.splitext(file)[0]
+        new_file_name = filename_without_ext+'.md'
     else:
-        new_file_name=file
+        new_file_name = file
     print(new_file_name)
     return new_file_name
 
-#0
-def list_time_head_textshort_text_to_vid_timeline_md(timeline_data,file,match):
-    #print(timeline_data)
+# 0
 
-    output_dir=create_output_directory()
-    new_file_name=create_new_file_name(file)
+
+def list_time_head_textshort_text_to_vid_timeline_md(timeline_data, file, match):
+    # print(timeline_data)
+
+    output_dir = create_output_directory()
+    new_file_name = create_new_file_name(file)
     with open(os.path.join(output_dir, new_file_name), 'w', encoding='UTF-8') as f:
         for i, (start_time, heading, short_text, text) in enumerate(timeline_data):
             start_time_sec = int(start_time)
@@ -607,183 +619,199 @@ def list_time_head_textshort_text_to_vid_timeline_md(timeline_data,file,match):
                 f.write(f"{text}\n\n")
 
 
-
-def get_list_time_head_textshort_text_4_file(file,key_word):
+def get_list_time_head_textshort_text_4_file(file, key_word):
     print("start to generate time line for video and head text:")
-    find1=r'Part \d:\nTitle: ([\w ]+)\nTimestamp: (\(\d{1,2}:\d{1,2}\))\nSummary: ([\w , .]+)'
-    replace1=r'- $1 $2 $3'
-    find2=r'(\(\d{1,2}:\d{1,2}\)) ([\w ]+)\n'
-    replace2=r'- $2 $1 '
-    number_list_bullet_pattern_str=r'((\d{1,2}\.)|-)[ ]{1,}'
-    head_pattern_str=r'(([\w:-]+ ){1,})'
-    time_line_pattern_str=r'\((\d{1,2}:\d{1,2})-{0,1}(\d{1,2}:\d{1,2}){0,1}\)[ ]{1,}'
-    time_stamp_pattern_str=r'\((\d{1,2}):(\d{1,2})\)'
-    text_pattern_str=r'(.+)\n{0,1}'
+    find1 = r'Part \d:\nTitle: ([\w ]+)\nTimestamp: (\(\d{1,2}:\d{1,2}\))\nSummary: ([\w , .]+)'
+    replace1 = r'- $1 $2 $3'
+    find2 = r'(\(\d{1,2}:\d{1,2}\)) ([\w ]+)\n'
+    replace2 = r'- $2 $1 '
+    number_list_bullet_pattern_str = r'((\d{1,2}\.)|-)[ ]{1,}'
+    head_pattern_str = r'(([\w:-]+ ){1,})'
+    time_line_pattern_str = r'\((\d{1,2}:\d{1,2})-{0,1}(\d{1,2}:\d{1,2}){0,1}\)[ ]{1,}'
+    time_stamp_pattern_str = r'\((\d{1,2}):(\d{1,2})\)'
+    text_pattern_str = r'(.+)\n{0,1}'
     #number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)'
-    #number_list_head_time_text_pattern_str=number_list_bullet_pattern_str+head_pattern_str+time_stamp_pattern_str+text_pattern_str
-    number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|-)[ ]{1,}(.+) \((\d{1,2}):(\d{1,2})\) (.+)'
-    number_list_head_time_pattern_str=r'(\d{1,2}):(\d{1,2})\s+(.+)'
+    # number_list_head_time_text_pattern_str=number_list_bullet_pattern_str+head_pattern_str+time_stamp_pattern_str+text_pattern_str
+    number_list_head_time_text_pattern_str = r'((\d{1,2}\.)|-)[ ]{1,}(.+) \((\d{1,2}):(\d{1,2})\) (.+)'
+    number_list_head_time_pattern_str = r'(\d{1,2}):(\d{1,2})\s+(.+)'
 
-    time_text_pattern_str=r'\((\d{1,2}):(\d{1,2})\)[ ]{0,}([^\n]+)[\n]{0,}'
+    time_text_pattern_str = r'\((\d{1,2}):(\d{1,2})\)[ ]{0,}([^\n]+)[\n]{0,}'
 
-    pattern_dict=dict()
-    pattern_dict["timestamps"]=number_list_head_time_pattern_str
-    pattern_dict["summary_base_on_chatgpt"]=number_list_head_time_text_pattern_str
-    pattern_dict["subtitle"]=time_text_pattern_str
-    list_time_head_textshort_text=[]
+    pattern_dict = dict()
+    pattern_dict["timestamps"] = number_list_head_time_pattern_str
+    pattern_dict["summary_base_on_chatgpt"] = number_list_head_time_text_pattern_str
+    pattern_dict["subtitle"] = time_text_pattern_str
+    list_time_head_textshort_text = []
     with open(os.path.join(os.getcwd(), file), 'r', encoding='UTF-8') as f:
         lines = f.readlines()
 
     for line in lines:
-        time_line_start_seconds=convert_min_sec_to_seconds(line)
-        if time_line_start_seconds!=None:
+        time_line_start_seconds = convert_min_sec_to_seconds(line)
+        if time_line_start_seconds != None:
             if key_word in pattern_dict:
-                pattern_str=pattern_dict[key_word]
-                match=re.search(pattern_str, line)
+                pattern_str = pattern_dict[key_word]
+                match = re.search(pattern_str, line)
                 if match:
-                    if key_word=="timestamps":
-                        list_time_head_textshort_text.append([time_line_start_seconds, match.group(3),None,None])
-                    elif key_word=="summary_base_on_chatgpt":
+                    if key_word == "timestamps":
+                        list_time_head_textshort_text.append(
+                            [time_line_start_seconds, match.group(3), None, None])
+                    elif key_word == "summary_base_on_chatgpt":
                         # for i in range(len(match.groups())):
                         #     print(i,match.group(i))
-                        list_time_head_textshort_text.append([time_line_start_seconds, match.group(3),match.group(6),None])
-                    elif key_word=="subtitle":
-                        list_time_head_textshort_text.append([time_line_start_seconds, None,None,match.group(3)])
+                        list_time_head_textshort_text.append(
+                            [time_line_start_seconds, match.group(3), match.group(6), None])
+                    elif key_word == "subtitle":
+                        list_time_head_textshort_text.append(
+                            [time_line_start_seconds, None, None, match.group(3)])
                 else:
-                    print("no match for line:",line)
+                    print("no match for line:", line)
                     print(key_word)
     # print("List of time, heading, short text, text:")
     # print(list_time_head_textshort_text)
     return list_time_head_textshort_text
 
+
 def timestamps_3blue1brown_2_timeline(str_url):
-    #process url
-    #str_url=r'![007_limits.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C007_limits.mp4)'
-    #'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
-    match1=search_str_url_4_file_vid(str_url)
-    #timestamps file
-    file_list=os.listdir(os.getcwd())
+    # process url
+    # str_url=r'![007_limits.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C007_limits.mp4)'
+    # '(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
+    match1 = search_str_url_4_file_vid(str_url)
+    # timestamps file
+    file_list = os.listdir(os.getcwd())
     for file in file_list:
         if file.endswith(".md") or file.endswith(".txt"):
-            if file.find("timestamps")!=-1:
-                key_word="timestamps"
-                list_time_head_textshort_text=get_list_time_head_textshort_text_4_file(file,key_word)
+            if file.find("timestamps") != -1:
+                key_word = "timestamps"
+                list_time_head_textshort_text = get_list_time_head_textshort_text_4_file(
+                    file, key_word)
 
-                list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
+                list_time_head_textshort_text_to_vid_timeline_md(
+                    list_time_head_textshort_text, file, match1)
 
 
 def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
 
-    #str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
+    # str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
 
-    match1=search_str_url_4_file_vid(str_url)
-    cwd=os.getcwd()
-    file_list=os.listdir(cwd)
+    match1 = search_str_url_4_file_vid(str_url)
+    cwd = os.getcwd()
+    file_list = os.listdir(cwd)
 
     create_output_directory()
 
-
     for file in file_list:
         if file.endswith(".md"):
-            if file.find("summary_base_on_chatgpt")!=-1:
-                key_word="summary_base_on_chatgpt"
-                list_time_head_textshort_text=get_list_time_head_textshort_text_4_file(file,key_word)
-                list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
+            if file.find("summary_base_on_chatgpt") != -1:
+                key_word = "summary_base_on_chatgpt"
+                list_time_head_textshort_text = get_list_time_head_textshort_text_4_file(
+                    file, key_word)
+                list_time_head_textshort_text_to_vid_timeline_md(
+                    list_time_head_textshort_text, file, match1)
 
-def merge_list_time_head_textshort_text(list_time_text,list_time_head_textshort):
+
+def merge_list_time_head_textshort_text(list_time_text, list_time_head_textshort):
     # print("list_time_head_textshort is :")
     # print(list_time_head_textshort)
     # print("list_time_text is :")
     # print(list_time_text)
 
-
     for i in range(len(list_time_head_textshort)):
-        #print(list_time_head_textshort[i][0])
+        # print(list_time_head_textshort[i][0])
         for j in range(len(list_time_text)):
-            if list_time_head_textshort[i][0]==list_time_text[j][0]:
+            if list_time_head_textshort[i][0] == list_time_text[j][0]:
 
-                time_text=list_time_text.pop(j)
+                time_text = list_time_text.pop(j)
                 print(time_text)
-                list_time_head_textshort[i][3]=time_text[3]
-                #list_time_head_textshort.append([list_time_head_textshort[i][0],list_time_head_textshort[i][1],list_time_head_textshort[i][2],time_text[3]])
+                list_time_head_textshort[i][3] = time_text[3]
+                # list_time_head_textshort.append([list_time_head_textshort[i][0],list_time_head_textshort[i][1],list_time_head_textshort[i][2],time_text[3]])
                 break
     # print("first merge list_time_head_textshort_text is :")
     # print(list_time_head_textshort)
-    list_time_head_textshort_text=list_time_head_textshort
-    if len(list_time_text)>0:
-        #print("remain:",list_time_text)
+    list_time_head_textshort_text = list_time_head_textshort
+    if len(list_time_text) > 0:
+        # print("remain:",list_time_text)
 
-        list_pop=[]
+        list_pop = []
         for i in range(len(list_time_text)):
             for j in range(len(list_time_head_textshort_text)):
-                time_text=int(list_time_text[i][0])
-                time_shorttext=int(list_time_head_textshort_text[j][0])
-                if j!=len(list_time_head_textshort_text)-1:
-                    time_shorttext_next=int(list_time_head_textshort_text[j+1][0])
+                time_text = int(list_time_text[i][0])
+                time_shorttext = int(list_time_head_textshort_text[j][0])
+                if j != len(list_time_head_textshort_text)-1:
+                    time_shorttext_next = int(
+                        list_time_head_textshort_text[j+1][0])
 
-                    if time_text>time_shorttext and time_text<time_shorttext_next:
+                    if time_text > time_shorttext and time_text < time_shorttext_next:
 
-                        list_time_head_textshort_text.insert(j+1,[list_time_text[i][0],None,None,list_time_text[i][3]])
+                        list_time_head_textshort_text.insert(
+                            j+1, [list_time_text[i][0], None, None, list_time_text[i][3]])
                         list_pop.append(list_time_text[i])
                         break
                 else:
-                    if time_text>time_shorttext:
-                        list_time_head_textshort_text.append([list_time_text[i][0],None,None,list_time_text[i][3]])
+                    if time_text > time_shorttext:
+                        list_time_head_textshort_text.append(
+                            [list_time_text[i][0], None, None, list_time_text[i][3]])
                         list_pop.append(list_time_text[i])
                         break
         for elment in list_pop:
-            index=list_time_text.index(elment)
+            index = list_time_text.index(elment)
             list_time_text.pop(index)
-    if len(list_time_text)>0:
-        print("remain:",list_time_text)
+    if len(list_time_text) > 0:
+        print("remain:", list_time_text)
 
     return list_time_head_textshort_text
+
+
 def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
 
-    #str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
+    # str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
 
-    match1=search_str_url_4_file_vid(str_url)
-    cwd=os.getcwd()
-    file_list=os.listdir(cwd)
+    match1 = search_str_url_4_file_vid(str_url)
+    cwd = os.getcwd()
+    file_list = os.listdir(cwd)
 
     create_output_directory()
 
     for file in file_list:
         if file.endswith(".md"):
-            if file.find("subtitle")!=-1:
-                key_word="subtitle"
-                list_time_text=get_list_time_head_textshort_text_4_file(file,key_word)
-                #list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
+            if file.find("subtitle") != -1:
+                key_word = "subtitle"
+                list_time_text = get_list_time_head_textshort_text_4_file(
+                    file, key_word)
+                # list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
-            if file.find("summary_base_on_chatgpt")!=-1:
-                cwd_floder_name=os.path.basename(cwd)
-                file_summary=file
-                key_word="summary_base_on_chatgpt"
-                list_time_head_textshort=get_list_time_head_textshort_text_4_file(file,key_word)
-                #list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
+            if file.find("summary_base_on_chatgpt") != -1:
+                cwd_floder_name = os.path.basename(cwd)
+                file_summary = file
+                key_word = "summary_base_on_chatgpt"
+                list_time_head_textshort = get_list_time_head_textshort_text_4_file(
+                    file, key_word)
+                # list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
-
-    list_time_head_textshort_text=merge_list_time_head_textshort_text(list_time_text,list_time_head_textshort)
+    list_time_head_textshort_text = merge_list_time_head_textshort_text(
+        list_time_text, list_time_head_textshort)
     print("final is:")
     print(list_time_head_textshort_text)
-    list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file_summary,match1)
-
-
+    list_time_head_textshort_text_to_vid_timeline_md(
+        list_time_head_textshort_text, file_summary, match1)
 
 
 def get_current_timestamp():
     timestamp = int(time.time())
     print(timestamp)
     return timestamp
+
+
 def add_timestamp_to_filenames():
     current_dir = os.getcwd()
     timestamp = int(time.time())
-    print("add_timestamp is : ",timestamp)
+    print("add_timestamp is : ", timestamp)
     for filename in os.listdir(current_dir):
         if os.path.isfile(os.path.join(current_dir, filename)) and not filename.endswith(".py"):
             filename_without_ext, ext = os.path.splitext(filename)
             new_filename = f"{filename_without_ext}_{timestamp}{ext}"
-            os.replace(os.path.join(current_dir, filename), os.path.join(current_dir, new_filename))
+            os.replace(os.path.join(current_dir, filename),
+                       os.path.join(current_dir, new_filename))
+
 
 def create_directory_assets_imgs():
     dirs = [
@@ -797,6 +825,8 @@ def create_directory_assets_imgs():
             print(f"Created directory: {directory}")
         else:
             print(f"Directory already exists: {directory}")
+
+
 def create_directory_assets_concept_structure():
     dirs = [
         "assets/imgs",
@@ -811,16 +841,6 @@ def create_directory_assets_concept_structure():
         else:
             print(f"Directory already exists: {directory}")
 
-def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
-    # Create a file named subtitle.md and summary_base_on_chatgpt.md
-    print("create_file_subtitle_summary_base_on_chatgpt_md")
-    if path is None:
-        path = os.getcwd()
-    time_stamp= get_current_timestamp()
-    with open(os.path.join(path, "subtitle_"+time_stamp+".md"), "w") as f:
-        pass
-    with open(os.path.join(path, "summary_base_on_chatgpt_"+time_stamp+".md"), "w") as f:
-        pass
 
 def open_folder_in_windows(folder_path):
     """Open a folder in Windows File Explorer based on the folder path.
@@ -835,6 +855,7 @@ def open_folder_in_windows(folder_path):
         os.startfile(folder_path)
     else:
         print(f"Folder path {folder_path} does not exist.")
+
 
 def open_assets_folder():
     cwd = os.getcwd()
@@ -856,9 +877,9 @@ def open_assets_folder():
 
 
 def rename_files_sensor_fusion(path=None):
-    if path==None:
+    if path == None:
         path = os.getcwd()
-    file_list=os.listdir(path)
+    file_list = os.listdir(path)
     for name in file_list:
 
         if name.endswith(".md"):
@@ -872,7 +893,7 @@ def rename_files_sensor_fusion(path=None):
                     elif name[2] == "_":
                         new_name = new_prefix+name[2:]
                     elif name[2] == ".":
-                        if name[3]==" ":
+                        if name[3] == " ":
                             new_name = new_prefix+"_"+name[4:]
                         else:
                             new_name = new_prefix+"_"+name[3:]
@@ -880,94 +901,105 @@ def rename_files_sensor_fusion(path=None):
                         new_name = new_prefix+"_"+name[2:]
                     try:
                         os.replace(os.path.join(path, name),
-                            os.path.join(path, new_name))
+                                   os.path.join(path, new_name))
                     except FileExistsError:
                         os.remove(os.path.join(path, new_name))
                         os.replace(os.path.join(path, name),
-                            os.path.join(path, new_name))
-def html2md(path=None,output_root="C://Output//",output_folder_name=None):
+                                   os.path.join(path, new_name))
+
+
+def html2md(path=None, output_root="C://Output//", output_folder_name=None):
     if path is None:
         path = os.getcwd()
-    timestamp=int(time.time())
-    intput_path=path
+    timestamp = int(time.time())
+    intput_path = path
     input_floder_name = os.path.basename(intput_path)
     #replace_list_regex2=[[r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)',r'0\1_\2'],]
-    input_floder_name=re.sub(r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)',r'0\1_\2',input_floder_name)
-    #Part 01-Module 01-Lesson 01_Welcome to the C++ Developer Nanodegree Program
-    input_floder_name=input_floder_name.replace(" ","_")
-    output_path=os.path.join(output_root,output_folder_name,input_floder_name)
+    input_floder_name = re.sub(
+        r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)', r'0\1_\2', input_floder_name)
+    # Part 01-Module 01-Lesson 01_Welcome to the C++ Developer Nanodegree Program
+    input_floder_name = input_floder_name.replace(" ", "_")
+    output_path = os.path.join(
+        output_root, output_folder_name, input_floder_name)
     os.makedirs(output_path, exist_ok=True)
 
-
     listfiles = os.listdir(intput_path)
-    mp4_list = [filename for filename in listfiles if filename.endswith(".mp4")]
+    mp4_list = [
+        filename for filename in listfiles if filename.endswith(".mp4")]
     # print(listfiles)
     for i in range(len(listfiles)):
         filename = listfiles[i]  # get all file list
         if filename.endswith(".html"):
-            input_file=os.path.join(intput_path,filename)
+            input_file = os.path.join(intput_path, filename)
             doc = aw.Document(input_file)
-            output_file=os.path.join(output_path,filename.replace(".html",".md"))
-            #print(output_path)
+            output_file = os.path.join(
+                output_path, filename.replace(".html", ".md"))
+            # print(output_path)
 
             doc.save(output_file)
 
-    output_files_list=os.listdir(output_path)
-    replace_list_regex=[[r'!\[\]\(.+\.001\.png\)',r''],
-                        [r'(!\[\]|!\[.+\])(\(.+)(\.png|\.jpg|\.gif|\.jpeg|\.svg|\.wbem)\)',r'\1\2'+f'_{timestamp}'+r'\3)'],
-                        [r'\*\*Evaluation Only\. Created with Aspose\.Words\. Copyright 2003-2023 Aspose Pty Ltd\.\*\*',r''],
-                        [r'\*\*Created with an evaluation copy of Aspose.Words. To discover the full versions of our APIs please visit: https://products.aspose.com/words/\*\*',r''],
-                        [r'\[udacimak v1.4.1\]\(https://github.com/udacimak/udacimak#readme\)',r''],
-                        [r'\[.+\]\(.+\.html\)',r''],
-                        [r'\n{3,}',r'\n\n'],
-                        [r'`[ ]+`',r'    '],
-                        ]
+    output_files_list = os.listdir(output_path)
+    replace_list_regex = [[r'!\[\]\(.+\.001\.png\)', r''],
+                          [r'(!\[\]|!\[.+\])(\(.+)(\.png|\.jpg|\.gif|\.jpeg|\.svg|\.wbem)\)',
+                              r'\1\2'+f'_{timestamp}'+r'\3)'],
+                          [r'\*\*Evaluation Only\. Created with Aspose\.Words\. Copyright 2003-2023 Aspose Pty Ltd\.\*\*', r''],
+                          [r'\*\*Created with an evaluation copy of Aspose.Words. To discover the full versions of our APIs please visit: https://products.aspose.com/words/\*\*', r''],
+                          [r'\[udacimak v1.4.1\]\(https://github.com/udacimak/udacimak#readme\)', r''],
+                          [r'\[.+\]\(.+\.html\)', r''],
+                          [r'\n{3,}', r'\n\n'],
+                          [r'`[ ]+`', r'    '],
+                          ]
     for i in range(len(output_files_list)):
         filename = output_files_list[i]
         if filename.endswith(".001.png"):
-            os.remove(os.path.join(output_path,filename))
+            os.remove(os.path.join(output_path, filename))
             continue
         if filename.endswith(".md"):
-            if filename=="index.md":
-                os.remove(os.path.join(output_path,filename))
+            if filename == "index.md":
+                os.remove(os.path.join(output_path, filename))
                 continue
-            with open(os.path.join(output_path,filename), 'r', encoding='UTF-8') as f:
+            with open(os.path.join(output_path, filename), 'r', encoding='UTF-8') as f:
                 content = f.read()
-            with open(os.path.join(output_path,filename), 'w', encoding='UTF-8') as f:
+            with open(os.path.join(output_path, filename), 'w', encoding='UTF-8') as f:
 
                 for replace_list in replace_list_regex:
-                    content=re.sub(replace_list[0],replace_list[1],content)
-                #f.write(content)
+                    content = re.sub(replace_list[0], replace_list[1], content)
+                # f.write(content)
 
                 lines = content.splitlines()
                 for line in lines:
-                    if len(line)>4:
+                    if len(line) > 4:
                         for file_mp4 in mp4_list:
-                            word_list=line.split(" ")
-                            flag=0
-                            flag_out=0
+                            word_list = line.split(" ")
+                            flag = 0
+                            flag_out = 0
                             for word in word_list:
-                                if file_mp4.find(word)>-1:
-                                    flag=flag+1
-                                elif file_mp4.find(word)==-1:
-                                    flag_out=flag_out+1
+                                if file_mp4.find(word) > -1:
+                                    flag = flag+1
+                                elif file_mp4.find(word) == -1:
+                                    flag_out = flag_out+1
                             if flag:
                                 if flag_out:
-                                    #print(line)
+                                    # print(line)
                                     pass
                                 else:
-                                    path_mp4=os.path.join(intput_path,file_mp4)
-                                    url_path = urllib.parse.quote(os.path.abspath(path_mp4))
-                                    url = "file:///" + url_path.replace("\\", "/")
-                                    line=line+"\n\n"+f"[{file_mp4}]({url})\n"+f"![{file_mp4}]({url})"
+                                    path_mp4 = os.path.join(
+                                        intput_path, file_mp4)
+                                    url_path = urllib.parse.quote(
+                                        os.path.abspath(path_mp4))
+                                    url = "file:///" + \
+                                        url_path.replace("\\", "/")
+                                    line = line+"\n\n" + \
+                                        f"[{file_mp4}]({url})\n" + \
+                                        f"![{file_mp4}]({url})"
 
                     f.write(line+"\n")
     rename_files_sensor_fusion(output_path)
-    output_files_list=os.listdir(output_path)
+    output_files_list = os.listdir(output_path)
 
-
-    output_path_md=output_path
-    output_path_img=os.path.join(output_root,"imgs",output_folder_name,input_floder_name)
+    output_path_md = output_path
+    output_path_img = os.path.join(
+        output_root, "imgs", output_folder_name, input_floder_name)
 
     # Create the output directory and its subdirectory if they don't exist
     try:
@@ -975,7 +1007,8 @@ def html2md(path=None,output_root="C://Output//",output_folder_name=None):
     except FileNotFoundError as e:
         if e.winerror == 206:
             # Shorten the filename and try again
-            output_path_img=output_path_img=os.path.join(output_path_md,"imgs")
+            output_path_img = output_path_img = os.path.join(
+                output_path_md, "imgs")
             os.makedirs(output_path_img, exist_ok=True)
 
         else:
@@ -985,26 +1018,32 @@ def html2md(path=None,output_root="C://Output//",output_folder_name=None):
         filename = output_files_list[i]
         if filename.endswith(".md"):
             try:
-                os.replace(os.path.join(output_path,filename),os.path.join(output_path_md,filename))
+                os.replace(os.path.join(output_path, filename),
+                           os.path.join(output_path_md, filename))
             except FileExistsError:
-                os.remove(os.path.join(output_path_md,filename))
-                os.replace(os.path.join(output_path,filename),os.path.join(output_path_md,filename))
+                os.remove(os.path.join(output_path_md, filename))
+                os.replace(os.path.join(output_path, filename),
+                           os.path.join(output_path_md, filename))
 
         if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".gif"):
             filename_ext = os.path.splitext(filename)[1]
             filename_without_ext = os.path.splitext(filename)[0]
-            filename_img=filename_without_ext+f'_{timestamp}'+filename_ext
+            filename_img = filename_without_ext+f'_{timestamp}'+filename_ext
             try:
-                os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename_img))
+                os.replace(os.path.join(output_path, filename),
+                           os.path.join(output_path_img, filename_img))
             except FileExistsError:
-                os.remove(os.path.join(output_path_img,filename_img))
-                os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename_img))
+                os.remove(os.path.join(output_path_img, filename_img))
+                os.replace(os.path.join(output_path, filename),
+                           os.path.join(output_path_img, filename_img))
             except FileNotFoundError as e:
                 if e.winerror == 3:
 
-                    output_path_img=output_path_img=os.path.join(output_path_md,"imgs")
+                    output_path_img = output_path_img = os.path.join(
+                        output_path_md, "imgs")
                     os.makedirs(output_path_img, exist_ok=True)
-                    os.replace(os.path.join(output_path,filename),os.path.join(output_path_img,filename_img))
+                    os.replace(os.path.join(output_path, filename),
+                               os.path.join(output_path_img, filename_img))
                 else:
                     # If it's not WinError 206, raise the original error
                     raise e
@@ -1012,38 +1051,54 @@ def html2md(path=None,output_root="C://Output//",output_folder_name=None):
 
 def html2md_tree():
     files = [f for f in os.listdir() if os.path.isfile(f)]
-    directories=[f for f in os.listdir() if os.path.isdir(f)]
-    output_folder_dict=dict()
+    directories = [f for f in os.listdir() if os.path.isdir(f)]
+    output_folder_dict = dict()
     for directory in directories:
-        search_str=r'Part (\d{2})_(.+)'
-        match=re.search(search_str,directory)
+        search_str = r'Part (\d{2})_(.+)'
+        match = re.search(search_str, directory)
         if match:
-            output_folder_dict[match.group(1)]='0'+match.group(1)+"_"+match.group(2)
+            output_folder_dict[match.group(
+                1)] = '0'+match.group(1)+"_"+match.group(2)
     for directory in directories:
-        search_str=r'Part (\d{2})-Module \d{2}-Lesson (\d{2})_(.+)'
-        match=re.search(search_str,directory)
+        search_str = r'Part (\d{2})-Module \d{2}-Lesson (\d{2})_(.+)'
+        match = re.search(search_str, directory)
         if match:
-            output_folder1="C:\\Output\\"
-            output_folder2=output_folder_dict[match.group(1)]
-            #output_folder=os.path.join(output_folder1,output_folder2)
-            input_path=os.path.join(os.getcwd(),directory)
-            html2md(input_path,output_folder1,output_folder2)
+            output_folder1 = "C:\\Output\\"
+            output_folder2 = output_folder_dict[match.group(1)]
+            # output_folder=os.path.join(output_folder1,output_folder2)
+            input_path = os.path.join(os.getcwd(), directory)
+            html2md(input_path, output_folder1, output_folder2)
+
 
 def vid_link_md_2_html(path=None):
     if path is None:
-        path=os.getcwd()
-    files=[f for f in os.listdir(path) if os.path.isfile(f)]
-    output_path=os.path.join(path,"output")
+        path = os.getcwd()
+    files = [f for f in os.listdir(path) if os.path.isfile(f)]
+    output_path = os.path.join(path, "output")
     os.makedirs(output_path, exist_ok=True)
-    replace_list_regex=[[r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)',r'<video src="\2" controls></video>']]
+    replace_list_regex = [
+        [r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']]
     for file in files:
         if file.endswith(".md"):
-            with open(file,"r",encoding="utf-8") as f:
-                content=f.read()
+            with open(file, "r", encoding="utf-8") as f:
+                content = f.read()
             for replace_list in replace_list_regex:
-                content=re.sub(replace_list[0],replace_list[1],content)
-            with open(os.path.join(output_path,file),"w",encoding="utf-8") as f:
+                content = re.sub(replace_list[0], replace_list[1], content)
+            with open(os.path.join(output_path, file), "w", encoding="utf-8") as f:
                 f.write(content)
+
+
+def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
+    # Create a file named subtitle.md and summary_base_on_chatgpt.md
+    print("create_file_subtitle_summary_base_on_chatgpt_md")
+    if path is None:
+        path = os.getcwd()
+    time_stamp = get_current_timestamp()
+    with open(os.path.join(path, "subtitle_"+str(time_stamp)+".md"), "w") as f:
+        pass
+    with open(os.path.join(path, "summary_base_on_chatgpt_"+str(time_stamp)+".md"), "w") as f:
+        pass
+
 
 def init_note():
     import os
@@ -1066,8 +1121,8 @@ def init_note():
     current_dir = os.getcwd()
 
     # Check for existing serial numbers (first three digits of filenames)
-    serial_numbers = [f[:3] for f in os.listdir(current_dir) if os.path.isfile(os.path.join(current_dir, f)) and f[:3].isdigit()]
-
+    serial_numbers = [f[:3] for f in os.listdir(current_dir) if os.path.isfile(
+        os.path.join(current_dir, f)) and f[:3].isdigit()]
 
     # Generate filename
     if serial_numbers:
@@ -1092,12 +1147,13 @@ def init_note():
 
         if 'assets' in os.listdir(current_dir):
             folder_list.reverse()
-            if folder_list!=[]:
-                assets_dir_path=os.path.join(current_dir, 'assets')
+            if folder_list != []:
+                assets_dir_path = os.path.join(current_dir, 'assets')
                 for folder_name in folder_list:
-                    assets_dir_path = os.path.join(assets_dir_path, folder_name)
+                    assets_dir_path = os.path.join(
+                        assets_dir_path, folder_name)
                     print(assets_dir_path)
-                    #if os.path.isdir(assets_dir_path):
+                    # if os.path.isdir(assets_dir_path):
                     if not os.path.exists(assets_dir_path):
                         os.makedirs(assets_dir_path)
                     # else:
@@ -1110,11 +1166,6 @@ def init_note():
             folder_list.append(os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
     create_file_subtitle_summary_base_on_chatgpt_md(assets_dir_path)
-
-
-    # # Add timestamp
-    # with open(os.path.join(current_dir, filename + ".md"), "a") as f:
-    #     f.write("\n\nTimestamp: " + time.strftime("%Y-%m-%d %H:%M:%S"))
 
 
 def compare_md_files(dir1, dir2):
@@ -1179,6 +1230,7 @@ def zhihu_book_process():
     search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
     remove_line(path, search_list)
 
+
 def html2md2():
     import html2markdown
     files = [f for f in os.listdir() if os.path.isfile(f)]
@@ -1189,9 +1241,6 @@ def html2md2():
             markdown_text = html2markdown.convert(html_string)
             with open(file[:-4] + '.md', 'w', encoding='utf-8') as f:
                 f.write(markdown_text)
-
-
-
 
 
 def test():
@@ -1216,9 +1265,11 @@ def main():
     parser.add_argument('-t', '--timestamp', type=str, default=r'1676880280',
                         help='input timestamp to pass to the function')
     parser.add_argument('-u', '--str_url', type=str, default=r'test',
-                    help='input str_url to pass to the function')
-    parser.add_argument('-gt', '--get_timestamp', action='store_true', help='call get_current_timestamp')
-    parser.add_argument('-at', '--add_timestamp', action='store_true', help='call add_timestamp_to_filenames')
+                        help='input str_url to pass to the function')
+    parser.add_argument('-gt', '--get_timestamp',
+                        action='store_true', help='call get_current_timestamp')
+    parser.add_argument('-at', '--add_timestamp', action='store_true',
+                        help='call add_timestamp_to_filenames')
     parser.add_argument('-mdx', '--mdx2md',
                         action='store_true', help='call mdx2md')
     parser.add_argument('-oaf', '--open_assets_folder',
@@ -1228,23 +1279,31 @@ def main():
     parser.add_argument('-ds', '--rename_files_sensor_fusion',
                         action='store_true', help='call rename_files_sensor_fusion')
     parser.add_argument('-tt', '--timestamps_3blue1brown_2_timeline',
-                    action='store_true', help='call timestamps_3blue1brown_2_timeline')
+                        action='store_true', help='call timestamps_3blue1brown_2_timeline')
     parser.add_argument('-cti', '--copy_timestamps_and_index_2_root',
-                action='store_true', help='call copy_timestamps_and_index_2_root')
+                        action='store_true', help='call copy_timestamps_and_index_2_root')
     parser.add_argument('-csm', '--convert_subtitle_chatgpt_summary_to_markdown_vid_timeline',
-                action='store_true', help='call convert_subtitle_chatgpt_summary_to_markdown_vid_timeline')
+                        action='store_true', help='call convert_subtitle_chatgpt_summary_to_markdown_vid_timeline')
     parser.add_argument('-cssm', '--convert_subtitle_and_summary_to_markdown_vid_timeline',
-                action='store_true', help='call convert_subtitle_and_summary_to_markdown_vid_timeline')
+                        action='store_true', help='call convert_subtitle_and_summary_to_markdown_vid_timeline')
 
-    parser.add_argument('-ci', '--create_imgs_folder', action='store_true', help='call create_directory_assets_imgs')
-    parser.add_argument('-cc', '--creat_concept_folder', action='store_true', help='call create_directory_assets_concept_structure')
-    parser.add_argument('-css', '--creat_subtitle_summary', action='store_true', help='call create_file_subtitle_summary_base_on_chatgpt_md')
-    parser.add_argument('-h2m', '--html2md', action='store_true', help='call html2md')
-    parser.add_argument('-h2m2', '--html2md2', action='store_true', help='call html2md2')
+    parser.add_argument('-ci', '--create_imgs_folder',
+                        action='store_true', help='call create_directory_assets_imgs')
+    parser.add_argument('-cc', '--creat_concept_folder', action='store_true',
+                        help='call create_directory_assets_concept_structure')
+    parser.add_argument('-css', '--creat_subtitle_summary', action='store_true',
+                        help='call create_file_subtitle_summary_base_on_chatgpt_md')
+    parser.add_argument('-h2m', '--html2md',
+                        action='store_true', help='call html2md')
+    parser.add_argument('-h2m2', '--html2md2',
+                        action='store_true', help='call html2md2')
 
-    parser.add_argument('-h2mt', '--html2md_tree', action='store_true', help='call html2md_tree')
-    parser.add_argument('-m2hl', '--vid_link_md_2_html', action='store_true', help='call vid_link_md_2_html')
-    parser.add_argument('-init', '--init_note', action='store_true', help='call init_note')
+    parser.add_argument('-h2mt', '--html2md_tree',
+                        action='store_true', help='call html2md_tree')
+    parser.add_argument('-m2hl', '--vid_link_md_2_html',
+                        action='store_true', help='call vid_link_md_2_html')
+    parser.add_argument('-init', '--init_note',
+                        action='store_true', help='call init_note')
 
     # parse the command-line arguments
     args = parser.parse_args()
