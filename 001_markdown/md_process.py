@@ -545,7 +545,7 @@ def create_output_directory():
 
         if 'assets' in os.listdir(current_dir):
             root=current_dir
-
+            #print("root is %s" % root)
             break
         else:
 
@@ -554,6 +554,7 @@ def create_output_directory():
 
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
+    print("Created output directory %s" % output_dir)
     return output_dir
 
 
@@ -1067,8 +1068,9 @@ def vid_link_md_2_html(path=None):
     if path is None:
         path = os.getcwd()
     files = [f for f in os.listdir(path) if os.path.isfile(f)]
-    output_path = os.path.join(path, "output")
-    os.makedirs(output_path, exist_ok=True)
+    output_path = create_output_directory()
+    if not os.path.exists(output_path):
+        os.makedirs(output_path, exist_ok=True)
     replace_list_regex = [
         [r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']]
     for file in files:
