@@ -537,27 +537,20 @@ def get_father_path(path):
 
 
 def create_output_directory():
-    cwd = os.getcwd()
-    cwd_floder_name = os.path.basename(cwd)
 
-    if cwd_floder_name == "assets":
+    current_dir = os.getcwd()
+    if current_dir.find('oneDrive') != -1:
+        raise Exception('dont find oneDrive')
+    while True:
 
-        father_path = os.path.dirname(cwd)
-        output_dir = os.path.join(father_path, 'output')
-    else:
-        father_floder_name = os.path.basename(os.path.dirname(cwd))
-        if father_floder_name == "assets":
-            father_father_path = os.path.dirname(os.path.dirname(cwd))
-            output_dir = os.path.join(father_father_path, 'output')
+        if 'assets' in os.listdir(current_dir):
+            root=current_dir
+
+            break
         else:
-            father_father_floder_name = os.path.basename(
-                os.path.dirname(os.path.dirname(cwd)))
-            if father_father_floder_name == "assets":
-                father_father_father_path = os.path.dirname(
-                    os.path.dirname(os.path.dirname(cwd)))
-                output_dir = os.path.join(father_father_father_path, 'output')
-            else:
-                output_dir = os.path.join(cwd, 'output')
+
+            current_dir = get_parent_dir(current_dir)
+    output_dir=os.path.join(root, 'output')
 
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
@@ -1098,16 +1091,16 @@ def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
         pass
     with open(os.path.join(path, "summary_base_on_chatgpt_"+str(time_stamp)+".md"), "w") as f:
         pass
-
+# Function to get the parent directory
+def get_parent_dir(directory):
+    return os.path.dirname(directory)
 
 def init_note():
     import os
     import pyperclip
     import time
 
-    # Function to get the parent directory
-    def get_parent_dir(directory):
-        return os.path.dirname(directory)
+
 
     # Function to create a file
     def create_file(path, content=""):
