@@ -478,10 +478,14 @@ def copy_timestamps_and_index_2_root(directory=None):
 
 
 def search_str_url_4_file_vid(str_url):
+    r"![001_Derivatives of multivariable functions.mp4](file:///C%3A%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CMultivaribale_calculus_Khan_Academy%5Cassets%5Cbvids%5Cmc_1683793602%5C002%5C001%5C001_Derivatives%20of%20multivariable%20functions.mp4)"
     url_pattern_4_file_vid = r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
+    url_pattern_4_file_vid2=r'(!\[.+\..+\]\(file:///C%3A%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
     match1 = re.search(url_pattern_4_file_vid, str_url)
     if not match1:
-        raise Exception('No match found')
+        match1 = re.search(url_pattern_4_file_vid2, str_url)
+        if not match1:
+            raise Exception('No match found')
     return match1
 
 
