@@ -552,7 +552,7 @@ def create_output_directory():
             current_dir = get_parent_dir(current_dir)
     output_dir=os.path.join(root, 'output')
 
-    if not os.path.isdir(output_dir):
+    if not os.path.exists(output_dir):
         os.mkdir(output_dir)
     print("Created output directory %s" % output_dir)
     return output_dir
@@ -763,7 +763,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     cwd = os.getcwd()
     file_list = os.listdir(cwd)
 
-    create_output_directory()
+    output_dir=create_output_directory()
 
     for file in file_list:
         if file.endswith(".md"):
@@ -787,7 +787,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     print(list_time_head_textshort_text)
     list_time_head_textshort_text_to_vid_timeline_md(
         list_time_head_textshort_text, file_summary, match1)
-
+    vid_link_md_2_html(output_dir)
 
 def get_current_timestamp():
     timestamp = int(time.time())
@@ -1067,6 +1067,7 @@ def html2md_tree():
 def vid_link_md_2_html(path=None):
     if path is None:
         path = os.getcwd()
+    print("vid_link_md_2_html input path is %s" % path)
     files = [f for f in os.listdir(path) if os.path.isfile(f)]
     output_path = create_output_directory()
     if not os.path.exists(output_path):
@@ -1075,8 +1076,9 @@ def vid_link_md_2_html(path=None):
         [r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']]
     for file in files:
         if file.endswith(".md"):
-            with open(file, "r", encoding="utf-8") as f:
+            with open(os.path.join(path, file), "r", encoding="utf-8") as f:
                 content = f.read()
+                print(content)
             for replace_list in replace_list_regex:
                 content = re.sub(replace_list[0], replace_list[1], content)
             with open(os.path.join(output_path, file), "w", encoding="utf-8") as f:
