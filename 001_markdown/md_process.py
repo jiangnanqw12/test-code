@@ -1067,7 +1067,7 @@ def html2md_tree():
 def vid_link_md_2_html(path=None):
     if path is None:
         path = os.getcwd()
-    print("vid_link_md_2_html input path is %s" % path)
+    #print("vid_link_md_2_html input path is %s" % path)
     files = [f for f in os.listdir(path) if os.path.isfile(f)]
     output_path = create_output_directory()
     if not os.path.exists(output_path):
@@ -1078,7 +1078,7 @@ def vid_link_md_2_html(path=None):
         if file.endswith(".md"):
             with open(os.path.join(path, file), "r", encoding="utf-8") as f:
                 content = f.read()
-                print(content)
+                #print(content)
             for replace_list in replace_list_regex:
                 content = re.sub(replace_list[0], replace_list[1], content)
             with open(os.path.join(output_path, file), "w", encoding="utf-8") as f:
