@@ -303,34 +303,6 @@ def delete_non_example_md_files():
             os.remove(file_path)
 
 
-def open_folder_in_windows(folder_path):
-    """根据文件夹路径在Windows文件管理器中打开文件夹。
-
-    参数:
-    folder_path (str): 要打开的文件夹路径。
-
-    返回:
-    无返回值。
-    """
-    if os.path.exists(folder_path):
-        os.startfile(folder_path)
-    else:
-        print(f"文件夹路径 {folder_path} 不存在。")
-
-
-def open_assets_folder():
-    CWD = os.getcwd()
-    # print(CWD)
-    assets_path_front = "C:/BaiduSyncdisk/assets"
-    KG_path_front = "C:\\BaiduSyncdisk\\assets\\KG"
-    # split paht CWD after KG, replace \ with /
-    KG_path_back = CWD.split("\KG")[1].replace("\\", "/")
-
-    # print(KG_path_back)
-    assets_path = assets_path_front+KG_path_back
-    # print(assets_path)
-    open_folder_in_windows(assets_path)
-
 
 def add_timestamp_to_filenames():
     current_dir = os.getcwd()
@@ -851,8 +823,9 @@ def open_folder_in_windows(folder_path):
         print(f"Folder path {folder_path} does not exist.")
 
 
-def open_assets_folder():
-    cwd = os.getcwd()
+def open_b_assets_folder(cwd=None):
+    if cwd is None:
+        cwd = os.getcwd()
     print(cwd)
     if cwd.find("OneDrive") == -1:
         raise Exception("This script is only for use with OneDrive.")
@@ -1098,7 +1071,35 @@ def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
 # Function to get the parent directory
 def get_parent_dir(directory):
     return os.path.dirname(directory)
+    # Function to create a file
+def create_file(path, content=""):
+    with open(path, 'w') as f:
+        f.write(content)
+def get_note_assets_path(folder_list,current_dir):
+    current_dir = get_parent_dir(current_dir)
+    while True:
 
+        if 'assets' in os.listdir(current_dir):
+            folder_list.reverse()
+            if folder_list != []:
+                assets_dir_path = os.path.join(current_dir, 'assets')
+                for folder_name in folder_list:
+                    assets_dir_path = os.path.join(
+                        assets_dir_path, folder_name)
+                    #print(assets_dir_path)
+                    # if os.path.isdir(assets_dir_path):
+                    if not os.path.exists(assets_dir_path):
+                        os.makedirs(assets_dir_path)
+                return assets_dir_path
+                    # else:
+                    #     raise Exception('not a directory ',assets_dir_path)
+            else:
+                raise Exception("No folder name found")
+
+            break
+        else:
+            folder_list.append(os.path.basename(current_dir))
+            current_dir = get_parent_dir(current_dir)
 def init_note():
     import os
     import pyperclip
@@ -1106,10 +1107,7 @@ def init_note():
 
 
 
-    # Function to create a file
-    def create_file(path, content=""):
-        with open(path, 'w') as f:
-            f.write(content)
+
 
     # Get content from clipboard
     content = pyperclip.paste()
@@ -1134,34 +1132,12 @@ def init_note():
     note_path = os.path.join(current_dir, note_file)
     if not os.path.exists(note_path):
         create_file(note_path)
-    # Check if assets folder is in the same directory
     folder_list = []
     folder_list.append(note_file[:-3])
     folder_list.append(os.path.basename(current_dir))
 
-    current_dir = get_parent_dir(current_dir)
-    while True:
+    assets_dir_path=get_note_assets_path(folder_list,current_dir)
 
-        if 'assets' in os.listdir(current_dir):
-            folder_list.reverse()
-            if folder_list != []:
-                assets_dir_path = os.path.join(current_dir, 'assets')
-                for folder_name in folder_list:
-                    assets_dir_path = os.path.join(
-                        assets_dir_path, folder_name)
-                    print(assets_dir_path)
-                    # if os.path.isdir(assets_dir_path):
-                    if not os.path.exists(assets_dir_path):
-                        os.makedirs(assets_dir_path)
-                    # else:
-                    #     raise Exception('not a directory ',assets_dir_path)
-            else:
-                raise Exception("No folder name found")
-
-            break
-        else:
-            folder_list.append(os.path.basename(current_dir))
-            current_dir = get_parent_dir(current_dir)
     create_file_subtitle_summary_base_on_chatgpt_md(assets_dir_path)
 
 
@@ -1240,7 +1216,7 @@ def html2md2():
                 f.write(markdown_text)
 
 
-def test():
+def test_zhi():
     path = os.getcwd()
     # back_up_dir_tree(path)
     # back_up_dir(path)
@@ -1252,6 +1228,109 @@ def test():
     # compare_md_files("mds", "mds_2023-02-26-22-12-57")
     # process_md_files_filename_2_head()
     rename_files_sensor_fusion(path)
+
+def test():
+    def get_b_assets_path(path=None):
+        if path is None:
+            path = os.getcwd()
+
+        if path.find("OneDrive") == -1 or path.find("KG") == -1:
+            raise Exception("This script is only for use with OneDrive/KG.")
+        # if path.find("assets") ==-1:
+        #     raise Exception("current path is not an assets path.")
+        #reg_search=[r'(.+\\OneDrive\\KG\\)(.+)']
+        reg_search=[[r'.+\\OneDrive\\KG\\(.+)',r'C:\\BaiduSyncdisk\\assets\\\1']]
+        test2=r'C:\BaiduSyncdisk\assets\O\O1\O17\O172\Multivaribale_calculus_Khan_Academy\assets\bvids\mc_1683793602\001_\005_'
+        test=r'C:\Users\shade\OneDrive\KG\O\O1\O17\O172\Multivaribale_calculus_Khan_Academy\assets\001_Thinking about multivariable functions\005_Transformations\003_Transformations, part 3'
+        #print(path)
+        match1=re.search(reg_search[0][0],path)
+        if match1:
+            path_b_assets=re.sub(reg_search[0][0],reg_search[0][1],path)
+            print(path_b_assets)
+            return path_b_assets
+    def get_bvids_path(current_dir=None,key_word="mc_1683793602"):
+        if current_dir is None:
+            current_dir=os.getcwd()
+        folder_list = []
+
+        folder_list.append(os.path.basename(current_dir))
+        current_dir = get_parent_dir(current_dir)
+        while True:
+
+            if 'assets' in os.listdir(current_dir):
+                folder_list.reverse()
+                folder_list.insert(1,"bvids")
+                folder_list.insert(2,key_word)
+                return folder_list,current_dir
+                # if folder_list != []:
+                #     assets_dir_path = os.path.join(current_dir, 'assets','bvids')
+                #     for folder_name in folder_list:
+                #         assets_dir_path = os.path.join(
+                #             assets_dir_path, folder_name.split('_')[0])
+                #         #print(assets_dir_path)
+                #         # if os.path.isdir(assets_dir_path):
+                #         if not os.path.exists(assets_dir_path):
+                #             os.makedirs(assets_dir_path)
+                #     return assets_dir_path
+                        # else:
+                        #     raise Exception('not a directory ',assets_dir_path)
+                # else:
+                #     raise Exception("No folder name found")
+
+                #break
+            else:
+                folder_list.append(os.path.basename(current_dir))
+                current_dir = get_parent_dir(current_dir)
+
+    def get_bvids_destination(folder_list,BaiduSyncdisk_assets_root):
+        path_temp=BaiduSyncdisk_assets_root
+        for i in range(len(folder_list)-1):
+
+            folder_temp=folder_list[i].split('_')[0]
+            if folder_temp!="mc":
+                path_temp=os.path.join(path_temp,folder_temp)
+            else:
+                path_temp=os.path.join(path_temp,folder_list[i])
+            if not os.path.exists(path_temp):
+                os.makedirs(path_temp)
+        return path_temp
+    def get_bvids_origin_path(BaiduSyncdisk_assets_root):
+        return os.path.join(BaiduSyncdisk_assets_root,"assets","bvids","mc_1683793602")
+    def get_bvid_name():
+        file=os.path.basename(os.getcwd())
+        return file+".mp4"
+    def get_note_name():
+        file=os.path.basename(os.getcwd())
+        return file+".md"
+    folder_list,OneDrive_KG_root=get_bvids_path(key_word="mc_1683793602")
+    BaiduSyncdisk_assets_root=get_b_assets_path(OneDrive_KG_root)
+    bvids_origin_path=get_bvids_origin_path(BaiduSyncdisk_assets_root)
+    print(folder_list,BaiduSyncdisk_assets_root)
+    #print(bvids_origin_path)
+    files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(os.path.join(bvids_origin_path, f)) and f.endswith(".mp4")]
+    OneDrive_KG_note_path=OneDrive_KG_root
+    for i in range(3,len(folder_list)-1):
+        OneDrive_KG_note_path=os.path.join(OneDrive_KG_note_path,folder_list[i])
+    print(OneDrive_KG_note_path)
+    print(get_bvid_name())
+    bvids_destination_path=get_bvids_destination(folder_list,BaiduSyncdisk_assets_root)
+    print(bvids_destination_path)
+    #os.rename(os.path.join(bvids_origin_path,files[0]),os.path.join(bvids_destination_path,get_bvid_name()))
+    vid_path=os.path.join(bvids_destination_path,get_bvid_name())
+
+    url_path = urllib.parse.quote(os.path.abspath(vid_path))
+    url = "file:///" + url_path.replace("\\", "/")
+    content1 = f"[{get_bvid_name()}]({url})\n" + f"![{get_bvid_name()}]({url})\n"
+    if not os.path.exists(os.path.join(OneDrive_KG_note_path,get_note_name())):
+        raise Exception("note not found")
+    else:
+        with open(os.path.join(OneDrive_KG_note_path,get_note_name()), "r", encoding="utf-8") as f:
+            content2=f.read()
+        with open(os.path.join(OneDrive_KG_note_path,get_note_name()), "w", encoding="utf-8") as f:
+            f.write(content2+content1)
+        # for f in files:
+        #     print(f)
+
 
 
 def main():
@@ -1269,8 +1348,8 @@ def main():
                         help='call add_timestamp_to_filenames')
     parser.add_argument('-mdx', '--mdx2md',
                         action='store_true', help='call mdx2md')
-    parser.add_argument('-oaf', '--open_assets_folder',
-                        action='store_true', help='call open_assets_folder')
+    parser.add_argument('-oaf', '--open_b_assets_folder',
+                        action='store_true', help='call open_b_assets_folder')
     parser.add_argument('-rfe', '--remove_filesname_end',
                         action='store_true', help='call remove_filesname_end')
     parser.add_argument('-ds', '--rename_files_sensor_fusion',
@@ -1301,7 +1380,8 @@ def main():
                         action='store_true', help='call vid_link_md_2_html')
     parser.add_argument('-init', '--init_note',
                         action='store_true', help='call init_note')
-
+    parser.add_argument('-test', '--test',
+                        action='store_true', help='call test')
     # parse the command-line arguments
     args = parser.parse_args()
 
@@ -1318,8 +1398,8 @@ def main():
         convert_subtitle_and_summary_to_markdown_vid_timeline(args.str_url)
     elif args.mdx2md:
         mdx2md(args.timestamp)
-    elif args.open_assets_folder:
-        open_assets_folder()
+    elif args.open_b_assets_folder:
+        open_b_assets_folder()
     elif args.timestamps_3blue1brown_2_timeline:
         timestamps_3blue1brown_2_timeline(args.str_url)
     elif args.get_timestamp:
@@ -1342,6 +1422,8 @@ def main():
         vid_link_md_2_html()
     elif args.init_note:
         init_note()
+    elif args.test:
+        test()
     else:
         print("Invalid argument")
 
