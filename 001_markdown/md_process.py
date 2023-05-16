@@ -303,7 +303,6 @@ def delete_non_example_md_files():
             os.remove(file_path)
 
 
-
 def add_timestamp_to_filenames():
     current_dir = os.getcwd()
     timestamp = int(time.time())
@@ -480,7 +479,7 @@ def copy_timestamps_and_index_2_root(directory=None):
 def search_str_url_4_file_vid(str_url):
     r"![001_Derivatives of multivariable functions.mp4](file:///C%3A%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CMultivaribale_calculus_Khan_Academy%5Cassets%5Cbvids%5Cmc_1683793602%5C002%5C001%5C001_Derivatives%20of%20multivariable%20functions.mp4)"
     url_pattern_4_file_vid = r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
-    url_pattern_4_file_vid2=r'(!\[.+\..+\]\(file:///C%3A%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
+    url_pattern_4_file_vid2 = r'(!\[.+\..+\]\(file:///C%3A%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
     match1 = re.search(url_pattern_4_file_vid, str_url)
     if not match1:
         match1 = re.search(url_pattern_4_file_vid2, str_url)
@@ -520,13 +519,13 @@ def create_output_directory():
     while True:
 
         if 'assets' in os.listdir(current_dir):
-            root=current_dir
+            root = current_dir
             #print("root is %s" % root)
             break
         else:
 
             current_dir = get_parent_dir(current_dir)
-    output_dir=os.path.join(root, 'output')
+    output_dir = os.path.join(root, 'output')
 
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
@@ -739,7 +738,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     cwd = os.getcwd()
     file_list = os.listdir(cwd)
 
-    output_dir=create_output_directory()
+    output_dir = create_output_directory()
 
     for file in file_list:
         if file.endswith(".md"):
@@ -764,7 +763,8 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     list_time_head_textshort_text_to_vid_timeline_md(
         list_time_head_textshort_text, file_summary, match1)
     vid_link_md_2_html(output_dir)
-    return output_dir,file_summary
+    return output_dir, file_summary
+
 
 def get_current_timestamp():
     timestamp = int(time.time())
@@ -1056,7 +1056,7 @@ def vid_link_md_2_html(path=None):
         if file.endswith(".md"):
             with open(os.path.join(path, file), "r", encoding="utf-8") as f:
                 content = f.read()
-                #print(content)
+                # print(content)
             for replace_list in replace_list_regex:
                 content = re.sub(replace_list[0], replace_list[1], content)
             with open(os.path.join(output_path, file), "w", encoding="utf-8") as f:
@@ -1074,13 +1074,19 @@ def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
     with open(os.path.join(path, "summary_base_on_chatgpt_"+str(time_stamp)+".md"), "w") as f:
         pass
 # Function to get the parent directory
+
+
 def get_parent_dir(directory):
     return os.path.dirname(directory)
     # Function to create a file
+
+
 def create_file(path, content=""):
     with open(path, 'w') as f:
         f.write(content)
-def get_note_assets_path(folder_list,current_dir):
+
+
+def get_note_assets_path(folder_list, current_dir):
     current_dir = get_parent_dir(current_dir)
     while True:
 
@@ -1091,13 +1097,13 @@ def get_note_assets_path(folder_list,current_dir):
                 for folder_name in folder_list:
                     assets_dir_path = os.path.join(
                         assets_dir_path, folder_name)
-                    #print(assets_dir_path)
+                    # print(assets_dir_path)
                     # if os.path.isdir(assets_dir_path):
                     if not os.path.exists(assets_dir_path):
                         os.makedirs(assets_dir_path)
                 return assets_dir_path
-                    # else:
-                    #     raise Exception('not a directory ',assets_dir_path)
+                # else:
+                #     raise Exception('not a directory ',assets_dir_path)
             else:
                 raise Exception("No folder name found")
 
@@ -1105,14 +1111,12 @@ def get_note_assets_path(folder_list,current_dir):
         else:
             folder_list.append(os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
+
+
 def init_note():
     import os
     import pyperclip
     import time
-
-
-
-
 
     # Get content from clipboard
     content = pyperclip.paste()
@@ -1141,7 +1145,7 @@ def init_note():
     folder_list.append(note_file[:-3])
     folder_list.append(os.path.basename(current_dir))
 
-    assets_dir_path=get_note_assets_path(folder_list,current_dir)
+    assets_dir_path = get_note_assets_path(folder_list, current_dir)
 
     create_file_subtitle_summary_base_on_chatgpt_md(assets_dir_path)
 
@@ -1234,99 +1238,132 @@ def test_zhi():
     # process_md_files_filename_2_head()
     rename_files_sensor_fusion(path)
 
-def test():
-    def get_b_assets_path(path=None):
-        if path is None:
-            path = os.getcwd()
 
-        if path.find("OneDrive") == -1 or path.find("KG") == -1:
-            raise Exception("This script is only for use with OneDrive/KG.")
-        # if path.find("assets") ==-1:
-        #     raise Exception("current path is not an assets path.")
-        #reg_search=[r'(.+\\OneDrive\\KG\\)(.+)']
-        reg_search=[[r'.+\\OneDrive\\KG\\(.+)',r'C:\\BaiduSyncdisk\\assets\\\1']]
-        test2=r'C:\BaiduSyncdisk\assets\O\O1\O17\O172\Multivaribale_calculus_Khan_Academy\assets\bvids\mc_1683793602\001_\005_'
-        test=r'C:\Users\shade\OneDrive\KG\O\O1\O17\O172\Multivaribale_calculus_Khan_Academy\assets\001_Thinking about multivariable functions\005_Transformations\003_Transformations, part 3'
-        #print(path)
-        match1=re.search(reg_search[0][0],path)
-        if match1:
-            path_b_assets=re.sub(reg_search[0][0],reg_search[0][1],path)
-            print(path_b_assets)
-            return path_b_assets
-    def get_bvids_path(current_dir=None,key_word="mc_1683793602"):
-        if current_dir is None:
-            current_dir=os.getcwd()
-        folder_list = []
+def get_b_assets_path(path=None):
+    if path is None:
+        path = os.getcwd()
 
-        folder_list.append(os.path.basename(current_dir))
-        current_dir = get_parent_dir(current_dir)
-        while True:
+    if path.find("OneDrive") == -1 or path.find("KG") == -1:
+        raise Exception("This script is only for use with OneDrive/KG.")
+    # if path.find("assets") ==-1:
+    #     raise Exception("current path is not an assets path.")
+    # reg_search=[r'(.+\\OneDrive\\KG\\)(.+)']
+    reg_search = [
+        [r'.+\\OneDrive\\KG\\(.+)', r'C:\\BaiduSyncdisk\\assets\\\1']]
+    test2 = r'C:\BaiduSyncdisk\assets\O\O1\O17\O172\Multivaribale_calculus_Khan_Academy\assets\bvids\mc_1683793602\001_\005_'
+    test = r'C:\Users\shade\OneDrive\KG\O\O1\O17\O172\Multivaribale_calculus_Khan_Academy\assets\001_Thinking about multivariable functions\005_Transformations\003_Transformations, part 3'
+    # print(path)
+    match1 = re.search(reg_search[0][0], path)
+    if match1:
+        path_b_assets = re.sub(reg_search[0][0], reg_search[0][1], path)
+        print(path_b_assets)
+        return path_b_assets
 
-            if 'assets' in os.listdir(current_dir):
-                folder_list.reverse()
-                folder_list.insert(1,"bvids")
-                folder_list.insert(2,key_word)
-                return folder_list,current_dir
 
-            else:
-                folder_list.append(os.path.basename(current_dir))
-                current_dir = get_parent_dir(current_dir)
+def get_bvids_path(current_dir=None, key_word="mc_1683793602"):
+    if current_dir is None:
+        current_dir = os.getcwd()
+    folder_list = []
 
-    def get_bvids_destination(folder_list,BaiduSyncdisk_assets_root):
-        path_temp=BaiduSyncdisk_assets_root
-        for i in range(len(folder_list)-1):
+    folder_list.append(os.path.basename(current_dir))
+    current_dir = get_parent_dir(current_dir)
+    while True:
 
-            folder_temp=folder_list[i].split('_')[0]
-            if folder_temp!="mc":
-                path_temp=os.path.join(path_temp,folder_temp)
-            else:
-                path_temp=os.path.join(path_temp,folder_list[i])
-            if not os.path.exists(path_temp):
-                os.makedirs(path_temp)
-        return path_temp
-    def get_bvids_origin_path(BaiduSyncdisk_assets_root):
-        return os.path.join(BaiduSyncdisk_assets_root,"assets","bvids","mc_1683793602")
-    def get_bvid_name():
-        file=os.path.basename(os.getcwd())
-        return file+".mp4"
-    def get_note_name():
-        file=os.path.basename(os.getcwd())
-        return file+".md"
-    folder_list,OneDrive_KG_root=get_bvids_path(key_word="mc_1683793602")
-    BaiduSyncdisk_assets_root=get_b_assets_path(OneDrive_KG_root)
-    bvids_origin_path=get_bvids_origin_path(BaiduSyncdisk_assets_root)
-    print(folder_list,BaiduSyncdisk_assets_root)
-    #print(bvids_origin_path)
-    files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(os.path.join(bvids_origin_path, f)) and f.endswith(".mp4")]
-    OneDrive_KG_note_path=OneDrive_KG_root
-    for i in range(3,len(folder_list)-1):
-        OneDrive_KG_note_path=os.path.join(OneDrive_KG_note_path,folder_list[i])
+        if 'assets' in os.listdir(current_dir):
+            folder_list.reverse()
+            folder_list.insert(1, "bvids")
+            folder_list.insert(2, key_word)
+            return folder_list, current_dir
+
+        else:
+            folder_list.append(os.path.basename(current_dir))
+            current_dir = get_parent_dir(current_dir)
+
+
+def get_bvids_destination(folder_list, BaiduSyncdisk_assets_root):
+    path_temp = BaiduSyncdisk_assets_root
+    for i in range(len(folder_list)-1):
+
+        folder_temp = folder_list[i].split('_')[0]
+        if folder_temp != "mc":
+            path_temp = os.path.join(path_temp, folder_temp)
+        else:
+            path_temp = os.path.join(path_temp, folder_list[i])
+        if not os.path.exists(path_temp):
+            os.makedirs(path_temp)
+    return path_temp
+
+
+def get_bvids_origin_path(BaiduSyncdisk_assets_root):
+    return os.path.join(BaiduSyncdisk_assets_root, "assets", "bvids", "mc_1683793602")
+
+
+def get_bvid_name():
+    file = os.path.basename(os.getcwd())
+    return file+".mp4"
+
+
+def get_note_name():
+    file = os.path.basename(os.getcwd())
+    return file+".md"
+
+
+def get_OneDrive_KG_note_path(OneDrive_KG_root, folder_list):
+    OneDrive_KG_note_path = OneDrive_KG_root
+    for i in range(3, len(folder_list)-1):
+        OneDrive_KG_note_path = os.path.join(
+            OneDrive_KG_note_path, folder_list[i])
     print(OneDrive_KG_note_path)
-    print(get_bvid_name())
-    bvids_destination_path=get_bvids_destination(folder_list,BaiduSyncdisk_assets_root)
-    print(bvids_destination_path)
-    content2=files[0]
-    os.rename(os.path.join(bvids_origin_path,files[0]),os.path.join(bvids_destination_path,get_bvid_name()))
-    vid_path=os.path.join(bvids_destination_path,get_bvid_name())
+    return OneDrive_KG_note_path
 
+
+def vid_path_2_md_vid_link(vid_path, bvid_name):
     url_path = urllib.parse.quote(os.path.abspath(vid_path))
     url = "file:///" + url_path.replace("\\", "/")
-    md_show_url=f"![{get_bvid_name()}]({url})"
-    content3 = f"\n[{get_bvid_name()}]({url})\n" + f"![{get_bvid_name()}]({url})\n"
-    output_dir,file_summary=convert_subtitle_and_summary_to_markdown_vid_timeline(md_show_url)
+    md_show_url = f"![{bvid_name}]({url})"
+    md_url = f"![{bvid_name}]({url})"
+    return md_show_url, md_url
 
-    if not os.path.exists(os.path.join(OneDrive_KG_note_path,get_note_name())):
+
+def full_fill_vid_link_2_summary():
+
+    folder_list, OneDrive_KG_root = get_bvids_path(key_word="mc_1683793602")
+    BaiduSyncdisk_assets_root = get_b_assets_path(OneDrive_KG_root)
+    bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
+    print(folder_list, BaiduSyncdisk_assets_root)
+    # print(bvids_origin_path)
+    files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
+        os.path.join(bvids_origin_path, f)) and f.endswith(".mp4")]
+    OneDrive_KG_note_path = get_OneDrive_KG_note_path(
+        OneDrive_KG_root, folder_list)
+    bvid_name = get_bvid_name()
+    print(bvid_name)
+    bvids_destination_path = get_bvids_destination(
+        folder_list, BaiduSyncdisk_assets_root)
+    print(bvids_destination_path)
+    content2 = files[0]
+    vid_path = os.path.join(bvids_destination_path, bvid_name)
+    if not os.path.exists(vid_path):
+
+        os.rename(os.path.join(bvids_origin_path, content2), vid_path)
+    md_show_url, md_url = vid_path_2_md_vid_link(vid_path, bvid_name)
+    content3 = r'\n'+md_url+r'\n'+md_show_url+r'\n'
+    output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
+        md_show_url)
+    note_name = get_note_name()
+    if not os.path.exists(os.path.join(OneDrive_KG_note_path, note_name)):
         raise Exception("note not found")
     else:
-        with open(os.path.join(OneDrive_KG_note_path,get_note_name()), "r", encoding="utf-8") as f:
-            content1=f.read()
-        with open(os.path.join(output_dir,file_summary), "r", encoding="utf-8") as f:
-            content4=f.read()
-        with open(os.path.join(OneDrive_KG_note_path,get_note_name()), "w", encoding="utf-8") as f:
+        with open(os.path.join(OneDrive_KG_note_path, note_name), "r", encoding="utf-8") as f:
+            content1 = f.read()
+        with open(os.path.join(output_dir, file_summary), "r", encoding="utf-8") as f:
+            content4 = f.read()
+        with open(os.path.join(OneDrive_KG_note_path, note_name), "w", encoding="utf-8") as f:
             f.write(content1+content2+content3+content4)
-        # for f in files:
-        #     print(f)
 
+
+def test():
+    pass
 
 
 def main():
@@ -1378,6 +1415,8 @@ def main():
                         action='store_true', help='call init_note')
     parser.add_argument('-test', '--test',
                         action='store_true', help='call test')
+    parser.add_argument('-vls', '--full_fill_vid_link_2_summary',
+                        action='store_true', help='call full_fill_vid_link_2_summary')
     # parse the command-line arguments
     args = parser.parse_args()
 
@@ -1418,6 +1457,8 @@ def main():
         vid_link_md_2_html()
     elif args.init_note:
         init_note()
+    elif args.full_fill_vid_link_2_summary:
+        full_fill_vid_link_2_summary()
     elif args.test:
         test()
     else:
