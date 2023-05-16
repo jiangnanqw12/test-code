@@ -764,6 +764,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     list_time_head_textshort_text_to_vid_timeline_md(
         list_time_head_textshort_text, file_summary, match1)
     vid_link_md_2_html(output_dir)
+    return output_dir,file_summary
 
 def get_current_timestamp():
     timestamp = int(time.time())
@@ -1266,22 +1267,7 @@ def test():
                 folder_list.insert(1,"bvids")
                 folder_list.insert(2,key_word)
                 return folder_list,current_dir
-                # if folder_list != []:
-                #     assets_dir_path = os.path.join(current_dir, 'assets','bvids')
-                #     for folder_name in folder_list:
-                #         assets_dir_path = os.path.join(
-                #             assets_dir_path, folder_name.split('_')[0])
-                #         #print(assets_dir_path)
-                #         # if os.path.isdir(assets_dir_path):
-                #         if not os.path.exists(assets_dir_path):
-                #             os.makedirs(assets_dir_path)
-                #     return assets_dir_path
-                        # else:
-                        #     raise Exception('not a directory ',assets_dir_path)
-                # else:
-                #     raise Exception("No folder name found")
 
-                #break
             else:
                 folder_list.append(os.path.basename(current_dir))
                 current_dir = get_parent_dir(current_dir)
@@ -1319,19 +1305,25 @@ def test():
     print(get_bvid_name())
     bvids_destination_path=get_bvids_destination(folder_list,BaiduSyncdisk_assets_root)
     print(bvids_destination_path)
-    #os.rename(os.path.join(bvids_origin_path,files[0]),os.path.join(bvids_destination_path,get_bvid_name()))
+    content2=files[0]
+    os.rename(os.path.join(bvids_origin_path,files[0]),os.path.join(bvids_destination_path,get_bvid_name()))
     vid_path=os.path.join(bvids_destination_path,get_bvid_name())
 
     url_path = urllib.parse.quote(os.path.abspath(vid_path))
     url = "file:///" + url_path.replace("\\", "/")
-    content1 = f"[{get_bvid_name()}]({url})\n" + f"![{get_bvid_name()}]({url})\n"
+    md_show_url=f"![{get_bvid_name()}]({url})"
+    content3 = f"\n[{get_bvid_name()}]({url})\n" + f"![{get_bvid_name()}]({url})\n"
+    output_dir,file_summary=convert_subtitle_and_summary_to_markdown_vid_timeline(md_show_url)
+
     if not os.path.exists(os.path.join(OneDrive_KG_note_path,get_note_name())):
         raise Exception("note not found")
     else:
         with open(os.path.join(OneDrive_KG_note_path,get_note_name()), "r", encoding="utf-8") as f:
-            content2=f.read()
+            content1=f.read()
+        with open(os.path.join(output_dir,file_summary), "r", encoding="utf-8") as f:
+            content4=f.read()
         with open(os.path.join(OneDrive_KG_note_path,get_note_name()), "w", encoding="utf-8") as f:
-            f.write(content2+content1)
+            f.write(content1+content2+content3+content4)
         # for f in files:
         #     print(f)
 
