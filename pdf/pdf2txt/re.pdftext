@@ -1,0 +1,28 @@
+Pritchard, D., and Heidrich,W. 2003. Cloth motion capture. Computer Graphics Forum(Eurographics
+2003), 22(3):263-271.
+Schaffalitzky, F., and Zisserman, A. 2002. Multi-view matching for unordered image sets, or ‘How
+do I organize my holiday snaps?”’ In European Conference on Computer Vision, Copenhagen,
+Denmark, pp. 414-431.
+Schiele, B., and Crowley, J.L. 2000. Recognition without correspondence using multidimensional
+receptive field histograms. International Journal of Computer Vision, 36(1):31-50.
+Schmid, C., andMohr, R. 1997. Local grayvalue invariants for image retrieval. IEEE Trans. on Pattern
+Analysis and Machine Intelligence, 19(5):530-534.
+Se, S., Lowe, D.G., and Little, J. 2001. Vision-based mobile robot localization and mapping using
+scale-invariant features. In International Conference on Robotics and Automation, Seoul, Korea,
+pp. 2051-58.
+Se, S., Lowe, D.G., and Little, J. 2002. Global localization using distinctive visual features. In
+International Conference on Intelligent Robots and Systems, IROS 2002, Lausanne, Switzerland,
+pp. 226-231.
+Shokoufandeh, A.,Marsic, I., and Dickinson, S.J. 1999. View-based object recognition using saliency
+maps. Image and Vision Computing, 17:445-460.
+Torr, P. 1995. Motion Segmentation and Outlier Detection, Ph.D. Thesis, Dept. of Engineering Science,
+University of Oxford, UK.
+Tuytelaars, T., and Van Gool, L. 2000. Wide baseline stereo based on local, affinely invariant regions.
+In British Machine Vision Conference, Bristol, UK, pp. 412-422.
+Weber, M., Welling, M. and Perona, P. 2000. Unsupervised learning of models for recognition. In
+European Conference on Computer Vision, Dublin, Ireland, pp. 18-32.
+Witkin, A.P. 1983. Scale-space filtering. In International Joint Conference on Artificial Intelligence,
+Karlsruhe, Germany, pp. 1019-1022.
+Zhang, Z., Deriche, R., Faugeras, O., and Luong, Q.T. 1995. A robust technique for matching two uncalibrated
+images through the recovery of the unknown epipolar geometry. Artificial Intelligence,
+78:87-119.
