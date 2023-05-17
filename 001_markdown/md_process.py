@@ -1321,7 +1321,7 @@ def vid_path_2_md_vid_link(vid_path, bvid_name):
     url_path = urllib.parse.quote(os.path.abspath(vid_path))
     url = "file:///" + url_path.replace("\\", "/")
     md_show_url = f"![{bvid_name}]({url})"
-    md_url = f"![{bvid_name}]({url})"
+    md_url = f"[{bvid_name}]({url})"
     return md_show_url, md_url
 
 
@@ -1347,7 +1347,7 @@ def full_fill_vid_link_2_summary():
 
         os.rename(os.path.join(bvids_origin_path, content2), vid_path)
     md_show_url, md_url = vid_path_2_md_vid_link(vid_path, bvid_name)
-    content3 = r'\n'+md_url+r'\n'+md_show_url+r'\n'
+    content3 = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
     output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
         md_show_url)
     note_name = get_note_name()
