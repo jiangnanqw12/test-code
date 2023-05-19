@@ -1344,7 +1344,7 @@ def full_fill_vid_link_2_summary():
     reg_search = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
 
     vid_name_origin=files[0]
-    content2 = re.sub(reg_search, r'\1', vid_name_origin)
+    content2 = "\n"+re.sub(reg_search, r'\1', vid_name_origin)
     vid_path = os.path.join(bvids_destination_path, bvid_name)
     if not os.path.exists(vid_path):
 
