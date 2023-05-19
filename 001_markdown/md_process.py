@@ -1342,12 +1342,13 @@ def full_fill_vid_link_2_summary():
         folder_list, BaiduSyncdisk_assets_root)
     print(bvids_destination_path)
     reg_search = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
-    content2 = files[0]
-    content2 = re.sub(reg_search, r'\1', content2)
+
+    vid_name_origin=files[0]
+    content2 = re.sub(reg_search, r'\1', vid_name_origin)
     vid_path = os.path.join(bvids_destination_path, bvid_name)
     if not os.path.exists(vid_path):
 
-        os.rename(os.path.join(bvids_origin_path, content2), vid_path)
+        os.rename(os.path.join(bvids_origin_path, vid_name_origin), vid_path)
     md_show_url, md_url = vid_path_2_md_vid_link(vid_path, bvid_name)
     content3 = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
     output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
