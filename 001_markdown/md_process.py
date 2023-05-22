@@ -1404,7 +1404,8 @@ def rename_base_on_reg():
                 print(new_file)
                 os.rename(file,new_file)
 
-
+def test():
+    pass
 
 def main():
     # create a parser object
