@@ -1337,18 +1337,44 @@ def full_fill_vid_link_2_summary():
     OneDrive_KG_note_path = get_OneDrive_KG_note_path(
         OneDrive_KG_root, folder_list)
     bvid_name = get_bvid_name()
+    number_data=bvid_name[:4]
     print(bvid_name)
     bvids_destination_path = get_bvids_destination(
         folder_list, BaiduSyncdisk_assets_root)
     print(bvids_destination_path)
     reg_search = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
+    flag_one_by_one=False
+    if flag_one_by_one:
+        vid_name_origin=files[0]
+        content2 = "\n"+re.sub(reg_search, r'\1', vid_name_origin)
+        vid_path = os.path.join(bvids_destination_path, bvid_name)
+        if not os.path.exists(vid_path):
 
-    vid_name_origin=files[0]
-    content2 = "\n"+re.sub(reg_search, r'\1', vid_name_origin)
-    vid_path = os.path.join(bvids_destination_path, bvid_name)
-    if not os.path.exists(vid_path):
+            os.rename(os.path.join(bvids_origin_path, vid_name_origin), vid_path)
+    else:
+        content2=""
+        for file in files:
+            if (number_data+file)==bvid_name:
+                vid_name_origin=file
 
-        os.rename(os.path.join(bvids_origin_path, vid_name_origin), vid_path)
+
+                break
+        vid_path = os.path.join(bvids_destination_path, bvid_name)
+        if not os.path.exists(vid_path):
+
+            os.rename(os.path.join(bvids_origin_path, vid_name_origin), vid_path)
+        files_srt = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
+os.path.join(bvids_origin_path, f)) and f.endswith(".srt")]
+        for file_srt in files_srt:
+            print(number_data+file_srt[:-7]+".mp4")
+            print(file_srt[-7:])
+            if (number_data+file_srt[:-7]+".mp4"==bvid_name) and (file_srt[-7:]==".en.srt"):
+                srt_path=os.path.join(bvids_destination_path, file_srt)
+                if not os.path.exists(srt_path):
+                    os.rename(os.path.join(bvids_origin_path, file_srt), srt_path)
+
+
+
     md_show_url, md_url = vid_path_2_md_vid_link(vid_path, bvid_name)
     content3 = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
     output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
@@ -1365,8 +1391,19 @@ def full_fill_vid_link_2_summary():
             f.write(content1+content2+content3+content4)
 
 
-def test():
-    pass
+def rename_base_on_reg():
+    path=os.getcwd()
+    files=os.listdir()
+    reg_string=[r"(.+) - Multivariable calculus - Khan.+(\.en\.srt|\.mp4)",r"\1\2"]
+    for file in files:
+        if file.endswith(".mp4") or file.endswith('.srt'):
+            match=re.search(reg_string[0],file)
+            if match is not None:
+
+                new_file=re.sub(reg_string[0],reg_string[1],file)
+                print(new_file)
+                os.rename(file,new_file)
+
 
 
 def main():
