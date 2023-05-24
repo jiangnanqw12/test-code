@@ -1330,7 +1330,7 @@ def full_fill_vid_link_2_summary():
     folder_list, OneDrive_KG_root = get_bvids_path(key_word="mc_1683793602")
     BaiduSyncdisk_assets_root = get_b_assets_path(OneDrive_KG_root)
     bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
-    bvids_origin_path=r"C:\Multivariable_calculus_Khan_Academy_youtube"
+    bvids_origin_path = r"C:\Multivariable_calculus_Khan_Academy_youtube"
     print(folder_list, BaiduSyncdisk_assets_root)
     # print(bvids_origin_path)
     files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
@@ -1338,43 +1338,43 @@ def full_fill_vid_link_2_summary():
     OneDrive_KG_note_path = get_OneDrive_KG_note_path(
         OneDrive_KG_root, folder_list)
     bvid_name = get_bvid_name()
-    number_data=bvid_name[:4]
+    number_data = bvid_name[:4]
     print(bvid_name)
     bvids_destination_path = get_bvids_destination(
         folder_list, BaiduSyncdisk_assets_root)
     print(bvids_destination_path)
     reg_search = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
-    flag_one_by_one=False
+    flag_one_by_one = False
     if flag_one_by_one:
-        vid_name_origin=files[0]
+        vid_name_origin = files[0]
         content2 = "\n"+re.sub(reg_search, r'\1', vid_name_origin)
         vid_path = os.path.join(bvids_destination_path, bvid_name)
         if not os.path.exists(vid_path):
 
-            os.rename(os.path.join(bvids_origin_path, vid_name_origin), vid_path)
+            os.rename(os.path.join(bvids_origin_path,
+                      vid_name_origin), vid_path)
     else:
-        content2=""
+        content2 = ""
         for file in files:
-            if (number_data+file)==bvid_name:
-                vid_name_origin=file
-
+            if (number_data+file) == bvid_name:
+                vid_name_origin = file
 
                 break
         vid_path = os.path.join(bvids_destination_path, bvid_name)
         if not os.path.exists(vid_path):
 
-            os.rename(os.path.join(bvids_origin_path, vid_name_origin), vid_path)
+            os.rename(os.path.join(bvids_origin_path,
+                      vid_name_origin), vid_path)
         files_srt = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
-os.path.join(bvids_origin_path, f)) and f.endswith(".srt")]
+            os.path.join(bvids_origin_path, f)) and f.endswith(".srt")]
         for file_srt in files_srt:
             # print(number_data+file_srt[:-7]+".mp4")
             # print(file_srt[-7:])
-            if (number_data+file_srt[:-7]+".mp4"==bvid_name) and (file_srt[-7:]==".en.srt"):
-                srt_path=os.path.join(bvids_destination_path, file_srt)
+            if (number_data+file_srt[:-7]+".mp4" == bvid_name) and (file_srt[-7:] == ".en.srt"):
+                srt_path = os.path.join(bvids_destination_path, file_srt)
                 if not os.path.exists(srt_path):
-                    os.rename(os.path.join(bvids_origin_path, file_srt), srt_path)
-
-
+                    os.rename(os.path.join(
+                        bvids_origin_path, file_srt), srt_path)
 
     md_show_url, md_url = vid_path_2_md_vid_link(vid_path, bvid_name)
     content3 = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
@@ -1393,20 +1393,23 @@ os.path.join(bvids_origin_path, f)) and f.endswith(".srt")]
 
 
 def rename_base_on_reg():
-    path=os.getcwd()
-    files=os.listdir()
-    reg_string=[r"(.+) - Multivariable calculus - Khan.+(\.en\.srt|\.mp4)",r"\1\2"]
+    path = os.getcwd()
+    files = os.listdir()
+    reg_string = [
+        r"(.+) - Multivariable calculus - Khan.+(\.en\.srt|\.mp4)", r"\1\2"]
     for file in files:
         if file.endswith(".mp4") or file.endswith('.srt'):
-            match=re.search(reg_string[0],file)
+            match = re.search(reg_string[0], file)
             if match is not None:
 
-                new_file=re.sub(reg_string[0],reg_string[1],file)
+                new_file = re.sub(reg_string[0], reg_string[1], file)
                 print(new_file)
-                os.rename(file,new_file)
+                os.rename(file, new_file)
+
 
 def test():
     pass
+
 
 def main():
     # create a parser object
@@ -1421,6 +1424,8 @@ def main():
                         action='store_true', help='call get_current_timestamp')
     parser.add_argument('-at', '--add_timestamp', action='store_true',
                         help='call add_timestamp_to_filenames')
+    parser.add_argument('-rreg', '--rename_base_on_reg', action='store_true',
+                        help='call rename_base_on_reg')
     parser.add_argument('-mdx', '--mdx2md',
                         action='store_true', help='call mdx2md')
     parser.add_argument('-oaf', '--open_b_assets_folder',
@@ -1483,6 +1488,8 @@ def main():
         get_current_timestamp()
     elif args.add_timestamp:
         add_timestamp_to_filenames()
+    elif args.rename_base_on_reg:
+        rename_base_on_reg()
     elif args.create_imgs_folder:
         create_directory_assets_imgs()
     elif args.creat_concept_folder:
