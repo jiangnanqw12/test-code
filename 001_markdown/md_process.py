@@ -1330,7 +1330,7 @@ def full_fill_vid_link_2_summary():
     folder_list, OneDrive_KG_root = get_bvids_path(key_word="mc_1683793602")
     BaiduSyncdisk_assets_root = get_b_assets_path(OneDrive_KG_root)
     bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
-    bvids_origin_path=r"C:\Multivariable_calculus_Khan_Academy_youtube"
+    bvids_origin_path=r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
     print(folder_list, BaiduSyncdisk_assets_root)
     # print(bvids_origin_path)
     files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
