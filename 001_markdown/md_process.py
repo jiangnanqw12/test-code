@@ -1391,18 +1391,26 @@ def full_fill_vid_link_2_summary():
         with open(os.path.join(OneDrive_KG_note_path, note_name), "w", encoding="utf-8") as f:
             f.write(content1+content2+content3+content4)
 
-
+r"Proof for the meaning of Lagrange multipliers - Multivariable Calculus - Khan Ac"
 def rename_base_on_reg():
     path = os.getcwd()
     files = os.listdir()
-    reg_string = [
-        r"(.+) - Multivariable calculus - Khan.+(\.en\.srt|\.mp4)", r"\1\2"]
+    reg_string1 = [
+        r"(.+) - Multivariable Calculus - Khan.+(\.en\.srt|\.mp4)", r"\1\2"]
+    reg_string_vid=[r"(.+) - Multivariable Calculus - Kh.+(\.mp4)", r"\1\2"]
+    reg_string_srt=[r"(.+) - Multivariable Calculus - Kh.+(\..+\.srt)", r"\1\2"]
     for file in files:
-        if file.endswith(".mp4") or file.endswith('.srt'):
-            match = re.search(reg_string[0], file)
+        if file.endswith(".mp4"):
+            match=re.search(reg_string_vid[0],file)
+            if match is not None:
+                new_file=re.sub(reg_string_vid[0],reg_string_vid[1],file)
+                print(new_file)
+                os.rename(file,new_file)
+        if file.endswith('.srt'):
+            match = re.search(reg_string_srt[0], file)
             if match is not None:
 
-                new_file = re.sub(reg_string[0], reg_string[1], file)
+                new_file = re.sub(reg_string_srt[0], reg_string_srt[1], file)
                 print(new_file)
                 os.rename(file, new_file)
 
