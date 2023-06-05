@@ -1330,7 +1330,7 @@ def full_fill_vid_link_2_summary():
     folder_list, OneDrive_KG_root = get_bvids_path(key_word="mc_1683793602")
     BaiduSyncdisk_assets_root = get_b_assets_path(OneDrive_KG_root)
     bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
-    bvids_origin_path=r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
+    bvids_origin_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
     print(folder_list, BaiduSyncdisk_assets_root)
     # print(bvids_origin_path)
     files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
@@ -1391,26 +1391,37 @@ def full_fill_vid_link_2_summary():
         with open(os.path.join(OneDrive_KG_note_path, note_name), "w", encoding="utf-8") as f:
             f.write(content1+content2+content3+content4)
 
+
 r"Proof for the meaning of Lagrange multipliers - Multivariable Calculus - Khan Ac"
+
+
 def rename_base_on_reg():
     path = os.getcwd()
     files = os.listdir()
+    folders = []
     reg_string1 = [
         r"(.+) - Multivariable Calculus - Khan.+(\.en\.srt|\.mp4)", r"\1\2"]
-    reg_string_vid=[r"(.+) - Multivariable Calculus - Kh.+(\.mp4)", r"\1\2"]
-    reg_string_srt=[r"(.+) - Multivariable Calculus - Kh.+(\..+\.srt)", r"\1\2"]
+    reg_string_vid = [r"(.+) - Multivariable Calculus - Kh.+(\.mp4)", r"\1\2"]
+    reg_string_srt = [
+        r"(.+) - Multivariable Calculus - Kh.+(\..+\.srt)", r"\1\2"]
     for file in files:
         if file.endswith(".mp4"):
-            match=re.search(reg_string_vid[0],file)
+            match = re.search(reg_string_vid[0], file)
             if match is not None:
-                new_file=re.sub(reg_string_vid[0],reg_string_vid[1],file)
+                new_file = re.sub(reg_string_vid[0], reg_string_vid[1], file)
                 print(new_file)
-                os.rename(file,new_file)
+                os.rename(file, new_file)
         if file.endswith('.srt'):
             match = re.search(reg_string_srt[0], file)
             if match is not None:
 
                 new_file = re.sub(reg_string_srt[0], reg_string_srt[1], file)
+                print(new_file)
+                os.rename(file, new_file)
+        if file.endswith(".md"):
+            match = re.search(reg_string1[0], file)
+            if match is not None:
+                new_file = re.sub(reg_string1[0], reg_string1[1], file)
                 print(new_file)
                 os.rename(file, new_file)
 
