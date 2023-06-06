@@ -1398,7 +1398,8 @@ r"Proof for the meaning of Lagrange multipliers - Multivariable Calculus - Khan 
 def rename_base_on_reg():
     path = os.getcwd()
     files = os.listdir()
-    folders = []
+    dirs = [directory for directory in os.listdir() if os.path.isdir(directory)]
+    reg_string_md = [r"(.+) - 学会如何学习 - 知乎书店(\.md)", r"\1\2"]
     reg_string1 = [
         r"(.+) - Multivariable Calculus - Khan.+(\.en\.srt|\.mp4)", r"\1\2"]
     reg_string_vid = [r"(.+) - Multivariable Calculus - Kh.+(\.mp4)", r"\1\2"]
@@ -1419,9 +1420,9 @@ def rename_base_on_reg():
                 print(new_file)
                 os.rename(file, new_file)
         if file.endswith(".md"):
-            match = re.search(reg_string1[0], file)
+            match = re.search(reg_string_md[0], file)
             if match is not None:
-                new_file = re.sub(reg_string1[0], reg_string1[1], file)
+                new_file = re.sub(reg_string_md[0], reg_string_md[1], file)
                 print(new_file)
                 os.rename(file, new_file)
 
