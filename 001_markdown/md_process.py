@@ -800,9 +800,12 @@ def create_directory_assets_imgs():
 
 def create_directory_assets_concept_structure():
     dirs = [
+        "assets",
         "assets/imgs",
         "assets/lectures",
-        "assets/paper"
+        "assets/papers",
+        "lectures",
+        "papers",
     ]
 
     for directory in dirs:
