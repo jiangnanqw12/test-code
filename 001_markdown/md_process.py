@@ -1399,6 +1399,8 @@ def rename_base_on_reg():
     path = os.getcwd()
     files = os.listdir()
     dirs = [directory for directory in os.listdir() if os.path.isdir(directory)]
+    # print(dirs)
+    reg_string_dir = [r"(.+) - 学会如何学习 - 知乎书店", r"\1"]
     reg_string_md = [r"(.+) - 学会如何学习 - 知乎书店(\.md)", r"\1\2"]
     reg_string1 = [
         r"(.+) - Multivariable Calculus - Khan.+(\.en\.srt|\.mp4)", r"\1\2"]
@@ -1425,6 +1427,13 @@ def rename_base_on_reg():
                 new_file = re.sub(reg_string_md[0], reg_string_md[1], file)
                 print(new_file)
                 os.rename(file, new_file)
+    for directory in dirs:
+        match = re.search(reg_string_dir[0], directory)
+        if match is not None:
+            new_directory = re.sub(
+                reg_string_dir[0], reg_string_dir[1], directory)
+            print(new_directory)
+            os.rename(directory, new_directory)
 
 
 def test():
