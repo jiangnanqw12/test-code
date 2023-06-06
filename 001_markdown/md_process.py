@@ -248,7 +248,7 @@ def search_in_mulu():
         # print(files)
 
 
-def base_on_mulu_markdown_rename_files():
+def base_on_index_markdown_rename_files():
     counter = 0
     with open("mulu.md", 'r', encoding='UTF-8') as f:
         lines = f.readlines()
@@ -282,19 +282,6 @@ def create_md_files_from_markdown_file(markdown_file):
                 pass
 
 
-def test_create_md_files_from_markdown_file():
-
-    create_md_files_from_markdown_file('test.md')
-    # 检查生成的文件是否存在
-    assert os.path.exists('1_第一行_.md')
-    assert os.path.exists('2_第二行_.md')
-    assert os.path.exists('3_第三行_.md')
-
-    # # 删除测试用的markdown文件和生成的md文件
-    # os.remove('test.md')
-    # os.remove('1_第一行_.md')
-    # os.remove('2_第二行_.md')
-    # os.remove('3_第三行_.md')
 
 
 def delete_non_example_md_files():
@@ -328,47 +315,6 @@ def text_replace(root_dir: str, replace_list: list):
                         line = line.replace(replace_item[0], replace_item[1])
                     f_dest.write(line)
 
-
-def mdx2md_b1(timestamp: int = 1676880280):
-    text_replace_list_mdx2md1 = [[r'<Figure image="', r'![]('],
-                                 ['" id="distribution"/>', r')'],
-                                 ['<Figure video="', r'![]('],
-                                 ['" show="video"/>', r')'],
-                                 ['" show="video" />', r')'],
-                                 ['"/>', r')'], ['" />', r')'],
-                                 ['" image="', ')'+'\n'+'![]('],
-                                 ['" video="', ')'+'\n'+'![]('],
-                                 ["question=", "- question"+"\n"],
-                                 ["choice1=", "- choice1 "],
-                                 ["choice2=", "- choice2 "],
-                                 ["choice3=", "- choice3 "],
-                                 ["choice4=", "- choice4 "],
-                                 ["answer=", "- answer "],
-                                 ["", ""],
-                                 ["", ""],
-                                 ["", ""],
-                                 ["</Question>", ""],
-                                 ["</LessonLink>", ""],
-                                 ['<LessonLink id="differential-equations">',
-                                 "(differential-equations) "],
-                                 ['<LessonLink id="fourier-series">', "(fourier-series) "]]
-    text_replace_list_mdx2md2 = [['.png', r'_'+str(timestamp)+'.png'],
-                                 ['.jpeg', r'_'+str(timestamp)+'.jpeg'],
-                                 ['.mp4', r'_'+str(timestamp)+'.mp4'],
-                                 ]
-    text_replace_list_mdx2md3 = [[r'<Figure', r''],
-                                 ['/>', r''],
-                                 ["<PiCreature", ""],
-                                 ["show=\"video\"", ""],
-                                 ["", ""],
-                                 ["", ""],
-                                 ["<Question", "---"],
-                                 ["</Question>", "---"],
-                                 ]
-    replace_list = text_replace_list_mdx2md3
-    # +text_replace_list_mdx2md2
-    cwd = os.getcwd()
-    text_replace(cwd, replace_list)
 
 
 def mdx2md(timestamp: int = 1676880280):
@@ -1091,7 +1037,13 @@ def create_file(path, content=""):
 def get_assets_root_path(current_dir=None):
     if current_dir is None:
         current_dir = os.getcwd()
-
+    while True:
+        if 'assets' in os.listdir(current_dir):
+            return current_dir,os.path.basename(current_dir)
+        else:
+            current_dir = get_parent_dir(current_dir)
+            if current_dir == '':
+                raise Exception('assets folder not found')
 
 def get_note_assets_path(folder_list, current_dir):
     folder_list.append(os.path.basename(current_dir))
@@ -1211,15 +1163,68 @@ def process_md_files_filename_2_head():
         with open(file_name, 'w', encoding='utf-8') as f:
             f.writelines(new_lines)
 
+def zhi_book_markdown_process(num=0):
+    if num==0:
+        files=os.listdir()
 
-def zhihu_book_process():
-    path = os.getcwd()
-    back_up_dir_tree(path)
-    #rename_files_end(path, '.md', '.md', 2, 2)
-    base_on_mulu_markdown_rename_files()
-    search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
-    remove_line(path, search_list)
+        for file in files:
+            if file.endswith(".md"):
+                with open(file,'r',encoding='utf-8') as f:
+                    content=f.read()
 
+def get_md_files(directory='.'):
+    """Return a sorted list of markdown filenames in a given directory."""
+    files = [f for f in os.listdir(directory) if f.endswith('.md')]
+    # Extract numeric prefix and sort based on it
+    files.sort(key=lambda x: int(re.match(r'(\d{3})_', x).group(1)) if re.match(r'(\d{3})_', x) else float('inf'))
+    return files
+def check_md_files(files):
+
+
+    # Check if files are in expected order
+    for i, filename in enumerate(files):
+        expected_prefix = f"{i:03d}_"
+        if not filename.startswith(expected_prefix):
+            print(f"Warning: {filename} does not match expected prefix {expected_prefix}")
+
+def merge_files(filenames, output_filename):
+    """Merge the content of a list of files and write to a new file."""
+    with open(output_filename, 'w', encoding='utf-8') as outfile:
+        for fname in filenames:
+            try:
+                with open(fname, 'r', encoding='utf-8') as infile:
+                    content = infile.read()
+                    outfile.write(content)
+                    outfile.write('\n')  # add blank lines between files
+            except IOError:
+                print(f'Error opening file {fname}, skipping.')
+
+def merge_all_md_files_into_one():
+    """Merge all markdown files in the current directory into one file."""
+    root_path, root_dir = get_assets_root_path()
+    output_file = os.path.join(root_path,root_dir+".md")
+    md_files = get_md_files()
+    check_md_files(md_files)
+    merge_files(md_files, output_file)
+
+
+def Merge_all_md_files_into_one_file_base_on_num_index():
+    files = [f for f in os.listdir() if f.endswith('.md')]
+    files.sort()
+    print(files)
+    root_path,root_dir=get_assets_root_path()
+    with open(os.path.join(root_path,root_dir+".md"), 'w', encoding='utf-8') as f:
+        for file in files:
+            with open(file, 'r', encoding='utf-8') as f2:
+                content = f2.read()
+                f.write(content)
+                f.write('\n\n')
+def test(num=0):
+
+    if num==0:
+        merge_all_md_files_into_one()
+
+    pass
 
 def html2md2():
     import html2markdown
@@ -1233,18 +1238,7 @@ def html2md2():
                 f.write(markdown_text)
 
 
-def test_zhi():
-    path = os.getcwd()
-    # back_up_dir_tree(path)
-    # back_up_dir(path)
-    # test_text_replace(1677211210)
-    # rename_files_end(path, '.md', '.md', 33, 33)
-    # base_on_mulu_markdown_rename_files()
-    # search_list = ["- created: 2023", "- source: https://www.zhihu.com"]
-    # remove_line(path, search_list)
-    # compare_md_files("mds", "mds_2023-02-26-22-12-57")
-    # process_md_files_filename_2_head()
-    rename_files_sensor_fusion(path)
+
 
 
 def get_b_assets_path(path=None):
@@ -1444,8 +1438,7 @@ def rename_base_on_reg():
             os.rename(directory, new_directory)
 
 
-def test():
-    pass
+
 
 
 def main():
