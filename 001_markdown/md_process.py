@@ -1088,8 +1088,13 @@ def create_file(path, content=""):
     with open(path, 'w') as f:
         f.write(content)
 
+def get_assets_root_path(current_dir=None):
+    if current_dir is None:
+        current_dir = os.getcwd()
+
 
 def get_note_assets_path(folder_list, current_dir):
+    folder_list.append(os.path.basename(current_dir))
     current_dir = get_parent_dir(current_dir)
     while True:
 
@@ -1146,7 +1151,7 @@ def init_note():
         create_file(note_path)
     folder_list = []
     folder_list.append(note_file[:-3])
-    folder_list.append(os.path.basename(current_dir))
+    #folder_list.append(os.path.basename(current_dir))
 
     assets_dir_path = get_note_assets_path(folder_list, current_dir)
 

@@ -89,7 +89,7 @@ def create_annotator_4pdf_file(file_name_with_endswith_pdf,f_annotate,cwd_after_
     f_annotate.write("annotate-image-target: " +
                      cwd_after_obsidian_workspace + "/assets/imgs\n")
     f_annotate.write("id: "  +
-                     file_name_without_space + "_"+str(timestamp)+"\n")
+                     file_name_without_space+"\n")
     f_annotate.write("---\n")
 
 
@@ -133,6 +133,7 @@ def main():
         if file.endswith('.pdf'):
             # get current file name without filename extension
             file_name_without_pdf = file[:-4]
+            file_name_without_pdf_without_timestamp=file_name_without_pdf.split("_")[0]
             src_file = os.path.join(cwd, file)
             dest_file = os.path.join(cwd, 'assets', 'pdfs', file)
             if not os.path.isfile(dest_file):
