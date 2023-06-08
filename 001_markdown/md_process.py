@@ -302,8 +302,8 @@ def add_timestamp_to_filenames():
 
 
 def text_replace(root_dir: str, replace_list: list):
-
-    output_dir = create_output_directory()
+    assets_root_path,assets_root_dir=get_assets_root_path()
+    output_dir = create_output_directory(assets_root_path)
     for filename_with_ext in os.listdir(root_dir):
         if filename_with_ext.endswith('.md'):
             src_path = os.path.join(root_dir, filename_with_ext)
@@ -318,7 +318,8 @@ def text_replace(root_dir: str, replace_list: list):
 
 
 def mdx2md(timestamp: int = 1676880280):
-    output_dir = create_output_directory()
+    assets_root_path,assets_root_dir=get_assets_root_path()
+    output_dir = create_output_directory(assets_root_path)
     cwd = os.getcwd()
     # text_replace_list_mdx2md3 = [
     #                              ]
@@ -457,20 +458,10 @@ def get_father_path(path):
     return os.path.dirname(path)
 
 
-def create_output_directory():
+def create_output_directory(root=None):
+    if root is None:
+        root = os.getcwd()
 
-    current_dir = os.getcwd()
-    if current_dir.find('oneDrive') != -1:
-        raise Exception('dont find oneDrive')
-    while True:
-
-        if 'assets' in os.listdir(current_dir):
-            root = current_dir
-            #print("root is %s" % root)
-            break
-        else:
-
-            current_dir = get_parent_dir(current_dir)
     output_dir = os.path.join(root, 'output')
 
     if not os.path.exists(output_dir):
@@ -493,8 +484,8 @@ def create_new_file_name(file):
 
 def list_time_head_textshort_text_to_vid_timeline_md(timeline_data, file, match):
     # print(timeline_data)
-
-    output_dir = create_output_directory()
+    assets_root_path,assets_root_dir=get_assets_root_path()
+    output_dir = create_output_directory(assets_root_path)
     new_file_name = create_new_file_name(file)
     with open(os.path.join(output_dir, new_file_name), 'w', encoding='UTF-8') as f:
         for i, (start_time, heading, short_text, text) in enumerate(timeline_data):
@@ -611,8 +602,8 @@ def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
     match1 = search_str_url_4_file_vid(str_url)
     cwd = os.getcwd()
     file_list = os.listdir(cwd)
-
-    create_output_directory()
+    assets_root_path,assets_root_dir=get_assets_root_path()
+    create_output_directory(assets_root_path)
 
     for file in file_list:
         if file.endswith(".md"):
@@ -683,8 +674,8 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     match1 = search_str_url_4_file_vid(str_url)
     cwd = os.getcwd()
     file_list = os.listdir(cwd)
-
-    output_dir = create_output_directory()
+    assets_root_path,assets_root_dir=get_assets_root_path()
+    output_dir = create_output_directory(assets_root_path)
 
     for file in file_list:
         if file.endswith(".md"):
@@ -996,7 +987,8 @@ def vid_link_md_2_html(path=None):
         path = os.getcwd()
     #print("vid_link_md_2_html input path is %s" % path)
     files = [f for f in os.listdir(path) if os.path.isfile(f)]
-    output_path = create_output_directory()
+    assets_root_path, assets_root_dir = get_assets_root_path(path)
+    output_path = create_output_directory(assets_root_path)
     if not os.path.exists(output_path):
         os.makedirs(output_path, exist_ok=True)
     replace_list_regex = [
@@ -1394,13 +1386,23 @@ def full_fill_vid_link_2_summary():
             f.write(content1+content2+content3+content4)
 
 
-r"Proof for the meaning of Lagrange multipliers - Multivariable Calculus - Khan Ac"
+def perform_regex_replacement_on_md_files(path=None):
 
+    if path is None:
+        path = os.getcwd()
+    files = os.listdir(path)
+    dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
 
-def rename_base_on_reg():
-    path = os.getcwd()
-    files = os.listdir()
-    dirs = [directory for directory in os.listdir() if os.path.isdir(directory)]
+    assets_root_path,assets_root_dir=get_assets_root_path()
+
+    for file in files:
+        if file.endswith(".md"):
+
+def rename_files_and_folders_by_regex(path=None):
+    if path is None:
+        path = os.getcwd()
+    files = os.listdir(path)
+    dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
     # print(dirs)
     reg_string_dir = [r"(.+) - 学会如何学习 - 知乎书店", r"\1"]
     reg_string_md = [r"(.+) - 学会如何学习 - 知乎书店(\.md)", r"\1\2"]
@@ -1454,8 +1456,8 @@ def main():
                         action='store_true', help='call get_current_timestamp')
     parser.add_argument('-at', '--add_timestamp', action='store_true',
                         help='call add_timestamp_to_filenames')
-    parser.add_argument('-rreg', '--rename_base_on_reg', action='store_true',
-                        help='call rename_base_on_reg')
+    parser.add_argument('-reff', '--rename_files_and_folders_by_regex', action='store_true',
+                        help='call rename_files_and_folders_by_regex')
     parser.add_argument('-mdx', '--mdx2md',
                         action='store_true', help='call mdx2md')
     parser.add_argument('-oaf', '--open_b_assets_folder',
@@ -1518,8 +1520,8 @@ def main():
         get_current_timestamp()
     elif args.add_timestamp:
         add_timestamp_to_filenames()
-    elif args.rename_base_on_reg:
-        rename_base_on_reg()
+    elif args.rename_files_and_folders_by_regex:
+        rename_files_and_folders_by_regex()
     elif args.create_imgs_folder:
         create_directory_assets_imgs()
     elif args.creat_concept_folder:
