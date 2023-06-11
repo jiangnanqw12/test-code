@@ -133,16 +133,6 @@ def remove_line_test1():
     remove_line(path, search_list)
 
 
-def rename_files_end_test1():
-    path = os.getcwd()
-    remove_filesname_end(path, '.md', '.md', 2, 2)
-
-
-def replace_name_test1():
-    path = os.getcwd()
-    global_replace_list()
-    rename_files(path, replace_list)
-
 
 def tianjiaxiahuaxian():
     for root, dirs, files in os.walk("."):
@@ -248,18 +238,28 @@ def search_in_mulu():
         # print(files)
 
 
-def base_on_index_markdown_rename_files():
+def base_on_index_markdown_rename_files(path=None):
     counter = 0
-    with open("mulu.md", 'r', encoding='UTF-8') as f:
+    if path is None:
+        path = os.getcwd()
+    with open(os.path.join(path,"000_index.md"), 'r', encoding='UTF-8') as f:
         lines = f.readlines()
-    for root, dirs, files in os.walk("."):
-        for line in lines:
-            if line[:-1]+'.md' in files:
-                counter = counter+1
-                # print(line[:-1]+'.md')
-                os.replace(os.path.join(root, line[:-1]+'.md'),
-                           os.path.join(root, num2str_title(counter)+"_"+line[:-1]+'.md'))
-
+    files = os.listdir(path)
+    for i in range(len(lines)):
+        line =lines[i]
+        line = line.replace("%", "_")
+    #for line in lines:
+        if line[-1]=="\n":
+            note_name=line[:-1]+'.md'
+        else:
+            note_name=line+'.md'
+        if note_name in files:
+            counter = i+1
+            # print(line[:-1]+'.md')
+            os.replace(os.path.join(path, note_name),
+                        os.path.join(path, num2str_title(counter)+"_"+note_name))
+        else:
+            raise Exception(note_name+" not in the files list")
 
 def create_md_files_from_markdown_file(markdown_file):
     """
@@ -1211,11 +1211,12 @@ def Merge_all_md_files_into_one_file_base_on_num_index():
                 content = f2.read()
                 f.write(content)
                 f.write('\n\n')
-def test(num=0):
+def test(num=1):
 
     if num==0:
         merge_all_md_files_into_one()
-
+    elif num==1:
+        base_on_index_markdown_rename_files()
     pass
 
 def html2md2():
@@ -1511,9 +1512,7 @@ def main():
     args = parser.parse_args()
 
     # call the appropriate function based on the arguments
-    if args.remove_filesname_end:
-        rename_files_end_test1()
-    elif args.rename_files_sensor_fusion:
+    if args.rename_files_sensor_fusion:
         rename_files_sensor_fusion()
     elif args.copy_timestamps_and_index_2_root:
         copy_timestamps_and_index_2_root()
