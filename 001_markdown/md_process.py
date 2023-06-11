@@ -1392,11 +1392,22 @@ def perform_regex_replacement_on_md_files(path=None):
         path = os.getcwd()
     files = os.listdir(path)
     dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
-
+    reg_string_list=[]
+    reg_string=[r"",r""]
+    reg_string_remove_zhi_mul_img=[r"!\[\]\(.+\)\n\n(!\[\]\(.+\.webp\))",r"\1"]
+    reg_string_list.extend([reg_string_remove_zhi_mul_img])
     assets_root_path,assets_root_dir=get_assets_root_path()
-
+    output_path=create_output_directory(assets_root_path)
     for file in files:
         if file.endswith(".md"):
+            with open(os.path.join(output_path, file), "w", encoding="utf-8") as f:
+                with open(os.path.join(path, file), "r", encoding="utf-8") as f1:
+                    content=f1.read()
+                for regex in reg_string_list:
+                    content=re.sub(regex[0],regex[1],content)
+
+                f.write(content)
+
 
 def rename_files_and_folders_by_regex(path=None):
     if path is None:
@@ -1404,8 +1415,8 @@ def rename_files_and_folders_by_regex(path=None):
     files = os.listdir(path)
     dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
     # print(dirs)
-    reg_string_dir = [r"(.+) - 学会如何学习 - 知乎书店", r"\1"]
-    reg_string_md = [r"(.+) - 学会如何学习 - 知乎书店(\.md)", r"\1\2"]
+    reg_string_dir = [r"(.+) - .+ - 知乎书店", r"\1"]
+    reg_string_md = [r"(.+) - .+ - 知乎书店(\.md)", r"\1\2"]
     reg_string1 = [
         r"(.+) - Multivariable Calculus - Khan.+(\.en\.srt|\.mp4)", r"\1\2"]
     reg_string_vid = [r"(.+) - Multivariable Calculus - Kh.+(\.mp4)", r"\1\2"]
