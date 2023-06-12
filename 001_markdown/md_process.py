@@ -1233,15 +1233,24 @@ def Merge_all_md_files_into_one_file_base_on_num_index():
                 content = f2.read()
                 f.write(content)
                 f.write('\n\n')
-def test(num=2):
 
-    if num==0:
-        merge_all_md_files_into_one()
-    elif num==1:
-        base_on_index_markdown_rename_files()
-    elif num==2:
-        lower_header_level_in_md_files()
-    pass
+def test(num=3):
+    operations = {
+
+        1: base_on_index_markdown_rename_files,
+        2: lower_header_level_in_md_files,
+        3: prepend_filename_as_header_if_chapter_present,
+        4: merge_all_md_files_into_one,
+    }
+
+    if num in operations:
+        operations[num]()
+    elif num == 0:
+        print("Available operations:")
+        for num, func in operations.items():
+            print(f"{num}: {func.__name__}")
+    else:
+        raise ValueError("Invalid operation number. Please choose a number between 0 and 4.")
 
 def html2md2():
     import html2markdown
@@ -1458,7 +1467,25 @@ def lower_header_level_in_md_files(path=None):
         except Exception as e:
             print(f"Failed to process file {file} due to {str(e)}")
 
+def prepend_filename_as_header_if_chapter_present(directory=None):
+    if directory is None:
+        directory = os.getcwd()
+    files_md = [f for f in os.listdir(directory) if f.endswith('.md')]
+    # Iterate over all files in the directory
+    for filename in files_md:
+        # If the filename contains 'Chapter'
 
+        if re.search(r'第.{1,2}章.+', filename):
+            # Open the file and read its contents
+            with open(os.path.join(directory, filename), 'r',encoding="utf-8") as f:
+                content = f.readlines()
+
+            # Prepend the filename as a level 2 header
+            content.insert(0, f'## {filename[4:-3]}\n')
+
+            # Write the modified content back to the file
+            with open(os.path.join(directory, filename), 'w',encoding="utf-8") as f:
+                f.writelines(content)
 
 def perform_regex_replacement_on_md_files(path=None):
 
