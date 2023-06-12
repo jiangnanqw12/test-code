@@ -1241,6 +1241,7 @@ def test(num=3):
         2: lower_header_level_in_md_files,
         3: prepend_filename_as_header_if_chapter_present,
         4: merge_all_md_files_into_one,
+        5: perform_regex_replacement_on_md_files,
     }
 
     if num in operations:
@@ -1494,30 +1495,20 @@ def perform_regex_replacement_on_md_files(path=None):
     files = os.listdir(path)
     dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
     reg_string_list=[]
-
-    reg_string=[r"",r""]
-    reg_string_down1=[r"##### (.+)",r"###### \1"]
-    reg_string_list.extend([reg_string_down1])
-    reg_string_down2=[r"#### (.+)",r"##### \1"]
-    reg_string_list.extend([reg_string_down2])
-    reg_string_down3=[r"### (.+)",r"#### \1"]
-    reg_string_list.extend([reg_string_down3])
-    reg_string_down4=[r"## (.+)",r"### \1"]
-    reg_string_list.extend([reg_string_down4])
-    reg_string_down5=[r"# (.+)",r"## \1"]
-    reg_string_list.extend([reg_string_down5])
+    reg_index_link=[r"-\s+\[.+\]\(https://www.zhihu.com/pub/reader/.+\)\n",r""]
+    reg_string_list.extend([reg_index_link])
     reg_string_remove_zhi_mul_img=[r"!\[\]\(.+\)\n\n(!\[\]\(.+\.webp\))",r"\1"]
     #reg_string_list.extend([reg_string_remove_zhi_mul_img])
     assets_root_path,assets_root_dir=get_assets_root_path()
     output_path=create_output_directory(assets_root_path)
     for file in files:
         if file.endswith(".md"):
-            with open(os.path.join(output_path, file), "w", encoding="utf-8") as f:
-                with open(os.path.join(path, file), "r", encoding="utf-8") as f1:
-                    content=f1.read()
-                for regex in reg_string_list:
-                    content=re.sub(regex[0],regex[1],content)
 
+            with open(os.path.join(path, file), "r", encoding="utf-8") as f1:
+                content=f1.read()
+            for regex in reg_string_list:
+                content=re.sub(regex[0],regex[1],content)
+            with open(os.path.join(path, file), "w", encoding="utf-8") as f:
                 f.write(content)
 
 
@@ -1575,6 +1566,8 @@ def main():
                         help='input timestamp to pass to the function')
     parser.add_argument('-u', '--str_url', type=str, default=r'test',
                         help='input str_url to pass to the function')
+    parser.add_argument('-ii', '--input_int', type=int, default=r'0',
+                    help='input input_int to pass to the function')
     parser.add_argument('-gt', '--get_timestamp',
                         action='store_true', help='call get_current_timestamp')
     parser.add_argument('-at', '--add_timestamp', action='store_true',
@@ -1666,7 +1659,7 @@ def main():
     elif args.full_fill_vid_link_2_summary:
         full_fill_vid_link_2_summary()
     elif args.test:
-        test()
+        test(args.input_int)
     else:
         print("Invalid argument")
 
