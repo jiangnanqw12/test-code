@@ -99,13 +99,13 @@ def mulu_process(replace_list):
             f.write(l)
 
 
-def num2str_title(num):
-    if num < 10:
-        return '00'+str(num)
-    elif num < 100:
-        return '0'+str(num)
-    else:
-        return str(num)
+# def num2str_title(num):
+#     if num < 10:
+#         return '00'+str(num)
+#     elif num < 100:
+#         return '0'+str(num)
+#     else:
+#         return str(num)
 
 
 def search_file(path):
@@ -238,28 +238,50 @@ def search_in_mulu():
         # print(files)
 
 
+# def base_on_index_markdown_rename_files(path=None):
+#     counter = 0
+#     if path is None:
+#         path = os.getcwd()
+#     with open(os.path.join(path,"000_index.md"), 'r', encoding='UTF-8') as f:
+#         lines = f.readlines()
+#     files = os.listdir(path)
+#     for i in range(len(lines)):
+#         line =lines[i]
+#         line = line.replace("%", "_")
+#     #for line in lines:
+#         if line[-1]=="\n":
+#             note_name=line[:-1]+'.md'
+#         else:
+#             note_name=line+'.md'
+#         if note_name in files:
+#             counter = i+1
+#             # print(line[:-1]+'.md')
+#             os.replace(os.path.join(path, note_name),
+#                         os.path.join(path, num2str_title(counter)+"_"+note_name))
+#         else:
+#             raise Exception(note_name+" not in the files list")
+
+
+def num2str_title(num):
+    return str(num).zfill(3)
+
 def base_on_index_markdown_rename_files(path=None):
     counter = 0
     if path is None:
         path = os.getcwd()
-    with open(os.path.join(path,"000_index.md"), 'r', encoding='UTF-8') as f:
+    with open(os.path.join(path, "000_index.md"), 'r', encoding='UTF-8') as f:
         lines = f.readlines()
     files = os.listdir(path)
-    for i in range(len(lines)):
-        line =lines[i]
-        line = line.replace("%", "_")
-    #for line in lines:
-        if line[-1]=="\n":
-            note_name=line[:-1]+'.md'
-        else:
-            note_name=line+'.md'
+    for i, line in enumerate(lines):
+        line = line.strip().replace("%", "_")
+        note_name = line + '.md'
         if note_name in files:
-            counter = i+1
-            # print(line[:-1]+'.md')
+            counter += 1
             os.replace(os.path.join(path, note_name),
-                        os.path.join(path, num2str_title(counter)+"_"+note_name))
+                        os.path.join(path, num2str_title(counter) + "_" + note_name))
         else:
-            raise Exception(note_name+" not in the files list")
+            raise FileNotFoundError(f"{note_name} not in the files list")
+
 
 def create_md_files_from_markdown_file(markdown_file):
     """
