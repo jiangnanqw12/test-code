@@ -1233,12 +1233,14 @@ def Merge_all_md_files_into_one_file_base_on_num_index():
                 content = f2.read()
                 f.write(content)
                 f.write('\n\n')
-def test(num=1):
+def test(num=2):
 
     if num==0:
         merge_all_md_files_into_one()
     elif num==1:
         base_on_index_markdown_rename_files()
+    elif num==2:
+        lower_header_level_in_md_files()
     pass
 
 def html2md2():
@@ -1409,6 +1411,55 @@ def full_fill_vid_link_2_summary():
             f.write(content1+content2+content3+content4)
 
 
+# def lower_header_level_in_md_files(path=None):
+#     if path is None:
+#         path = os.getcwd()
+#     files_md = [f for f in os.listdir(path) if f.endswith('.md')]
+#     reg_string_head=[r"(#{1,6}) (.+)",r" \2"]
+#     for file in files_md:
+
+#         with open(os.path.join(path,file),"r",encoding="utf-8") as f:
+#             lines=f.readlines()
+#         with open(os.path.join(path,file),"w",encoding="utf-8") as f:
+
+#             for line in lines:
+
+#                 match = re.search(reg_string_head[0],line)
+#                 if match:
+#                     string_sharp=match.group(1)
+#                     head_num=string_sharp.count("#")
+#                     line=re.sub(reg_string_head[0],(head_num+1)*"#"+reg_string_head[1],line)
+#                 f.write(line)
+
+
+def lower_header_level_in_md_files(path=None):
+    if path is None:
+        path = os.getcwd()
+
+    files_md = [f for f in os.listdir(path) if f.endswith('.md')]
+    reg_string_head = re.compile(r"(#{1,6}) (.+)")
+    #what is compile
+    for file in files_md:
+        try:
+            with open(os.path.join(path, file), "r", encoding="utf-8") as f:
+                lines = f.readlines()
+
+            processed_lines = []
+            for line in lines:
+                match = reg_string_head.search(line)
+                if match:
+                    string_sharp = match.group(1)
+                    head_num = string_sharp.count("#")
+                    line = reg_string_head.sub((head_num + 1) * "#" + r" \2", line)
+                processed_lines.append(line)
+
+            with open(os.path.join(path, file), "w", encoding="utf-8") as f:
+                f.writelines(processed_lines)
+        except Exception as e:
+            print(f"Failed to process file {file} due to {str(e)}")
+
+
+
 def perform_regex_replacement_on_md_files(path=None):
 
     if path is None:
@@ -1416,9 +1467,20 @@ def perform_regex_replacement_on_md_files(path=None):
     files = os.listdir(path)
     dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
     reg_string_list=[]
+
     reg_string=[r"",r""]
+    reg_string_down1=[r"##### (.+)",r"###### \1"]
+    reg_string_list.extend([reg_string_down1])
+    reg_string_down2=[r"#### (.+)",r"##### \1"]
+    reg_string_list.extend([reg_string_down2])
+    reg_string_down3=[r"### (.+)",r"#### \1"]
+    reg_string_list.extend([reg_string_down3])
+    reg_string_down4=[r"## (.+)",r"### \1"]
+    reg_string_list.extend([reg_string_down4])
+    reg_string_down5=[r"# (.+)",r"## \1"]
+    reg_string_list.extend([reg_string_down5])
     reg_string_remove_zhi_mul_img=[r"!\[\]\(.+\)\n\n(!\[\]\(.+\.webp\))",r"\1"]
-    reg_string_list.extend([reg_string_remove_zhi_mul_img])
+    #reg_string_list.extend([reg_string_remove_zhi_mul_img])
     assets_root_path,assets_root_dir=get_assets_root_path()
     output_path=create_output_directory(assets_root_path)
     for file in files:
@@ -1492,6 +1554,8 @@ def main():
                         help='call add_timestamp_to_filenames')
     parser.add_argument('-reff', '--rename_files_and_folders_by_regex', action='store_true',
                         help='call rename_files_and_folders_by_regex')
+    parser.add_argument('-regmd', '--perform_regex_replacement_on_md_files', action='store_true',
+                        help='call perform_regex_replacement_on_md_files')
     parser.add_argument('-mdx', '--mdx2md',
                         action='store_true', help='call mdx2md')
     parser.add_argument('-oaf', '--open_b_assets_folder',
@@ -1554,6 +1618,8 @@ def main():
         add_timestamp_to_filenames()
     elif args.rename_files_and_folders_by_regex:
         rename_files_and_folders_by_regex()
+    elif args.perform_regex_replacement_on_md_files:
+        perform_regex_replacement_on_md_files()
     elif args.create_imgs_folder:
         create_directory_assets_imgs()
     elif args.creat_concept_folder:
