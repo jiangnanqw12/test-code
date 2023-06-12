@@ -1497,6 +1497,10 @@ def perform_regex_replacement_on_md_files(path=None):
     reg_string_list=[]
     reg_index_link=[r"-\s+\[.+\]\(https://www.zhihu.com/pub/reader/.+\)\n",r""]
     reg_string_list.extend([reg_index_link])
+    reg_zhi_sao_ma=[r"扫码下载知乎APP 客户端\n\n!\[\]\(.+sidebar-download-qrcode.wybWudky.png\)\n",r""]
+    reg_string_list.extend([reg_zhi_sao_ma])
+    reg_Back_matter_template=[r"---\n\n- created:.+\n- source: .+",r""]
+    reg_string_list.extend([reg_Back_matter_template])
     reg_string_remove_zhi_mul_img=[r"!\[\]\(.+\)\n\n(!\[\]\(.+\.webp\))",r"\1"]
     #reg_string_list.extend([reg_string_remove_zhi_mul_img])
     assets_root_path,assets_root_dir=get_assets_root_path()
