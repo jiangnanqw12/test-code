@@ -1242,6 +1242,7 @@ def test(num=3):
         3: prepend_filename_as_header_if_chapter_present,
         4: merge_all_md_files_into_one,
         5: perform_regex_replacement_on_md_files,
+        6: remove_md_copy_code,
     }
 
     if num in operations:
@@ -1469,6 +1470,8 @@ def lower_header_level_in_md_files(path=None):
             print(f"Failed to process file {file} due to {str(e)}")
 
 def prepend_filename_as_header_if_chapter_present(directory=None):
+    reg_string1=r"第.{1,2}章.+"
+    reg_string=r"第.{1,2}章.+"
     if directory is None:
         directory = os.getcwd()
     files_md = [f for f in os.listdir(directory) if f.endswith('.md')]
@@ -1476,7 +1479,7 @@ def prepend_filename_as_header_if_chapter_present(directory=None):
     for filename in files_md:
         # If the filename contains 'Chapter'
 
-        if re.search(r'第.{1,2}章.+', filename):
+        if re.search(reg_string, filename):
             # Open the file and read its contents
             with open(os.path.join(directory, filename), 'r',encoding="utf-8") as f:
                 content = f.readlines()
@@ -1487,7 +1490,31 @@ def prepend_filename_as_header_if_chapter_present(directory=None):
             # Write the modified content back to the file
             with open(os.path.join(directory, filename), 'w',encoding="utf-8") as f:
                 f.writelines(content)
+def remove_md_copy_code(path=None):
+    if path is None:
+        path = os.getcwd()
+    reg_string=[r"```\n(.+)Copy code",r"```\1\n"]
+    reg_string_list=[]
+    reg_string_list.append(reg_string)
 
+    files_md = [f for f in os.listdir(path) if f.endswith('.md')]
+    perform_regex_replacement_on_files(reg_string_list,path,files_md)
+
+def perform_regex_replacement_on_files(reg_string_list,path=None,files=None):
+
+    if path is None:
+        path = os.getcwd()
+    if files is None:
+        files = os.listdir(path)
+
+    for file in files:
+
+        with open(os.path.join(path, file), "r", encoding="utf-8") as f1:
+            content=f1.read()
+        for regex in reg_string_list:
+            content=re.sub(regex[0],regex[1],content)
+        with open(os.path.join(path, file), "w", encoding="utf-8") as f:
+            f.write(content)
 def perform_regex_replacement_on_md_files(path=None):
 
     if path is None:
