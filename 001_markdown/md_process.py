@@ -1236,14 +1236,17 @@ def Merge_all_md_files_into_one_file_base_on_num_index():
 
 def test(num=0):
     operations = {
+        1: perform_regex_replacement_on_index_file,
+        2: base_on_index_markdown_rename_files,
+        3: perform_regex_replacement_on_zhi_book_mds_name,
 
-        1: base_on_index_markdown_rename_files,
-        2: lower_header_level_in_md_files,
-        3: prepend_filename_as_header_if_chapter_present,
-        4: merge_all_md_files_into_one,
-        5: perform_regex_replacement_on_md_files,
+        4: prepend_filename_as_header_if_chapter_present,
+        5: lower_header_level_in_md_files,
+
         6: remove_md_copy_code,
-        7: format_index_file,
+
+
+        10: merge_all_md_files_into_one,
     }
 
     if num in operations:
@@ -1501,18 +1504,55 @@ def remove_md_copy_code(path=None):
     files_md = [f for f in os.listdir(path) if f.endswith('.md')]
     perform_regex_replacement_on_files(reg_string_list,path,files_md)
 
-def format_index_file(path=None):
+# def format_index_file(path=None):
+#     if path is None:
+#         path = os.getcwd()
+#     inedex_name="000_index.md"
+#     if inedex_name not in os.listdir(path):
+#         raise Exception("index file not found")
+#     files=[]
+#     files.append(os.path.join(path,inedex_name))
+#     reg_string=[r"- \[(.+)\]\(.+\)",r"\1"]
+#     reg_string_list=[]
+#     reg_string_list.append(reg_string)
+#     perform_regex_replacement_on_files(reg_string_list,path,files)
+
+
+def perform_regex_replacement_on_index_file(directory_path=None):
+    """
+    This function checks for the existence of an index file in the given directory
+    path and performs a regex replacement on it.
+    Args:
+        directory_path: Path to the directory to check. Defaults to the current working directory.
+    Raises:
+        FileNotFoundError: If the index file is not found in the directory.
+    """
+    if directory_path is None:
+        directory_path = os.getcwd()
+
+    index_filename = "000_index.md"
+
+    if index_filename not in os.listdir(directory_path):
+        raise FileNotFoundError("Index file not found")
+
+    file_paths = [os.path.join(directory_path, index_filename)]
+    regex_patterns = [(r"- \[(.+)\]\(.+\)", r"\1")]
+
+    perform_regex_replacement_on_files(regex_patterns, directory_path, file_paths)
+
+def perform_regex_replacement_on_zhi_book_mds_name(path=None):
     if path is None:
         path = os.getcwd()
-    inedex_name="000_index.md"
-    if inedex_name not in os.listdir(path):
-        raise Exception("index file not found")
-    files=[]
-    files.append(os.path.join(path,inedex_name))
-    reg_string=[r"- \[(.+)\]\(.+\)",r"\1"]
+    files_md=[f for f in os.listdir(path) if f.endswith('.md')]
+    reg_string_dir = [r"(.+) - .+ - 知乎书店", r"\1"]
+    reg_string_md = [r"(.+) - .+ - 知乎书店(\.md)", r"\1\2"]
     reg_string_list=[]
-    reg_string_list.append(reg_string)
-    perform_regex_replacement_on_files(reg_string_list,path,files)
+    reg_string_list.append(reg_string_md)
+    perform_regex_rename_on_files(reg_string_list,path,files_md)
+    dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
+    reg_string_list=[]
+    reg_string_list.append(reg_string_dir)
+    perform_regex_rename_on_files(reg_string_list,path,dirs)
 
 def perform_regex_replacement_on_files(reg_string_list,path=None,files=None):
 
@@ -1529,6 +1569,21 @@ def perform_regex_replacement_on_files(reg_string_list,path=None,files=None):
             content=re.sub(regex[0],regex[1],content)
         with open(os.path.join(path, file), "w", encoding="utf-8") as f:
             f.write(content)
+
+def perform_regex_rename_on_files(reg_string_list,path=None,files=None):
+
+    if path is None:
+        path = os.getcwd()
+    if files is None:
+        files = os.listdir(path)
+
+    for file in files:
+        for reg_string in reg_string_list:
+            match = re.search(reg_string[0], file)
+            if match is not None:
+                new_file = re.sub(reg_string[0], reg_string[1], file)
+                print(new_file)
+                os.rename(file, new_file)
 def perform_regex_replacement_on_md_files(path=None):
 
     if path is None:
@@ -1617,8 +1672,7 @@ def main():
                         action='store_true', help='call get_current_timestamp')
     parser.add_argument('-at', '--add_timestamp', action='store_true',
                         help='call add_timestamp_to_filenames')
-    parser.add_argument('-reff', '--rename_files_and_folders_by_regex', action='store_true',
-                        help='call rename_files_and_folders_by_regex')
+
     parser.add_argument('-regmd', '--perform_regex_replacement_on_md_files', action='store_true',
                         help='call perform_regex_replacement_on_md_files')
     parser.add_argument('-mdx', '--mdx2md',
@@ -1681,8 +1735,7 @@ def main():
         get_current_timestamp()
     elif args.add_timestamp:
         add_timestamp_to_filenames()
-    elif args.rename_files_and_folders_by_regex:
-        rename_files_and_folders_by_regex()
+
     elif args.perform_regex_replacement_on_md_files:
         perform_regex_replacement_on_md_files()
     elif args.create_imgs_folder:
