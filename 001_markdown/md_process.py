@@ -238,7 +238,7 @@ def search_in_mulu():
         # print(files)
 
 
-# def base_on_index_markdown_rename_files(path=None):
+# def rename_files_base_on_index_markdown(path=None):
 #     counter = 0
 #     if path is None:
 #         path = os.getcwd()
@@ -265,7 +265,7 @@ def search_in_mulu():
 def num2str_title(num):
     return str(num).zfill(3)
 
-def base_on_index_markdown_rename_files(path=None):
+def rename_files_base_on_index_markdown(path=None):
     counter = 0
     if path is None:
         path = os.getcwd()
@@ -280,6 +280,7 @@ def base_on_index_markdown_rename_files(path=None):
             os.replace(os.path.join(path, note_name),
                         os.path.join(path, num2str_title(counter) + "_" + note_name))
         else:
+            print(files)
             raise FileNotFoundError(f"{note_name} not in the files list")
 
 
@@ -1237,14 +1238,14 @@ def Merge_all_md_files_into_one_file_base_on_num_index():
 def test(num=0):
     operations = {
         1: perform_regex_replacement_on_index_file,
-        2: base_on_index_markdown_rename_files,
-        3: perform_regex_replacement_on_zhi_book_mds_name,
 
+        2: perform_regex_replacement_on_zhi_book_mds_name,
+        3: rename_files_base_on_index_markdown,
         4: prepend_filename_as_header_if_chapter_present,
         5: lower_header_level_in_md_files,
 
         6: remove_md_copy_code,
-
+        7: perform_regex_replacement_on_zhi_mds,
 
         10: merge_all_md_files_into_one,
     }
@@ -1539,6 +1540,22 @@ def perform_regex_replacement_on_index_file(directory_path=None):
     regex_patterns = [(r"- \[(.+)\]\(.+\)", r"\1")]
 
     perform_regex_replacement_on_files(regex_patterns, directory_path, file_paths)
+def perform_regex_replacement_on_zhi_mds(directory_path=None):
+
+    if directory_path is None:
+        directory_path = os.getcwd()
+
+    files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
+
+    reg_string_list=[]
+    reg_index_link=[r"-\s+\[.+\]\(https://www.zhihu.com/pub/reader/.+\)\n",r""]
+    reg_string_list.extend([reg_index_link])
+    reg_zhi_sao_ma=[r"扫码下载知乎APP 客户端\n\n!\[\]\(.+sidebar-download-qrcode.wybWudky.png\)\n",r""]
+    reg_string_list.extend([reg_zhi_sao_ma])
+    reg_Back_matter_template=[r"---\n\n- created:.+\n- source: .+",r""]
+    reg_string_list.extend([reg_Back_matter_template])
+
+    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
 
 def perform_regex_replacement_on_zhi_book_mds_name(path=None):
     if path is None:
@@ -1546,6 +1563,7 @@ def perform_regex_replacement_on_zhi_book_mds_name(path=None):
     files_md=[f for f in os.listdir(path) if f.endswith('.md')]
     reg_string_dir = [r"(.+) - .+ - 知乎书店", r"\1"]
     reg_string_md = [r"(.+) - .+ - 知乎书店(\.md)", r"\1\2"]
+    reg_string_md2=[r"{ (.+) }", r"{\1}"]
     reg_string_list=[]
     reg_string_list.append(reg_string_md)
     perform_regex_rename_on_files(reg_string_list,path,files_md)
