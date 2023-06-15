@@ -1234,7 +1234,7 @@ def Merge_all_md_files_into_one_file_base_on_num_index():
                 f.write(content)
                 f.write('\n\n')
 
-def test(num=3):
+def test(num=0):
     operations = {
 
         1: base_on_index_markdown_rename_files,
@@ -1243,6 +1243,7 @@ def test(num=3):
         4: merge_all_md_files_into_one,
         5: perform_regex_replacement_on_md_files,
         6: remove_md_copy_code,
+        7: format_index_file,
     }
 
     if num in operations:
@@ -1499,6 +1500,19 @@ def remove_md_copy_code(path=None):
 
     files_md = [f for f in os.listdir(path) if f.endswith('.md')]
     perform_regex_replacement_on_files(reg_string_list,path,files_md)
+
+def format_index_file(path=None):
+    if path is None:
+        path = os.getcwd()
+    inedex_name="000_index.md"
+    if inedex_name not in os.listdir(path):
+        raise Exception("index file not found")
+    files=[]
+    files.append(os.path.join(path,inedex_name))
+    reg_string=[r"- \[(.+)\]\(.+\)",r"\1"]
+    reg_string_list=[]
+    reg_string_list.append(reg_string)
+    perform_regex_replacement_on_files(reg_string_list,path,files)
 
 def perform_regex_replacement_on_files(reg_string_list,path=None,files=None):
 
