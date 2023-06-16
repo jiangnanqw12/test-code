@@ -1246,7 +1246,7 @@ def test(num=0):
 
         6: remove_md_copy_code,
         7: perform_regex_replacement_on_zhi_mds,
-
+        8: convert_zhi_footnote_to_obsidian,
         10: merge_all_md_files_into_one,
     }
 
@@ -1475,22 +1475,26 @@ def lower_header_level_in_md_files(path=None):
             print(f"Failed to process file {file} due to {str(e)}")
 
 def prepend_filename_as_header_if_chapter_present(directory=None):
-    reg_string1=r"第.{1,2}章.+"
-    reg_string=r"第.{1,2}章.+"
+    reg_string1=r"\d{3}_(第.{1,2}章.+)"
+    reg_string2=r"\d{3}_(\d{1,2} .+)\.md"
+
     if directory is None:
         directory = os.getcwd()
+    reg_string=reg_string2
     files_md = [f for f in os.listdir(directory) if f.endswith('.md')]
     # Iterate over all files in the directory
     for filename in files_md:
         # If the filename contains 'Chapter'
-
-        if re.search(reg_string, filename):
+        match=re.search(reg_string, filename)
+        if match:
+            chapter_name=match.group(1)
+            print(chapter_name)
             # Open the file and read its contents
             with open(os.path.join(directory, filename), 'r',encoding="utf-8") as f:
                 content = f.readlines()
 
             # Prepend the filename as a level 2 header
-            content.insert(0, f'## {filename[4:-3]}\n')
+            content.insert(0, f'## {chapter_name}\n')
 
             # Write the modified content back to the file
             with open(os.path.join(directory, filename), 'w',encoding="utf-8") as f:
@@ -1557,6 +1561,20 @@ def perform_regex_replacement_on_zhi_mds(directory_path=None):
 
     perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
 
+def convert_zhi_footnote_to_obsidian(directory_path=None):
+    if directory_path is None:
+        directory_path = os.getcwd()
+
+    files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
+
+    reg_string_list=[]
+    #r"[\[1\]](https://www.zhihu.com/pub/reader/120057501/chapter/1302455544230445056#n1s) 在英语中，发散一词是diffuse。注意focused（专注）一词的词尾是-ed，而diffuse则不是。发散一词的意思是“薄薄地弥漫出去”。"
+    reg_string1=[r'<sup><a href="https://www.zhihu.com/pub/.+" id=".+">\[(\d{1,2})\] </a></sup>',r"[^\1]"]
+    reg_string_list.extend([reg_string1])
+    reg_string2=[r'\[\\\[(\d{1,2})\\\]\]\(https://www\.zhihu\.com/pub/.+\) (.+)',r"[^\1]: (\2)"]
+    reg_string_list.extend([reg_string2])
+
+    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
 def perform_regex_replacement_on_zhi_book_mds_name(path=None):
     if path is None:
         path = os.getcwd()
