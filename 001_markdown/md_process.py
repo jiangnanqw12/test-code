@@ -811,36 +811,7 @@ def open_b_assets_folder(cwd=None):
     open_folder_in_windows(assets_path)
 
 
-def rename_files_sensor_fusion(path=None):
-    if path == None:
-        path = os.getcwd()
-    file_list = os.listdir(path)
-    for name in file_list:
 
-        if name.endswith(".md"):
-            # 如果文件或目录名称以数字开头，则进行重新编号
-            if not (name[:3].isdigit()):
-                if name[:2].isdigit():
-                    prefix = name[:2]
-                    new_prefix = prefix.zfill(3)  # 将前缀转换为三位数
-                    if name[2] == " ":
-                        new_name = new_prefix+"_"+name[3:]
-                    elif name[2] == "_":
-                        new_name = new_prefix+name[2:]
-                    elif name[2] == ".":
-                        if name[3] == " ":
-                            new_name = new_prefix+"_"+name[4:]
-                        else:
-                            new_name = new_prefix+"_"+name[3:]
-                    else:
-                        new_name = new_prefix+"_"+name[2:]
-                    try:
-                        os.replace(os.path.join(path, name),
-                                   os.path.join(path, new_name))
-                    except FileExistsError:
-                        os.remove(os.path.join(path, new_name))
-                        os.replace(os.path.join(path, name),
-                                   os.path.join(path, new_name))
 
 
 def html2md(path=None, output_root="C://Output//", output_folder_name=None):
@@ -929,7 +900,7 @@ def html2md(path=None, output_root="C://Output//", output_folder_name=None):
                                         f"![{file_mp4}]({url})"
 
                     f.write(line+"\n")
-    rename_files_sensor_fusion(output_path)
+    md_note_process(output_path)
     output_files_list = os.listdir(output_path)
 
     output_path_md = output_path
@@ -1178,14 +1149,7 @@ def process_md_files_filename_2_head():
         with open(file_name, 'w', encoding='utf-8') as f:
             f.writelines(new_lines)
 
-def zhi_book_markdown_process(num=0):
-    if num==0:
-        files=os.listdir()
 
-        for file in files:
-            if file.endswith(".md"):
-                with open(file,'r',encoding='utf-8') as f:
-                    content=f.read()
 
 def get_md_files(directory='.'):
     """Return a sorted list of markdown filenames in a given directory."""
@@ -1235,7 +1199,7 @@ def Merge_all_md_files_into_one_file_base_on_num_index():
                 f.write(content)
                 f.write('\n\n')
 
-def test(num=0):
+def zhi_book_process(num=0):
     operations = {
         1: perform_regex_replacement_on_index_file,
 
@@ -1258,6 +1222,10 @@ def test(num=0):
             print(f"{num}: {func.__name__}")
     else:
         raise ValueError("Invalid operation number. Please choose a number between 0 and 4.")
+def test():
+    pass
+
+
 
 def html2md2():
     import html2markdown
@@ -1502,9 +1470,9 @@ def prepend_filename_as_header_if_chapter_present(directory=None):
 def remove_md_copy_code(path=None):
     if path is None:
         path = os.getcwd()
-    reg_string=[r"```\n(.+)Copy code",r"```\1\n"]
+    reg_string_copy_code=[r"```\n(.+)Copy code",r"```\1\n"]
     reg_string_list=[]
-    reg_string_list.append(reg_string)
+    reg_string_list.append(reg_string_copy_code)
 
     files_md = [f for f in os.listdir(path) if f.endswith('.md')]
     perform_regex_replacement_on_files(reg_string_list,path,files_md)
@@ -1569,7 +1537,8 @@ def convert_zhi_footnote_to_obsidian(directory_path=None):
 
     reg_string_list=[]
     #r"[\[1\]](https://www.zhihu.com/pub/reader/120057501/chapter/1302455544230445056#n1s) 在英语中，发散一词是diffuse。注意focused（专注）一词的词尾是-ed，而diffuse则不是。发散一词的意思是“薄薄地弥漫出去”。"
-    reg_string1=[r'<sup><a href="https://www.zhihu.com/pub/.+" id=".+">\[(\d{1,2})\] </a></sup>',r"[^\1]"]
+    reg_string1=[r'<sup><a href="https://www\.zhihu\.com/pub/reader.+n\d{1,2}" id="n\d{1,2}s">\[(\d{1,2})\]</a></sup>',r"[^\1]"]
+    #r'<sup><a href="https://www\.zhihu\.com/pub/reader.+n\d{1,2}" id="n\d{1,2}s">\[\d{1,2}\]</a></sup>'
     reg_string_list.extend([reg_string1])
     reg_string2=[r'\[\\\[(\d{1,2})\\\]\]\(https://www\.zhihu\.com/pub/.+\) (.+)',r"[^\1]: (\2)"]
     reg_string_list.extend([reg_string2])
@@ -1689,9 +1658,36 @@ def rename_files_and_folders_by_regex(path=None):
             print(new_directory)
             os.rename(directory, new_directory)
 
+def md_note_process(num=0):
+    operations = {
+        1: remove_back_matter_and_copy_code,
 
 
+    }
 
+    if num in operations:
+        operations[num]()
+    elif num == 0:
+        print("Available operations:")
+        for num, func in operations.items():
+            print(f"{num}: {func.__name__}")
+    else:
+        raise ValueError("Invalid operation number.")
+
+def remove_back_matter_and_copy_code(directory_path=None):
+
+    if directory_path is None:
+        directory_path = os.getcwd()
+
+    files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
+
+    reg_string_list=[]
+
+    reg_Back_matter_template=[r"---\n\n- created:.+\n- source: .+",r""]
+    reg_string_list.extend([reg_Back_matter_template])
+    reg_string_copy_code=[r"```\n(.+)Copy code",r"```\1\n"]
+    reg_string_list.extend([reg_string_copy_code])
+    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
 
 def main():
     # create a parser object
@@ -1717,8 +1713,8 @@ def main():
                         action='store_true', help='call open_b_assets_folder')
     parser.add_argument('-rfe', '--remove_filesname_end',
                         action='store_true', help='call remove_filesname_end')
-    parser.add_argument('-ds', '--rename_files_sensor_fusion',
-                        action='store_true', help='call rename_files_sensor_fusion')
+    parser.add_argument('-md', '--md_note_process',
+                        action='store_true', help='call md_note_process')
     parser.add_argument('-tt', '--timestamps_3blue1brown_2_timeline',
                         action='store_true', help='call timestamps_3blue1brown_2_timeline')
     parser.add_argument('-cti', '--copy_timestamps_and_index_2_root',
@@ -1747,14 +1743,16 @@ def main():
                         action='store_true', help='call init_note')
     parser.add_argument('-test', '--test',
                         action='store_true', help='call test')
+    parser.add_argument('-zbp', '--zhi_book_process',
+                        action='store_true', help='call zhi_book_process')
     parser.add_argument('-vls', '--full_fill_vid_link_2_summary',
                         action='store_true', help='call full_fill_vid_link_2_summary')
     # parse the command-line arguments
     args = parser.parse_args()
 
     # call the appropriate function based on the arguments
-    if args.rename_files_sensor_fusion:
-        rename_files_sensor_fusion()
+    if args.md_note_process:
+        md_note_process(args.input_int)
     elif args.copy_timestamps_and_index_2_root:
         copy_timestamps_and_index_2_root()
     elif args.convert_subtitle_chatgpt_summary_to_markdown_vid_timeline:
@@ -1794,6 +1792,9 @@ def main():
         full_fill_vid_link_2_summary()
     elif args.test:
         test(args.input_int)
+
+    elif args.zhi_book_process:
+        zhi_book_process(args.input_int)
     else:
         print("Invalid argument")
 
