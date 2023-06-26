@@ -1440,6 +1440,7 @@ def remove_back_matter_and_copy_code(directory_path=None):
 def wiki_note_process(num=0):
     operations = {
         1: remove_wiki_edit_link,
+        2: remove_wiki_equation_svg,
 
 
     }
@@ -1463,6 +1464,21 @@ def remove_wiki_edit_link(directory_path=None):
 
     reg_wiki_edit_link=[r'\\\[\[edit\]\(https://en\.wikipedia\.org/w/index\.php\?title=.+ "Edit section: (.+)"\)\\\]',r""]
     reg_string_list.extend([reg_wiki_edit_link])
+
+
+    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+def remove_wiki_equation_svg(directory_path=None):
+    if directory_path is None:
+        directory_path = os.getcwd()
+
+    files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
+
+    reg_string_list=[]
+
+
+    reg_wiki_equation_svg=[r'!\[([^\]]+)\]\([A-Za-z0-9]+\.svg\)',r"$\1$"]
+
+    reg_string_list.extend([reg_wiki_equation_svg])
 
     perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
 def main():
