@@ -333,6 +333,9 @@ def get_list_time_head_textshort_text_4_file(file, key_word):
                 else:
                     print("no match for line:", line)
                     print(key_word)
+            else:
+                raise Exception("key_word not in pattern_dict")
+
     # print("List of time, heading, short text, text:")
     # print(list_time_head_textshort_text)
     return list_time_head_textshort_text
