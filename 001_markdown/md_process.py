@@ -298,17 +298,7 @@ def list_time_head_textshort_text_to_vid_timeline_md(timeline_data, file, match)
 
 def get_list_time_head_textshort_text_4_file(file, key_word):
     print("start to generate time line for video and head text:")
-    find1 = r'Part \d:\nTitle: ([\w ]+)\nTimestamp: (\(\d{1,2}:\d{1,2}\))\nSummary: ([\w , .]+)'
-    replace1 = r'- $1 $2 $3'
-    find2 = r'(\(\d{1,2}:\d{1,2}\)) ([\w ]+)\n'
-    replace2 = r'- $2 $1 '
-    number_list_bullet_pattern_str = r'((\d{1,2}\.)|-)[ ]{1,}'
-    head_pattern_str = r'(([\w:-]+ ){1,})'
-    time_line_pattern_str = r'\((\d{1,2}:\d{1,2})-{0,1}(\d{1,2}:\d{1,2}){0,1}\)[ ]{1,}'
-    time_stamp_pattern_str = r'\((\d{1,2}):(\d{1,2})\)'
-    text_pattern_str = r'(.+)\n{0,1}'
-    #number_list_head_time_text_pattern_str=r'((\d{1,2}\.)|(-))[ ]{1,}([\w, ]+):[ ]\((\d{1,2}:\d{1,2})\)[ ](.+)'
-    # number_list_head_time_text_pattern_str=number_list_bullet_pattern_str+head_pattern_str+time_stamp_pattern_str+text_pattern_str
+
     number_list_head_time_text_pattern_str = r'((\d{1,2}\.)|-)[ ]{1,}(.+) \((\d{1,2}):(\d{1,2})\) (.+)'
     number_list_head_time_pattern_str = r'(\d{1,2}):(\d{1,2})\s+(.+)'
 
@@ -1438,7 +1428,7 @@ def generate_vid_notes_with_timeline_from_text_summary():
         print("bvids_destination_directory_path:",bvids_destination_directory_path)
     # bvid_reg_string = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
 
-    bvid_reg_string=get_bvid_reg_string(folder_list)
+    bvid_reg_string,bvid_srt_reg_string=get_bvid_reg_string(folder_list,TR_MODE)
 
     flag_one_by_one = False
     if flag_one_by_one:
@@ -1474,15 +1464,15 @@ def generate_vid_notes_with_timeline_from_text_summary():
 
         files_srt = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
             os.path.join(bvids_origin_path, f)) and f.endswith(".srt")]
-        # for file_srt in files_srt:
-        #     # print(number_data+file_srt[:-7]+".mp4")
-        #     # print(file_srt[-7:])
-        #     #if (serial_number+file_srt[:-7]+".mp4" == bvid_name) and (file_srt[-7:] == ".en.srt"):
-        #     if vid_name_origin[:-4] + ".srt" == file_srt:
-        #         srt_path = os.path.join(bvids_destination_directory_path, file_srt)
-        #         if not os.path.exists(srt_path):
-        #             os.rename(os.path.join(
-        #                 bvids_origin_path, file_srt), srt_path)
+        for file_srt in files_srt:
+            match = re.search(bvid_srt_reg_string, file_srt)
+            if match:
+                new_srt_name=bvid_name[:-4]+".srt"
+                srt_path = os.path.join(bvids_destination_directory_path, new_srt_name)
+                if not os.path.exists(srt_path):
+                    os.rename(os.path.join(
+                        bvids_origin_path, file_srt), srt_path)
+
     md_show_url, md_url = vid_path_2_md_vid_link(vid_file_path, bvid_name)
     content3 = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
     output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
@@ -1551,8 +1541,8 @@ def get_bvids_destination_long(folder_list, BaiduSyncdisk_assets_root):
             os.makedirs(path_temp)
     return path_temp
 
-def get_bvid_reg_string(folder_list):
-    TR_MODE=1
+def get_bvid_reg_string(folder_list,TR_MODE=0):
+
     sub_topic=folder_list[-2].split("_")[-2]+" "+folder_list[-2].split("_")[-1]
     if TR_MODE:
         print("Sub topic:",sub_topic)
@@ -1562,7 +1552,40 @@ def get_bvid_reg_string(folder_list):
     bvid_reg_string=current_topic+r'(( - )|(- - ))'+sub_topic+r'\.mp4'
     if TR_MODE:
         print("bvid_reg_string:",bvid_reg_string)
-    return bvid_reg_string
+    bvid_srt_reg_string=current_topic+r'(( - )|(- - ))'+sub_topic+r'(\.en|\.en.+)'+r'\.srt'
+    return bvid_reg_string,bvid_srt_reg_string
+
+def move_origin_vid_to_destination(files,bvids_origin_path, bvids_destination_directory_path, bvid_name):
+    flag_one_by_one = False
+    if flag_one_by_one:
+        vid_name_origin = files[0]
+        content2 = "\n"+re.sub(bvid_reg_string, r'\1', vid_name_origin)
+        vid_path = os.path.join(bvids_destination_directory_path, bvid_name)
+        if not os.path.exists(vid_path):
+
+            os.rename(os.path.join(bvids_origin_path,
+                      vid_name_origin), vid_path)
+    else:
+
+        content2 = ""
+        flag_match=0
+        for file in files:
+            match=re.search(bvid_reg_string, file)
+            if match:
+                flag_match=1
+                vid_name_origin=file
+                if TR_MODE:
+                    print("vid_name_origin:",vid_name_origin)
+                    print(match.group(0))
+                break
+
+        vid_file_path = os.path.join(bvids_destination_directory_path, bvid_name)
+        if flag_match==0 and (not os.path.exists(vid_file_path)):
+            raise ValueError("No match found.")
+        if not os.path.exists(vid_file_path):
+
+            os.rename(os.path.join(bvids_origin_path,
+                      vid_name_origin), vid_file_path)
 def main():
     # create a parser object
     parser = argparse.ArgumentParser()
