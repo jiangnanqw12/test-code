@@ -1478,6 +1478,7 @@ def generate_vid_notes_with_timeline_from_text_summary():
 
     md_show_url, md_url = vid_path_2_md_vid_link(vid_file_path, bvid_name)
     content3 = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
+    convert_chatgpt_summary_text_to_one_line_summary()
     output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
         md_show_url)
     note_name = get_note_name()
@@ -1589,6 +1590,19 @@ def move_origin_vid_to_destination(files,bvids_origin_path, bvids_destination_di
 
             os.rename(os.path.join(bvids_origin_path,
                       vid_name_origin), vid_file_path)
+
+def convert_chatgpt_summary_text_to_one_line_summary(directory_path=None):
+    if directory_path is None:
+        directory_path = os.getcwd()
+
+    files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
+
+    reg_string_list=[]
+
+    reg_string2=[r'Title: (.+)\nStart Timestamp: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)',r"- \1 (\2) \4"]
+    reg_string_list.extend([reg_string2])
+
+    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
 def main():
     # create a parser object
     parser = argparse.ArgumentParser()
