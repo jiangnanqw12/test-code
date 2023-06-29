@@ -1383,8 +1383,9 @@ def vid_note_process(num=0):
 
 def generate_vid_notes_with_timeline_from_text_summary():
     TR_MODE=1
-    #folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="FPCV_1687756947")
-    folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="NN_1687967434")
+    flag_one_by_one = False
+    folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="FPCV_1687756947")
+    #folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="NN_1687967434")
 
 
     if TR_MODE:
@@ -1397,7 +1398,8 @@ def generate_vid_notes_with_timeline_from_text_summary():
     # bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
     # bvids_origin_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
     #bvids_origin_path=r'C:\First Principles of Computer Vision Specialization\Features and Boundaries'
-    bvids_origin_path=r'C:\BaiduSyncdisk\deep'
+    #bvids_origin_path=r'C:\BaiduSyncdisk\deep'
+    bvids_origin_path=r'C:\BaiduSyncdisk\Introduction'
     files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
         os.path.join(bvids_origin_path, f)) and f.endswith(".mp4")]
     files.sort()
@@ -1421,7 +1423,7 @@ def generate_vid_notes_with_timeline_from_text_summary():
 
     bvid_reg_string,bvid_srt_reg_string=get_bvid_reg_string(folder_list,TR_MODE)
 
-    flag_one_by_one = True
+
     if flag_one_by_one:
 
         vid_file_path = os.path.join(bvids_destination_directory_path, bvid_name)
@@ -1627,8 +1629,9 @@ def convert_md_vid_link_to_html(directory_path=None):
     #             f.write(content)
 def generate_vid_notes_with_timeline_from_timestamps():
     TR_MODE=1
-    #folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="FPCV_1687756947")
-    folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="NN_1687967434")
+    flag_one_by_one = False
+    folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="FPCV_1687756947")
+    #folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="NN_1687967434")
 
 
     if TR_MODE:
@@ -1641,7 +1644,8 @@ def generate_vid_notes_with_timeline_from_timestamps():
     # bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
     # bvids_origin_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
     #bvids_origin_path=r'C:\First Principles of Computer Vision Specialization\Features and Boundaries'
-    bvids_origin_path=r'C:\BaiduSyncdisk\deep'
+    #bvids_origin_path=r'C:\BaiduSyncdisk\deep'
+    bvids_origin_path=r'C:\BaiduSyncdisk\Introduction'
     files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
         os.path.join(bvids_origin_path, f)) and f.endswith(".mp4")]
     files.sort()
@@ -1665,7 +1669,7 @@ def generate_vid_notes_with_timeline_from_timestamps():
 
     bvid_reg_string,bvid_srt_reg_string=get_bvid_reg_string(folder_list,TR_MODE)
 
-    flag_one_by_one = True
+
     if flag_one_by_one:
         content2=''
         vid_file_path = os.path.join(bvids_destination_directory_path, bvid_name)
