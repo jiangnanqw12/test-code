@@ -730,6 +730,8 @@ def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
         pass
     with open(os.path.join(path, "summary_base_on_chatgpt_"+str(time_stamp)+".md"), "w") as f:
         pass
+    with open(os.path.join(path, "timestamps_"+str(time_stamp)+".md"), "w") as f:
+        pass
 # Function to get the parent directory
 
 
@@ -1725,7 +1727,7 @@ def generate_vid_notes_with_timeline_from_timestamps():
             content4 = f.read()
         with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "w", encoding="utf-8") as f:
             f.write(content1+content2+content3+content4)
-    convert_md_vid_link_to_html()
+    convert_md_vid_link_to_html(OneDrive_KG_note_directory_path)
 def main():
     # create a parser object
     parser = argparse.ArgumentParser()
