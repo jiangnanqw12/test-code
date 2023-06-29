@@ -967,8 +967,12 @@ def get_bvid_name():
 def get_note_name():
     file = os.path.basename(os.getcwd())
     return file+".md"
-
-
+def get_note_vid_tra_name():
+    file = os.path.basename(os.getcwd())
+    return file+r'_vid_tra'+".md"
+def get_note_vid_name():
+    file = os.path.basename(os.getcwd())
+    return file+r'_vid'+".md"
 def get_OneDrive_KG_note_path(OneDrive_KG_root, folder_list):
     OneDrive_KG_note_path = OneDrive_KG_root
     for i in range(2, len(folder_list)-1):
@@ -1472,19 +1476,22 @@ def generate_vid_notes_with_timeline_from_text_summary():
     convert_chatgpt_summary_text_to_one_line_summary()
     output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
         md_show_url)
-    note_name = get_note_name()
+    note_name = get_note_vid_tra_name()
     if TR_MODE:
         print("note_name:",note_name)
     if not os.path.exists(os.path.join(OneDrive_KG_note_directory_path, note_name)):
-        print(os.path.join(OneDrive_KG_note_directory_path, note_name),"is note exists")
-        raise Exception("note not found")
-    else:
-        with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "r", encoding="utf-8") as f:
-            content1 = f.read()
-        with open(os.path.join(output_dir, file_summary), "r", encoding="utf-8") as f:
-            content4 = f.read()
+        # print(os.path.join(OneDrive_KG_note_directory_path, note_name),"is note exists")
+        # raise Exception("note not found")
         with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "w", encoding="utf-8") as f:
-            f.write(content1+content2+content3+content4)
+            pass
+
+    with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "r", encoding="utf-8") as f:
+        content1 = f.read()
+    with open(os.path.join(output_dir, file_summary), "r", encoding="utf-8") as f:
+        content4 = f.read()
+    with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "w", encoding="utf-8") as f:
+        f.write(content1+content2+content3+content4)
+    convert_md_vid_link_to_html(OneDrive_KG_note_directory_path)
 def get_bassets_path(current_dir=None, key_word="mc_1683793602"):
     '''
     kg and bkg 中的 bassets path
@@ -1718,19 +1725,22 @@ def generate_vid_notes_with_timeline_from_timestamps():
 
     output_dir, file_summary = timestamps_3blue1brown_2_timeline(
         md_show_url)
-    note_name = get_note_name()
+    note_name = get_note_vid_name()
     if TR_MODE:
         print("note_name:",note_name)
     if not os.path.exists(os.path.join(OneDrive_KG_note_directory_path, note_name)):
-        print(os.path.join(OneDrive_KG_note_directory_path, note_name),"is note exists")
-        raise Exception("note not found")
-    else:
-        with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "r", encoding="utf-8") as f:
-            content1 = f.read()
-        with open(os.path.join(output_dir, file_summary), "r", encoding="utf-8") as f:
-            content4 = f.read()
+        # print(os.path.join(OneDrive_KG_note_directory_path, note_name),"is note exists")
+        # raise Exception("note not found")
         with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "w", encoding="utf-8") as f:
-            f.write(content1+content2+content3+content4)
+            pass
+
+
+    with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "r", encoding="utf-8") as f:
+        content1 = f.read()
+    with open(os.path.join(output_dir, file_summary), "r", encoding="utf-8") as f:
+        content4 = f.read()
+    with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "w", encoding="utf-8") as f:
+        f.write(content1+content2+content3+content4)
     convert_md_vid_link_to_html(OneDrive_KG_note_directory_path)
 def main():
     # create a parser object
