@@ -294,7 +294,7 @@ def list_time_head_textshort_text_to_vid_timeline_md(timeline_data, file, match)
 
             if text:
                 f.write(f"{text}\n\n")
-
+    return output_dir, new_file_name
 
 def get_list_time_head_textshort_text_4_file(file, key_word):
     print("start to generate time line for video and head text:")
@@ -355,10 +355,10 @@ def timestamps_3blue1brown_2_timeline(str_url):
                 list_time_head_textshort_text = get_list_time_head_textshort_text_4_file(
                     file, key_word)
 
-                list_time_head_textshort_text_to_vid_timeline_md(
+                output_dir,file_name=list_time_head_textshort_text_to_vid_timeline_md(
                     list_time_head_textshort_text, file, match1)
 
-
+                return output_dir,file_name
 def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
 
     # str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
@@ -773,8 +773,8 @@ def get_assets_root_path(current_dir=None):
                 raise Exception('assets folder not found')
 
 def get_note_assets_path(folder_list, current_dir):
-    folder_list.append(os.path.basename(current_dir))
-    current_dir = get_parent_dir(current_dir)
+    # folder_list.append(os.path.basename(current_dir))
+    # current_dir = get_parent_dir(current_dir)
     while True:
 
         if 'assets' in os.listdir(current_dir):
@@ -1383,6 +1383,7 @@ def vid_note_process(num=0):
     operations = {
         1: init_note,
         2: generate_vid_notes_with_timeline_from_text_summary,
+        3: generate_vid_notes_with_timeline_from_timestamps,
 
 
     }
@@ -1398,7 +1399,8 @@ def vid_note_process(num=0):
 
 def generate_vid_notes_with_timeline_from_text_summary():
     TR_MODE=1
-    folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="FPCV_1687756947")
+    #folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="FPCV_1687756947")
+    folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="NN_1687967434")
 
 
     if TR_MODE:
@@ -1410,9 +1412,11 @@ def generate_vid_notes_with_timeline_from_text_summary():
         print("BaiduSyncdisk assets root _directory_path:",BaiduSyncdisk_assets_root_directory_path)
     # bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
     # bvids_origin_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
-    bvids_origin_path=r'C:\First Principles of Computer Vision Specialization\Features and Boundaries'
+    #bvids_origin_path=r'C:\First Principles of Computer Vision Specialization\Features and Boundaries'
+    bvids_origin_path=r'C:\BaiduSyncdisk\deep'
     files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
         os.path.join(bvids_origin_path, f)) and f.endswith(".mp4")]
+    files.sort()
     if TR_MODE:
         print("Files:",files)
     OneDrive_KG_note_directory_path = get_OneDrive_KG_note_path(
@@ -1433,15 +1437,16 @@ def generate_vid_notes_with_timeline_from_text_summary():
 
     bvid_reg_string,bvid_srt_reg_string=get_bvid_reg_string(folder_list,TR_MODE)
 
-    flag_one_by_one = False
+    flag_one_by_one = True
     if flag_one_by_one:
-        vid_name_origin = files[0]
-        content2 = "\n"+re.sub(bvid_reg_string, r'\1', vid_name_origin)
-        vid_path = os.path.join(bvids_destination_directory_path, bvid_name)
-        if not os.path.exists(vid_path):
 
+        vid_file_path = os.path.join(bvids_destination_directory_path, bvid_name)
+        if not os.path.exists(vid_file_path):
+            vid_name_origin = files[0]
+        #content2 = "\n"+re.sub(bvid_reg_string, r'\1', vid_name_origin)
+            content2 = vid_name_origin
             os.rename(os.path.join(bvids_origin_path,
-                      vid_name_origin), vid_path)
+                      vid_name_origin), vid_file_path)
     else:
 
         content2 = ""
@@ -1547,7 +1552,8 @@ def get_bvids_destination_long(folder_list, BaiduSyncdisk_assets_root):
 
 def get_bvid_reg_string(folder_list,TR_MODE=0):
 
-    sub_topic=folder_list[-2].split("_")[-2]+" "+folder_list[-2].split("_")[-1]
+    #sub_topic=folder_list[-2].split("_")[-2]+" "+folder_list[-2].split("_")[-1]
+    sub_topic=folder_list[-2].split("_")[-1]
     if TR_MODE:
         print("Sub topic:",sub_topic)
     current_topic=folder_list[-1].split("_")[-1]
@@ -1603,6 +1609,109 @@ def convert_chatgpt_summary_text_to_one_line_summary(directory_path=None):
     reg_string_list.extend([reg_string2])
 
     perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+
+def generate_vid_notes_with_timeline_from_timestamps():
+    TR_MODE=1
+    #folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="FPCV_1687756947")
+    folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="NN_1687967434")
+
+
+    if TR_MODE:
+        print("Folder list:",folder_list)
+        print("OneDrive KG root directory_path:",OneDrive_KG_root_directory_path)
+
+    BaiduSyncdisk_assets_root_directory_path = get_b_KG_directory_path(OneDrive_KG_root_directory_path)
+    if TR_MODE:
+        print("BaiduSyncdisk assets root _directory_path:",BaiduSyncdisk_assets_root_directory_path)
+    # bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
+    # bvids_origin_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
+    #bvids_origin_path=r'C:\First Principles of Computer Vision Specialization\Features and Boundaries'
+    bvids_origin_path=r'C:\BaiduSyncdisk\deep'
+    files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
+        os.path.join(bvids_origin_path, f)) and f.endswith(".mp4")]
+    files.sort()
+    if TR_MODE:
+        print("Files:",files)
+    OneDrive_KG_note_directory_path = get_OneDrive_KG_note_path(
+        OneDrive_KG_root_directory_path, folder_list)
+    if TR_MODE:
+        print("OneDrive KG note directory_path:",OneDrive_KG_note_directory_path)
+    bvid_name = get_bvid_name()
+    if TR_MODE:
+        print("bvid_name:",bvid_name)
+    serial_number = bvid_name[:3]
+    if TR_MODE:
+        print("serial_number:",serial_number)
+    bvids_destination_directory_path = get_bvids_destination_long(
+        folder_list, BaiduSyncdisk_assets_root_directory_path)
+    if TR_MODE:
+        print("bvids_destination_directory_path:",bvids_destination_directory_path)
+    # bvid_reg_string = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
+
+    bvid_reg_string,bvid_srt_reg_string=get_bvid_reg_string(folder_list,TR_MODE)
+
+    flag_one_by_one = True
+    if flag_one_by_one:
+        content2=''
+        vid_file_path = os.path.join(bvids_destination_directory_path, bvid_name)
+        if not os.path.exists(vid_file_path):
+            vid_name_origin = files[0]
+        #content2 = "\n"+re.sub(bvid_reg_string, r'\1', vid_name_origin)
+            content2 = vid_name_origin
+            os.rename(os.path.join(bvids_origin_path,
+                      vid_name_origin), vid_file_path)
+    else:
+
+        content2 = ""
+        flag_match=0
+        for file in files:
+            match=re.search(bvid_reg_string, file)
+            if match:
+                flag_match=1
+                vid_name_origin=file
+                if TR_MODE:
+                    print("vid_name_origin:",vid_name_origin)
+                    print(match.group(0))
+                break
+
+        vid_file_path = os.path.join(bvids_destination_directory_path, bvid_name)
+        if flag_match==0 and (not os.path.exists(vid_file_path)):
+            raise ValueError("No match found.")
+        if not os.path.exists(vid_file_path):
+
+            os.rename(os.path.join(bvids_origin_path,
+                      vid_name_origin), vid_file_path)
+
+
+        files_srt = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
+            os.path.join(bvids_origin_path, f)) and f.endswith(".srt")]
+        for file_srt in files_srt:
+            match = re.search(bvid_srt_reg_string, file_srt)
+            if match:
+                new_srt_name=bvid_name[:-4]+".srt"
+                srt_path = os.path.join(bvids_destination_directory_path, new_srt_name)
+                if not os.path.exists(srt_path):
+                    os.rename(os.path.join(
+                        bvids_origin_path, file_srt), srt_path)
+
+    md_show_url, md_url = vid_path_2_md_vid_link(vid_file_path, bvid_name)
+    content3 = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
+
+    output_dir, file_summary = timestamps_3blue1brown_2_timeline(
+        md_show_url)
+    note_name = get_note_name()
+    if TR_MODE:
+        print("note_name:",note_name)
+    if not os.path.exists(os.path.join(OneDrive_KG_note_directory_path, note_name)):
+        print(os.path.join(OneDrive_KG_note_directory_path, note_name),"is note exists")
+        raise Exception("note not found")
+    else:
+        with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "r", encoding="utf-8") as f:
+            content1 = f.read()
+        with open(os.path.join(output_dir, file_summary), "r", encoding="utf-8") as f:
+            content4 = f.read()
+        with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "w", encoding="utf-8") as f:
+            f.write(content1+content2+content3+content4)
 def main():
     # create a parser object
     parser = argparse.ArgumentParser()
