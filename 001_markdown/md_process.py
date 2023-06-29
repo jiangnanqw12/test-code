@@ -300,7 +300,7 @@ def get_list_time_head_textshort_text_4_file(file, key_word):
     print("start to generate time line for video and head text:")
 
     number_list_head_time_text_pattern_str = r'((\d{1,2}\.)|-)[ ]{1,}(.+) \((\d{1,2}):(\d{1,2})\) (.+)'
-    number_list_head_time_pattern_str = r'(\d{1,2}):(\d{1,2})\s+(.+)'
+    number_list_head_time_pattern_str = r'(\d{1,2}):(\d{1,2}) - (.+)'
 
     time_text_pattern_str = r'\((\d{1,2}):(\d{1,2})\)[ ]{0,}([^\n]+)[\n]{0,}'
 
@@ -463,7 +463,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     print(list_time_head_textshort_text)
     list_time_head_textshort_text_to_vid_timeline_md(
         list_time_head_textshort_text, file_summary, match1)
-    vid_link_md_2_html(output_dir)
+    convert_md_vid_link_to_html(output_dir)
     return output_dir, file_summary
 
 
@@ -717,26 +717,7 @@ def html2md_tree():
             html2md(input_path, output_folder1, output_folder2)
 
 
-def vid_link_md_2_html(path=None):
-    if path is None:
-        path = os.getcwd()
-    #print("vid_link_md_2_html input path is %s" % path)
-    files = [f for f in os.listdir(path) if os.path.isfile(f)]
-    assets_root_path, assets_root_dir = get_assets_root_path(path)
-    output_path = create_output_directory(assets_root_path)
-    if not os.path.exists(output_path):
-        os.makedirs(output_path, exist_ok=True)
-    replace_list_regex = [
-        [r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']]
-    for file in files:
-        if file.endswith(".md"):
-            with open(os.path.join(path, file), "r", encoding="utf-8") as f:
-                content = f.read()
-                # print(content)
-            for replace_list in replace_list_regex:
-                content = re.sub(replace_list[0], replace_list[1], content)
-            with open(os.path.join(output_path, file), "w", encoding="utf-8") as f:
-                f.write(content)
+
 
 
 def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
@@ -1384,6 +1365,7 @@ def vid_note_process(num=0):
         1: init_note,
         2: generate_vid_notes_with_timeline_from_text_summary,
         3: generate_vid_notes_with_timeline_from_timestamps,
+        4: convert_md_vid_link_to_html,
 
 
     }
@@ -1610,6 +1592,37 @@ def convert_chatgpt_summary_text_to_one_line_summary(directory_path=None):
 
     perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
 
+def convert_md_vid_link_to_html(directory_path=None):
+    if directory_path is None:
+        directory_path = os.getcwd()
+
+    files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
+
+    reg_string_list=[]
+
+    reg_string2=[r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']
+    reg_string_list.extend([reg_string2])
+
+    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+    # if path is None:
+    #     path = os.getcwd()
+    # #print("convert_md_vid_link_to_html input path is %s" % path)
+    # files = [f for f in os.listdir(path) if os.path.isfile(f)]
+    # assets_root_path, assets_root_dir = get_assets_root_path(path)
+    # output_path = create_output_directory(assets_root_path)
+    # if not os.path.exists(output_path):
+    #     os.makedirs(output_path, exist_ok=True)
+    # replace_list_regex = [
+    #     [r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']]
+    # for file in files:
+    #     if file.endswith(".md"):
+    #         with open(os.path.join(path, file), "r", encoding="utf-8") as f:
+    #             content = f.read()
+    #             # print(content)
+    #         for replace_list in replace_list_regex:
+    #             content = re.sub(replace_list[0], replace_list[1], content)
+    #         with open(os.path.join(output_path, file), "w", encoding="utf-8") as f:
+    #             f.write(content)
 def generate_vid_notes_with_timeline_from_timestamps():
     TR_MODE=1
     #folder_list, OneDrive_KG_root_directory_path = get_bassets_path(key_word="FPCV_1687756947")
@@ -1712,6 +1725,7 @@ def generate_vid_notes_with_timeline_from_timestamps():
             content4 = f.read()
         with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "w", encoding="utf-8") as f:
             f.write(content1+content2+content3+content4)
+    convert_md_vid_link_to_html()
 def main():
     # create a parser object
     parser = argparse.ArgumentParser()
@@ -1763,8 +1777,8 @@ def main():
 
     parser.add_argument('-h2mt', '--html2md_tree',
                         action='store_true', help='call html2md_tree')
-    parser.add_argument('-m2hl', '--vid_link_md_2_html',
-                        action='store_true', help='call vid_link_md_2_html')
+    parser.add_argument('-m2hl', '--convert_md_vid_link_to_html',
+                        action='store_true', help='call convert_md_vid_link_to_html')
     parser.add_argument('-init', '--init_note',
                         action='store_true', help='call init_note')
     parser.add_argument('-test', '--test',
@@ -1814,8 +1828,8 @@ def main():
         html2md2()
     elif args.html2md_tree:
         html2md_tree()
-    elif args.vid_link_md_2_html:
-        vid_link_md_2_html()
+    elif args.convert_md_vid_link_to_html:
+        convert_md_vid_link_to_html()
     elif args.init_note:
         init_note()
     elif args.full_fill_vid_link_2_summary:
