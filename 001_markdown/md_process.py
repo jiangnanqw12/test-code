@@ -1401,9 +1401,9 @@ def generate_vid_notes_with_timeline_from_text_summary():
         print("BaiduSyncdisk assets root _directory_path:",BaiduSyncdisk_assets_root_directory_path)
     # bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
     # bvids_origin_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
-    #bvids_origin_path=r'C:\First Principles of Computer Vision Specialization\Features and Boundaries'
+    bvids_origin_path=r'C:\BaiduSyncdisk\First Principles of Computer Vision Specialization\Features and Boundaries'
     #bvids_origin_path=r'C:\BaiduSyncdisk\deep'
-    bvids_origin_path=r'C:\BaiduSyncdisk\Introduction'
+    #bvids_origin_path=r'C:\BaiduSyncdisk\Introduction'
     files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
         os.path.join(bvids_origin_path, f)) and f.endswith(".mp4")]
     files.sort()
@@ -1546,7 +1546,15 @@ def get_bvids_destination_long(folder_list, BaiduSyncdisk_assets_root):
 def get_bvid_reg_string(folder_list,TR_MODE=0):
 
     #sub_topic=folder_list[-2].split("_")[-2]+" "+folder_list[-2].split("_")[-1]
-    sub_topic=folder_list[-2].split("_")[-1]
+    #sub_topic=folder_list[-2].split("_")[-1]
+    reg_sub=[r'\d{3}_(.+)',r'\1']
+
+    match=re.search(reg_sub[0],folder_list[-2])
+    if match:
+        sub_topic=re.sub(reg_sub[0],reg_sub[1],folder_list[-2])
+        sub_topic.replace("_"," ")
+    else:
+        raise Exception("sub_topic not found")
     if TR_MODE:
         print("Sub topic:",sub_topic)
     current_topic=folder_list[-1].split("_")[-1]
@@ -1597,7 +1605,8 @@ def convert_chatgpt_summary_text_to_one_line_summary(directory_path=None):
     files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
 
     reg_string_list=[]
-
+    reg_string1=[r'Section \d{1,2}: (.+)\n\nStart: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)',r"- \1 (\2) \4"]
+    reg_string_list.extend([reg_string1])
     reg_string2=[r'Title: (.+)\nStart Timestamp: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)',r"- \1 (\2) \4"]
     reg_string_list.extend([reg_string2])
 
@@ -1615,25 +1624,7 @@ def convert_md_vid_link_to_html(directory_path=None):
     reg_string_list.extend([reg_string2])
 
     perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
-    # if path is None:
-    #     path = os.getcwd()
-    # #print("convert_md_vid_link_to_html input path is %s" % path)
-    # files = [f for f in os.listdir(path) if os.path.isfile(f)]
-    # assets_root_path, assets_root_dir = get_assets_root_path(path)
-    # output_path = create_output_directory(assets_root_path)
-    # if not os.path.exists(output_path):
-    #     os.makedirs(output_path, exist_ok=True)
-    # replace_list_regex = [
-    #     [r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']]
-    # for file in files:
-    #     if file.endswith(".md"):
-    #         with open(os.path.join(path, file), "r", encoding="utf-8") as f:
-    #             content = f.read()
-    #             # print(content)
-    #         for replace_list in replace_list_regex:
-    #             content = re.sub(replace_list[0], replace_list[1], content)
-    #         with open(os.path.join(output_path, file), "w", encoding="utf-8") as f:
-    #             f.write(content)
+
 def generate_vid_notes_with_timeline_from_timestamps():
     TR_MODE=1
     flag_one_by_one = False
