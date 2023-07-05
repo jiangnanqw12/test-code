@@ -1205,6 +1205,26 @@ def perform_regex_replacement_on_files(reg_string_list,path=None,files=None):
             content=re.sub(regex[0],regex[1],content)
         with open(os.path.join(path, file), "w", encoding="utf-8") as f:
             f.write(content)
+def perform_regex_replacement_on_files_tree(reg_string_list,path=None):
+
+
+    if path is None:
+        path = os.getcwd()
+
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            file_path = os.path.join(root, file)
+
+            with open(file_path, "r", encoding="utf-8") as f1:
+                content = f1.read()
+
+            new_content = content
+            for regex in reg_string_list:
+                new_content = re.sub(regex[0], regex[1], new_content)
+
+            if new_content != content:
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(new_content)
 
 def perform_regex_rename_on_files(reg_string_list,path=None,files=None):
 
@@ -1372,6 +1392,7 @@ def vid_note_process(num=0):
         2: generate_vid_notes_with_timeline_from_text_summary,
         3: generate_vid_notes_with_timeline_from_timestamps,
         4: convert_md_vid_link_to_html,
+        5: convert_md_vid_link_to_html_tree,
 
 
     }
@@ -1624,6 +1645,19 @@ def convert_md_vid_link_to_html(directory_path=None):
     reg_string_list.extend([reg_string2])
 
     perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+
+def convert_md_vid_link_to_html_tree(directory_path=None):
+    if directory_path is None:
+        directory_path = os.getcwd()
+
+
+
+    reg_string_list=[]
+
+    reg_string2=[r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']
+    reg_string_list.extend([reg_string2])
+
+    perform_regex_replacement_on_files_tree(reg_string_list, directory_path)
 
 def generate_vid_notes_with_timeline_from_timestamps():
     TR_MODE=1
