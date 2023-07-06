@@ -1535,7 +1535,50 @@ def get_bassets_path(current_dir=None, key_word="mc_1683793602"):
         else:
             folder_list.append(os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
+def get_kg_assets_root(current_dir=None):
+    '''
 
+    '''
+    TR_MODE=1
+    if current_dir is None:
+        current_dir = os.getcwd()
+    folder_list = []
+
+
+    while True:
+
+        if 'assets' in os.listdir(current_dir):
+            folder_list.reverse()
+
+
+            return folder_list, current_dir
+
+        else:
+            folder_list.append(os.path.basename(current_dir))
+            current_dir = get_parent_dir(current_dir)
+def get_kg_bassets_folder_keyword():
+    TR_MODE=1
+    folder_list, OneDrive_KG_root_directory_path = get_kg_assets_root()
+
+    if TR_MODE:
+        print("Folder list:",folder_list)
+        print("OneDrive KG root directory_path:",OneDrive_KG_root_directory_path)
+    OneDrive_KG_assets_directory_path = os.path.join(OneDrive_KG_root_directory_path,"assets")
+    if TR_MODE:
+        print("OneDrive KG assets directory_path:",OneDrive_KG_assets_directory_path)
+    dirs=[directory for directory in os.listdir(OneDrive_KG_assets_directory_path) if os.path.isdir(os.path.join(OneDrive_KG_assets_directory_path,directory))]
+    if TR_MODE:
+        print("dirs:",dirs)
+    reg_string=[r".+_\d{10}",r"\1"]
+    for dir in dirs:
+        match=re.search(reg_string[0],dir)
+        if match:
+            if TR_MODE:
+                print("match.group(0):",match.group(0))
+            keyword_path=os.path.join(OneDrive_KG_assets_directory_path,dir)
+            if TR_MODE:
+                print("keyword_path:",keyword_path)
+            return match.group(0),keyword_path
 def get_b_KG_directory_path(path=None):
     if path is None:
         path = os.getcwd()
@@ -1767,6 +1810,22 @@ def generate_vid_notes_with_timeline_from_timestamps():
     with open(os.path.join(OneDrive_KG_note_directory_path, note_name), "w", encoding="utf-8") as f:
         f.write(content1+content2+content3+content4)
     convert_md_vid_link_to_html(OneDrive_KG_note_directory_path)
+
+def os_file_process(num=0):
+    operations = {
+        1: get_kg_bassets_folder_keyword,
+
+
+    }
+
+    if num in operations:
+        operations[num]()
+    elif num == 0:
+        print("Available operations:")
+        for num, func in operations.items():
+            print(f"{num}: {func.__name__}")
+    else:
+        raise ValueError("Invalid operation number.")
 def main():
     # create a parser object
     parser = argparse.ArgumentParser()
@@ -1826,6 +1885,7 @@ def main():
                         action='store_true', help='call test')
     parser.add_argument('-zbp', '--zhi_book_process',
                         action='store_true', help='call zhi_book_process')
+    parser.add_argument('-osf', '--os_file_process',action='store_true', help='call os_file_process')
     parser.add_argument('-vls', '--full_fill_vid_link_2_summary',
                         action='store_true', help='call full_fill_vid_link_2_summary')
     # parse the command-line arguments
@@ -1880,6 +1940,8 @@ def main():
 
     elif args.zhi_book_process:
         zhi_book_process(args.input_int)
+    elif args.os_file_process:
+        os_file_process(args.input_int)
     else:
         print("Invalid argument")
 
