@@ -755,16 +755,16 @@ def get_assets_root_path(current_dir=None):
             if current_dir == '':
                 raise Exception('assets folder not found')
 
-def get_note_assets_path(folder_list, current_dir):
-    # folder_list.append(os.path.basename(current_dir))
+def get_note_assets_path(topic_to_sub_topic_folder_list, current_dir):
+    # topic_to_sub_topic_folder_list.append(os.path.basename(current_dir))
     # current_dir = get_parent_dir(current_dir)
     while True:
 
         if 'assets' in os.listdir(current_dir):
-            folder_list.reverse()
-            if folder_list != []:
+            topic_to_sub_topic_folder_list.reverse()
+            if topic_to_sub_topic_folder_list != []:
                 assets_dir_path = os.path.join(current_dir, 'assets')
-                for folder_name in folder_list:
+                for folder_name in topic_to_sub_topic_folder_list:
                     assets_dir_path = os.path.join(
                         assets_dir_path, folder_name)
                     # print(assets_dir_path)
@@ -779,7 +779,7 @@ def get_note_assets_path(folder_list, current_dir):
 
             break
         else:
-            folder_list.append(os.path.basename(current_dir))
+            topic_to_sub_topic_folder_list.append(os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
 
 
@@ -811,11 +811,11 @@ def init_note():
     note_path = os.path.join(current_dir, note_file)
     if not os.path.exists(note_path):
         create_file(note_path)
-    folder_list = []
-    folder_list.append(note_file[:-3])
-    #folder_list.append(os.path.basename(current_dir))
+    topic_to_sub_topic_folder_list = []
+    topic_to_sub_topic_folder_list.append(note_file[:-3])
+    #topic_to_sub_topic_folder_list.append(os.path.basename(current_dir))
 
-    assets_dir_path = get_note_assets_path(folder_list, current_dir)
+    assets_dir_path = get_note_assets_path(topic_to_sub_topic_folder_list, current_dir)
 
     create_file_subtitle_summary_base_on_chatgpt_md(assets_dir_path)
 
@@ -924,32 +924,32 @@ def html2md2():
 def get_bvids_path(current_dir=None, key_word="mc_1683793602"):
     if current_dir is None:
         current_dir = os.getcwd()
-    folder_list = []
+    topic_to_sub_topic_folder_list = []
 
-    folder_list.append(os.path.basename(current_dir))
+    topic_to_sub_topic_folder_list.append(os.path.basename(current_dir))
     current_dir = get_parent_dir(current_dir)
     while True:
 
         if 'assets' in os.listdir(current_dir):
-            folder_list.reverse()
-            folder_list.insert(1, "bvids")
-            folder_list.insert(2, key_word)
-            return folder_list, current_dir
+            topic_to_sub_topic_folder_list.reverse()
+            topic_to_sub_topic_folder_list.insert(1, "bvids")
+            topic_to_sub_topic_folder_list.insert(2, key_word)
+            return topic_to_sub_topic_folder_list, current_dir
 
         else:
-            folder_list.append(os.path.basename(current_dir))
+            topic_to_sub_topic_folder_list.append(os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
 
 
-def get_bvids_destination_short(folder_list, BaiduSyncdisk_assets_root):
+def get_bvids_destination_short(topic_to_sub_topic_folder_list, BaiduSyncdisk_assets_root):
     path_temp = BaiduSyncdisk_assets_root
-    for i in range(len(folder_list)-1):
+    for i in range(len(topic_to_sub_topic_folder_list)-1):
 
-        folder_temp = folder_list[i].split('_')[0]
+        folder_temp = topic_to_sub_topic_folder_list[i].split('_')[0]
         if folder_temp != "FPCV":
             path_temp = os.path.join(path_temp, folder_temp)
         else:
-            path_temp = os.path.join(path_temp, folder_list[i])
+            path_temp = os.path.join(path_temp, topic_to_sub_topic_folder_list[i])
         if not os.path.exists(path_temp):
             os.makedirs(path_temp)
     return path_temp
@@ -973,11 +973,11 @@ def get_note_vid_tra_name():
 def get_note_vid_name():
     file = os.path.basename(os.getcwd())
     return file+r'_vid'+".md"
-def get_OneDrive_KG_note_path(OneDrive_KG_root, folder_list):
+def get_OneDrive_KG_note_path(OneDrive_KG_root, topic_to_sub_topic_folder_list):
     OneDrive_KG_note_path = OneDrive_KG_root
-    for i in range(2, len(folder_list)-1):
+    for i in range(2, len(topic_to_sub_topic_folder_list)-1):
         OneDrive_KG_note_path = os.path.join(
-            OneDrive_KG_note_path, folder_list[i])
+            OneDrive_KG_note_path, topic_to_sub_topic_folder_list[i])
     print(OneDrive_KG_note_path)
     return OneDrive_KG_note_path
 
@@ -992,22 +992,22 @@ def vid_path_2_md_vid_link(vid_path, current_bvid_name):
 
 def full_fill_vid_link_2_summary():
 
-    folder_list, OneDrive_KG_root = get_bvids_path(key_word="mc_1683793602")
+    topic_to_sub_topic_folder_list, OneDrive_KG_root = get_bvids_path(key_word="mc_1683793602")
     BaiduSyncdisk_assets_root = get_b_KG_directory_path(OneDrive_KG_root)
     # bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
     # bvids_origin_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
     bvids_origin_path=r'C:\First Principles of Computer Vision Specialization\Features and Boundaries'
-    print(folder_list, BaiduSyncdisk_assets_root)
+    print(topic_to_sub_topic_folder_list, BaiduSyncdisk_assets_root)
     # print(bvids_origin_path)
     files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
         os.path.join(bvids_origin_path, f)) and f.endswith(".mp4")]
     OneDrive_KG_note_path = get_OneDrive_KG_note_path(
-        OneDrive_KG_root, folder_list)
+        OneDrive_KG_root, topic_to_sub_topic_folder_list)
     current_bvid_name = get_current_bvid_name()
     number_data = current_bvid_name[:4]
     print(current_bvid_name)
     bvids_destination_path = get_bvids_destination_short(
-        folder_list, BaiduSyncdisk_assets_root)
+        topic_to_sub_topic_folder_list, BaiduSyncdisk_assets_root)
     print(bvids_destination_path)
     reg_search = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
     flag_one_by_one = False
@@ -1409,13 +1409,14 @@ def vid_note_process(num=0):
 def generate_vid_notes_with_timeline_from_text_summary():
     TR_MODE=1
     global_KG_note_file_system()
-    move_origin_vid_to_destination(TR_MODE)
+    origin_current_vid_file_name=move_origin_vid_to_destination(TR_MODE)
 
     md_show_url, md_url = vid_path_2_md_vid_link(current_bvid_destination_file_path, current_bvid_name)
     current_vid_md_link_content = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
     convert_chatgpt_summary_text_to_one_line_summary()
     output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
         md_show_url)
+    file_summary_path=os.path.join(output_dir, file_summary)
     note_name = get_note_vid_tra_name()
     if TR_MODE:
         print("note_name:",note_name)
@@ -1425,34 +1426,29 @@ def generate_vid_notes_with_timeline_from_text_summary():
         with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "w", encoding="utf-8") as f:
             pass
 
-    with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "r", encoding="utf-8") as f:
-        current_note_origin_content = f.read()
-    with open(os.path.join(output_dir, file_summary), "r", encoding="utf-8") as f:
-        current_vid_summary = f.read()
-    with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "w", encoding="utf-8") as f:
-        f.write(current_note_origin_content+origin_current_vid_file_name+current_vid_md_link_content+current_vid_summary)
+    merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content)
     convert_md_vid_link_to_html(OneDrive_KG_current_note_directory_path)
-def get_bassets_path(current_dir=None, key_word="mc_1683793602"):
+def get_bassets_keyword_path(current_dir=None, key_word="mc_1683793602"):
     '''
     kg and bkg 中的 bassets path
     '''
     TR_MODE=1
     if current_dir is None:
         current_dir = os.getcwd()
-    folder_list = []
+    topic_to_sub_topic_folder_list = []
 
-    folder_list.append(os.path.basename(current_dir))
+    topic_to_sub_topic_folder_list.append(os.path.basename(current_dir))
     current_dir = get_parent_dir(current_dir)
     while True:
 
         if 'assets' in os.listdir(current_dir):
-            folder_list.reverse()
+            topic_to_sub_topic_folder_list.reverse()
 
-            folder_list.insert(1, key_word)
-            return folder_list, current_dir
+            topic_to_sub_topic_folder_list.insert(1, key_word)
+            return topic_to_sub_topic_folder_list, current_dir
 
         else:
-            folder_list.append(os.path.basename(current_dir))
+            topic_to_sub_topic_folder_list.append(os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
 def get_kg_assets_root(current_dir=None):
     '''
@@ -1461,26 +1457,26 @@ def get_kg_assets_root(current_dir=None):
     TR_MODE=1
     if current_dir is None:
         current_dir = os.getcwd()
-    folder_list = []
+    topic_to_sub_topic_folder_list = []
 
 
     while True:
 
         if 'assets' in os.listdir(current_dir):
-            folder_list.reverse()
+            topic_to_sub_topic_folder_list.reverse()
 
 
-            return folder_list, current_dir
+            return topic_to_sub_topic_folder_list, current_dir
 
         else:
-            folder_list.append(os.path.basename(current_dir))
+            topic_to_sub_topic_folder_list.append(os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
 def get_kg_bassets_folder_keyword():
     TR_MODE=1
-    folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
+    topic_to_sub_topic_folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
 
     if TR_MODE:
-        print("Folder list:",folder_list)
+        print("Folder list:",topic_to_sub_topic_folder_list)
         print("OneDrive KG root directory_path:",OneDrive_KG_note_root_directory_path)
     OneDrive_KG_assets_directory_path = os.path.join(OneDrive_KG_note_root_directory_path,"assets")
     if TR_MODE:
@@ -1517,30 +1513,30 @@ def get_b_KG_directory_path(path=None):
         path_b_assets = re.sub(reg_search[0][0], reg_search[0][1], path)
         #print(path_b_assets)
         return path_b_assets
-def get_bvids_destination_long(folder_list, BaiduSyncdisk_assets_root):
+def get_bvids_destination_long(topic_to_sub_topic_folder_list, BaiduSyncdisk_assets_root):
     path_temp = BaiduSyncdisk_assets_root
-    for i in range(len(folder_list)-1):
-        path_temp = os.path.join(path_temp, folder_list[i])
+    for i in range(len(topic_to_sub_topic_folder_list)-1):
+        path_temp = os.path.join(path_temp, topic_to_sub_topic_folder_list[i])
 
         if not os.path.exists(path_temp):
             os.makedirs(path_temp)
     return path_temp
 
-def get_bvid_reg_string(folder_list,TR_MODE=0):
+def get_bvid_reg_string(topic_to_sub_topic_folder_list,TR_MODE=0):
 
-    #sub_topic=folder_list[-2].split("_")[-2]+" "+folder_list[-2].split("_")[-1]
-    #sub_topic=folder_list[-2].split("_")[-1]
+    #sub_topic=topic_to_sub_topic_folder_list[-2].split("_")[-2]+" "+topic_to_sub_topic_folder_list[-2].split("_")[-1]
+    #sub_topic=topic_to_sub_topic_folder_list[-2].split("_")[-1]
     reg_sub=[r'\d{3}_(.+)',r'\1']
 
-    match=re.search(reg_sub[0],folder_list[-2])
+    match=re.search(reg_sub[0],topic_to_sub_topic_folder_list[-2])
     if match:
-        sub_topic=re.sub(reg_sub[0],reg_sub[1],folder_list[-2])
+        sub_topic=re.sub(reg_sub[0],reg_sub[1],topic_to_sub_topic_folder_list[-2])
         sub_topic.replace("_"," ")
     else:
         raise Exception("sub_topic not found")
     if TR_MODE:
         print("Sub topic:",sub_topic)
-    current_topic=folder_list[-1].split("_")[-1]
+    current_topic=topic_to_sub_topic_folder_list[-1].split("_")[-1]
     if TR_MODE:
         print("Current topic:",current_topic)
     bvid_reg_string=current_topic+r'(( - )|(- - ))'+sub_topic+r'\.mp4'
@@ -1561,12 +1557,12 @@ def global_KG_note_file_system():
 def move_origin_vid_to_destination(TR_MODE=0):
 
     flag_one_by_one = False
-    folder_list, OneDrive_KG_note_root_directory_path = get_bassets_path(key_word="FPCV_1687756947")
-    #folder_list, OneDrive_KG_note_root_directory_path = get_bassets_path(key_word="NN_1687967434")
+    topic_to_sub_topic_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(key_word="FPCV_1687756947")
+    #topic_to_sub_topic_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(key_word="NN_1687967434")
 
 
     if TR_MODE:
-        print("Folder list:",folder_list)
+        print("Folder list:",topic_to_sub_topic_folder_list)
         print("OneDrive KG root directory_path:",OneDrive_KG_note_root_directory_path)
 
     BaiduSyncdisk_KG_note_root_directory_path = get_b_KG_directory_path(OneDrive_KG_note_root_directory_path)
@@ -1583,7 +1579,7 @@ def move_origin_vid_to_destination(TR_MODE=0):
     if TR_MODE:
         print("Files:",files)
     OneDrive_KG_current_note_directory_path = get_OneDrive_KG_note_path(
-        OneDrive_KG_note_root_directory_path, folder_list)
+        OneDrive_KG_note_root_directory_path, topic_to_sub_topic_folder_list)
     if TR_MODE:
         print("OneDrive KG note directory_path:",OneDrive_KG_current_note_directory_path)
     current_bvid_name = get_current_bvid_name()
@@ -1593,12 +1589,12 @@ def move_origin_vid_to_destination(TR_MODE=0):
     if TR_MODE:
         print("serial_number:",serial_number)
     bvids_destination_directory_path = get_bvids_destination_long(
-        folder_list, BaiduSyncdisk_KG_note_root_directory_path)
+        topic_to_sub_topic_folder_list, BaiduSyncdisk_KG_note_root_directory_path)
     if TR_MODE:
         print("bvids_destination_directory_path:",bvids_destination_directory_path)
     # bvid_reg_string = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
 
-    bvid_reg_string,bvid_srt_reg_string=get_bvid_reg_string(folder_list,TR_MODE)
+    bvid_reg_string,bvid_srt_reg_string=get_bvid_reg_string(topic_to_sub_topic_folder_list,TR_MODE)
 
     current_bvid_destination_file_path = os.path.join(bvids_destination_directory_path, current_bvid_name)
     if flag_one_by_one:
@@ -1643,14 +1639,15 @@ def move_origin_vid_to_destination(TR_MODE=0):
                 if not os.path.exists(srt_path):
                     os.rename(os.path.join(
                         bvids_origin_path, file_srt), srt_path)
-def merge_all_content_into_md_note_file(note_name):
+        return origin_current_vid_file_name
+def merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content):
     with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "r", encoding="utf-8") as f:
         current_note_origin_content = f.read()
-    with open(os.path.join(output_dir, file_summary), "r", encoding="utf-8") as f:
+    with open(file_summary_path, "r", encoding="utf-8") as f:
         current_vid_summary = f.read()
     with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "w", encoding="utf-8") as f:
         f.write(current_note_origin_content+origin_current_vid_file_name+current_vid_md_link_content+current_vid_summary)
-    convert_md_vid_link_to_html(OneDrive_KG_current_note_directory_path)
+
 
 def convert_chatgpt_summary_text_to_one_line_summary(directory_path=None):
     if directory_path is None:
@@ -1695,12 +1692,13 @@ def convert_md_vid_link_to_html_tree(directory_path=None):
 def generate_vid_notes_with_timeline_from_timestamps():
     TR_MODE=1
     global_KG_note_file_system()
-    move_origin_vid_to_destination(TR_MODE)
+    origin_current_vid_file_name=move_origin_vid_to_destination(TR_MODE)
 
     md_show_url, md_url = vid_path_2_md_vid_link(current_bvid_destination_file_path, current_bvid_name)
     current_vid_md_link_content = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
 
     output_dir, file_summary = timestamps_3blue1brown_2_timeline(md_show_url)
+    file_summary_path=os.path.join(output_dir, file_summary)
     note_name = get_note_vid_name()
     if TR_MODE:
         print("note_name:",note_name)
@@ -1709,7 +1707,8 @@ def generate_vid_notes_with_timeline_from_timestamps():
         # raise Exception("note not found")
         with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "w", encoding="utf-8") as f:
             pass
-
+    merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content)
+    convert_md_vid_link_to_html(OneDrive_KG_current_note_directory_path)
 
 
 
