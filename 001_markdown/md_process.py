@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re
-import difflib
+
 import time
-import glob
+
 import os
 import datetime
 import shutil
@@ -306,7 +306,7 @@ def get_list_time_head_textshort_text_4_file(file, key_word):
 
     pattern_dict = dict()
     pattern_dict["timestamps"] = number_list_head_time_pattern_str
-    pattern_dict["summary_base_on_chatgpt"] = number_list_head_time_text_pattern_str
+    pattern_dict["summary_gpt"] = number_list_head_time_text_pattern_str
     pattern_dict["subtitle"] = time_text_pattern_str
     list_time_head_textshort_text = []
     with open(os.path.join(os.getcwd(), file), 'r', encoding='UTF-8') as f:
@@ -322,7 +322,7 @@ def get_list_time_head_textshort_text_4_file(file, key_word):
                     if key_word == "timestamps":
                         list_time_head_textshort_text.append(
                             [time_line_start_seconds, match.group(3), None, None])
-                    elif key_word == "summary_base_on_chatgpt":
+                    elif key_word == "summary_gpt":
                         # for i in range(len(match.groups())):
                         #     print(i,match.group(i))
                         list_time_head_textshort_text.append(
@@ -371,8 +371,8 @@ def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
 
     for file in file_list:
         if file.endswith(".md"):
-            if file.find("summary_base_on_chatgpt") != -1:
-                key_word = "summary_base_on_chatgpt"
+            if file.find("summary_gpt") != -1:
+                key_word = "summary_gpt"
                 list_time_head_textshort_text = get_list_time_head_textshort_text_4_file(
                     file, key_word)
                 list_time_head_textshort_text_to_vid_timeline_md(
@@ -449,10 +449,10 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
                     file, key_word)
                 # list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
 
-            if file.find("summary_base_on_chatgpt") != -1:
+            if file.find("summary_gpt") != -1:
                 cwd_floder_name = os.path.basename(cwd)
                 file_summary = file
-                key_word = "summary_base_on_chatgpt"
+                key_word = "summary_gpt"
                 list_time_head_textshort = get_list_time_head_textshort_text_4_file(
                     file, key_word)
                 # list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
@@ -720,15 +720,15 @@ def html2md_tree():
 
 
 
-def create_file_subtitle_summary_base_on_chatgpt_md(path=None):
-    # Create a file named subtitle.md and summary_base_on_chatgpt.md
-    print("create_file_subtitle_summary_base_on_chatgpt_md")
+def create_file_subtitle_summary_gpt_md(path=None):
+    # Create a file named subtitle.md and summary_gpt.md
+    print("create_file_subtitle_summary_gpt_md")
     if path is None:
         path = os.getcwd()
     time_stamp = get_current_timestamp()
     with open(os.path.join(path, "subtitle_"+str(time_stamp)+".md"), "w") as f:
         pass
-    with open(os.path.join(path, "summary_base_on_chatgpt_"+str(time_stamp)+".md"), "w") as f:
+    with open(os.path.join(path, "summary_gpt_"+str(time_stamp)+".md"), "w") as f:
         pass
     with open(os.path.join(path, "timestamps_"+str(time_stamp)+".md"), "w") as f:
         pass
@@ -817,7 +817,7 @@ def init_note():
 
     assets_dir_path = get_note_assets_path(topic_to_sub_topic_folder_list, current_dir)
 
-    create_file_subtitle_summary_base_on_chatgpt_md(assets_dir_path)
+    create_file_subtitle_summary_gpt_md(assets_dir_path)
 
 
 
@@ -1773,7 +1773,7 @@ def main():
     parser.add_argument('-cc', '--creat_concept_folder', action='store_true',
                         help='call create_directory_assets_concept_structure')
     parser.add_argument('-css', '--creat_subtitle_summary', action='store_true',
-                        help='call create_file_subtitle_summary_base_on_chatgpt_md')
+                        help='call create_file_subtitle_summary_gpt_md')
     parser.add_argument('-h2m', '--html2md',
                         action='store_true', help='call html2md')
     parser.add_argument('-h2m2', '--html2md2',
@@ -1826,7 +1826,7 @@ def main():
     elif args.creat_concept_folder:
         create_directory_assets_concept_structure()
     elif args.creat_subtitle_summary:
-        create_file_subtitle_summary_base_on_chatgpt_md()
+        create_file_subtitle_summary_gpt_md()
     elif args.html2md:
         html2md()
     elif args.html2md2:
