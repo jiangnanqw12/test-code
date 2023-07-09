@@ -194,7 +194,7 @@ def copy_timestamps_and_index_2_root(directory=None):
                     shutil.copy(file, dest_path)
 
 
-def search_str_url_4_file_vid(str_url):
+def check_video_file_path_conforms_to_pattern(str_url):
     r"![001_Derivatives of multivariable functions.mp4](file:///C%3A%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CMultivaribale_calculus_Khan_Academy%5Cassets%5Cbvids%5Cmc_1683793602%5C002%5C001%5C001_Derivatives%20of%20multivariable%20functions.mp4)"
     url_pattern_4_file_vid = r'(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
     url_pattern_4_file_vid2 = r'(!\[.+\..+\]\(file:///C%3A%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
@@ -202,6 +202,7 @@ def search_str_url_4_file_vid(str_url):
     if not match1:
         match1 = re.search(url_pattern_4_file_vid2, str_url)
         if not match1:
+            print("str_url: ", str_url)
             raise Exception('No match found')
     return match1
 
@@ -345,7 +346,7 @@ def timestamps_3blue1brown_2_timeline(str_url):
     # process url
     # str_url=r'![007_limits.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C007_limits.mp4)'
     # '(!\[.+\..+\]\(file:///C:%5CBaiduSyncdisk%5Cassets(%5C.+){1,}\.\w+)(\))'
-    match1 = search_str_url_4_file_vid(str_url)
+    match1 = check_video_file_path_conforms_to_pattern(str_url)
     # timestamps file
     file_list = os.listdir(os.getcwd())
     for file in file_list:
@@ -363,7 +364,7 @@ def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
 
     # str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
 
-    match1 = search_str_url_4_file_vid(str_url)
+    match1 = check_video_file_path_conforms_to_pattern(str_url)
     cwd = os.getcwd()
     file_list = os.listdir(cwd)
     assets_root_path,assets_root_dir=get_assets_root_path()
@@ -435,7 +436,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
 
     # str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
 
-    match1 = search_str_url_4_file_vid(str_url)
+    match1 = check_video_file_path_conforms_to_pattern(str_url)
     cwd = os.getcwd()
     file_list = os.listdir(cwd)
     assets_root_path,assets_root_dir=get_assets_root_path()
@@ -1226,8 +1227,7 @@ def perform_regex_replacement_on_files_tree(reg_string_list,path=None):
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(new_content)
 
-def perform_regex_rename_on_files(reg_string_list,path=None,files=None):
-
+def perform_regex_rename_on_files(reg_string_list, path=None, files=None):
     if path is None:
         path = os.getcwd()
     if files is None:
@@ -1238,76 +1238,12 @@ def perform_regex_rename_on_files(reg_string_list,path=None,files=None):
             match = re.search(reg_string[0], file)
             if match is not None:
                 new_file = re.sub(reg_string[0], reg_string[1], file)
-                print(new_file)
-                os.rename(file, new_file)
-def perform_regex_replacement_on_md_files(path=None):
+                try:
+                    os.rename(file, new_file)
+                    print(f"Renamed '{file}' to '{new_file}'")
+                except OSError as e:
+                    print(f"Error renaming '{file}' to '{new_file}': {e}")
 
-    if path is None:
-        path = os.getcwd()
-    files = os.listdir(path)
-    dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
-    reg_string_list=[]
-    reg_index_link=[r"-\s+\[.+\]\(https://www.zhihu.com/pub/reader/.+\)\n",r""]
-    reg_string_list.extend([reg_index_link])
-    reg_zhi_sao_ma=[r"扫码下载知乎APP 客户端\n\n!\[\]\(.+sidebar-download-qrcode.wybWudky.png\)\n",r""]
-    reg_string_list.extend([reg_zhi_sao_ma])
-    reg_Back_matter_template=[r"---\n\n- created:.+\n- source: .+",r""]
-    reg_string_list.extend([reg_Back_matter_template])
-    reg_string_remove_zhi_mul_img=[r"!\[\]\(.+\)\n\n(!\[\]\(.+\.webp\))",r"\1"]
-    #reg_string_list.extend([reg_string_remove_zhi_mul_img])
-    assets_root_path,assets_root_dir=get_assets_root_path()
-    output_path=create_output_directory(assets_root_path)
-    for file in files:
-        if file.endswith(".md"):
-
-            with open(os.path.join(path, file), "r", encoding="utf-8") as f1:
-                content=f1.read()
-            for regex in reg_string_list:
-                content=re.sub(regex[0],regex[1],content)
-            with open(os.path.join(path, file), "w", encoding="utf-8") as f:
-                f.write(content)
-
-
-def rename_files_and_folders_by_regex(path=None):
-    if path is None:
-        path = os.getcwd()
-    files = os.listdir(path)
-    dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
-    # print(dirs)
-    reg_string_dir = [r"(.+) - .+ - 知乎书店", r"\1"]
-    reg_string_md = [r"(.+) - .+ - 知乎书店(\.md)", r"\1\2"]
-    reg_string1 = [
-        r"(.+) - Multivariable Calculus - Khan.+(\.en\.srt|\.mp4)", r"\1\2"]
-    reg_string_vid = [r"(.+) - Multivariable Calculus - Kh.+(\.mp4)", r"\1\2"]
-    reg_string_srt = [
-        r"(.+) - Multivariable Calculus - Kh.+(\..+\.srt)", r"\1\2"]
-    for file in files:
-        if file.endswith(".mp4"):
-            match = re.search(reg_string_vid[0], file)
-            if match is not None:
-                new_file = re.sub(reg_string_vid[0], reg_string_vid[1], file)
-                print(new_file)
-                os.rename(file, new_file)
-        if file.endswith('.srt'):
-            match = re.search(reg_string_srt[0], file)
-            if match is not None:
-
-                new_file = re.sub(reg_string_srt[0], reg_string_srt[1], file)
-                print(new_file)
-                os.rename(file, new_file)
-        if file.endswith(".md"):
-            match = re.search(reg_string_md[0], file)
-            if match is not None:
-                new_file = re.sub(reg_string_md[0], reg_string_md[1], file)
-                print(new_file)
-                os.rename(file, new_file)
-    for directory in dirs:
-        match = re.search(reg_string_dir[0], directory)
-        if match is not None:
-            new_directory = re.sub(
-                reg_string_dir[0], reg_string_dir[1], directory)
-            print(new_directory)
-            os.rename(directory, new_directory)
 
 def md_note_process(num=0):
     operations = {
@@ -1408,14 +1344,19 @@ def vid_note_process(num=0):
 
 def generate_vid_notes_with_timeline_from_text_summary():
     TR_MODE=1
-    global_KG_note_file_system()
-    origin_current_vid_file_name=move_origin_vid_to_destination(TR_MODE)
+
+    origin_current_vid_file_name,current_bvid_destination_file_path,OneDrive_KG_current_note_directory_path=move_origin_vid_to_destination(TR_MODE)
+    current_bvid_name = get_current_bvid_name()
+    if TR_MODE:
+        print("current_bvid_name:",current_bvid_name)
 
     md_show_url, md_url = vid_path_2_md_vid_link(current_bvid_destination_file_path, current_bvid_name)
     current_vid_md_link_content = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
+    if TR_MODE:
+        print("md_show_url:",md_show_url)
+        print("md_url:",md_url)
     convert_chatgpt_summary_text_to_one_line_summary()
-    output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
-        md_show_url)
+    output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(md_show_url)
     file_summary_path=os.path.join(output_dir, file_summary)
     note_name = get_note_vid_tra_name()
     if TR_MODE:
@@ -1426,7 +1367,7 @@ def generate_vid_notes_with_timeline_from_text_summary():
         with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "w", encoding="utf-8") as f:
             pass
 
-    merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content)
+    merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content,OneDrive_KG_current_note_directory_path)
     convert_md_vid_link_to_html(OneDrive_KG_current_note_directory_path)
 def get_bassets_keyword_path(current_dir=None, key_word="mc_1683793602"):
     '''
@@ -1544,22 +1485,17 @@ def get_bvid_reg_string(topic_to_sub_topic_folder_list,TR_MODE=0):
         print("bvid_reg_string:",bvid_reg_string)
     bvid_srt_reg_string=current_topic+r'(( - )|(- - ))'+sub_topic+r'(\.en|\.en.+)'+r'\.srt'
     return bvid_reg_string,bvid_srt_reg_string
-def global_KG_note_file_system():
-    global OneDrive_KG_note_root_directory_path
-    global BaiduSyncdisk_KG_note_root_directory_path
-    global OneDrive_KG_current_note_directory_path
-    global current_bvid_destination_file_path
 
-    global current_bvid_name
 
 
 
 def move_origin_vid_to_destination(TR_MODE=0):
 
-    flag_one_by_one = False
-    topic_to_sub_topic_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(key_word="FPCV_1687756947")
+    flag_one_by_one = True
+    key_word,key_word_path=get_kg_bassets_folder_keyword()
+    topic_to_sub_topic_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(key_word=key_word)
     #topic_to_sub_topic_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(key_word="NN_1687967434")
-
+    origin_current_vid_file_name = ""
 
     if TR_MODE:
         print("Folder list:",topic_to_sub_topic_folder_list)
@@ -1570,7 +1506,8 @@ def move_origin_vid_to_destination(TR_MODE=0):
         print("BaiduSyncdisk assets root _directory_path:",BaiduSyncdisk_KG_note_root_directory_path)
     # bvids_origin_path = get_bvids_origin_path(BaiduSyncdisk_assets_root)
     # bvids_origin_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
-    bvids_origin_path=r'C:\BaiduSyncdisk\First Principles of Computer Vision Specialization\Features and Boundaries'
+    #bvids_origin_path=r'C:\BaiduSyncdisk\First Principles of Computer Vision Specialization\Features and Boundaries'
+    bvids_origin_path=r'C:\BaiduSyncdisk\00_MOOC_b\Algorithms_Princeton\01_course-introduction'
     #bvids_origin_path=r'C:\BaiduSyncdisk\deep'
     #bvids_origin_path=r'C:\BaiduSyncdisk\Introduction'
     files = [f for f in os.listdir(bvids_origin_path) if os.path.isfile(
@@ -1608,7 +1545,7 @@ def move_origin_vid_to_destination(TR_MODE=0):
                       vid_name_origin), current_bvid_destination_file_path)
     else:
 
-        origin_current_vid_file_name = ""
+
         flag_match=0
         for file in files:
             match=re.search(bvid_reg_string, file)
@@ -1639,8 +1576,8 @@ def move_origin_vid_to_destination(TR_MODE=0):
                 if not os.path.exists(srt_path):
                     os.rename(os.path.join(
                         bvids_origin_path, file_srt), srt_path)
-        return origin_current_vid_file_name
-def merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content):
+    return origin_current_vid_file_name,current_bvid_destination_file_path,OneDrive_KG_current_note_directory_path
+def merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content,OneDrive_KG_current_note_directory_path):
     with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "r", encoding="utf-8") as f:
         current_note_origin_content = f.read()
     with open(file_summary_path, "r", encoding="utf-8") as f:
@@ -1659,6 +1596,8 @@ def convert_chatgpt_summary_text_to_one_line_summary(directory_path=None):
     reg_string1=[r'Section \d{1,2}: (.+)\n\nStart: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)',r"- \1 (\2) \4"]
     reg_string_list.extend([reg_string1])
     reg_string2=[r'Title: (.+)\nStart Timestamp: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)',r"- \1 (\2) \4"]
+    reg_string_list.extend([reg_string2])
+    reg_string2=[r'Title: (.+)\nStart Timestamp: \d{1,2}:(\d{1,2}:\d{1,2}),\d{1,3}\nSummary(: |:\n)(.+)',r"- \1 (\2) \4"]
     reg_string_list.extend([reg_string2])
 
     perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
@@ -1691,11 +1630,14 @@ def convert_md_vid_link_to_html_tree(directory_path=None):
 
 def generate_vid_notes_with_timeline_from_timestamps():
     TR_MODE=1
-    global_KG_note_file_system()
-    origin_current_vid_file_name=move_origin_vid_to_destination(TR_MODE)
+
+    origin_current_vid_file_name,current_bvid_destination_file_path,OneDrive_KG_current_note_directory_path=move_origin_vid_to_destination(TR_MODE)
 
     md_show_url, md_url = vid_path_2_md_vid_link(current_bvid_destination_file_path, current_bvid_name)
     current_vid_md_link_content = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
+    if TR_MODE:
+        print("md_show_url:",md_show_url)
+        print("md_url:",md_url)
 
     output_dir, file_summary = timestamps_3blue1brown_2_timeline(md_show_url)
     file_summary_path=os.path.join(output_dir, file_summary)
@@ -1711,12 +1653,27 @@ def generate_vid_notes_with_timeline_from_timestamps():
     convert_md_vid_link_to_html(OneDrive_KG_current_note_directory_path)
 
 
+def zfill_folder_files(path=None, zfill_num=3):
+    if path is None:
+        path = os.getcwd()
+
+    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    for file in files:
+        file_name, file_ext = os.path.splitext(file)
+        file_name_zfilled = file_name.zfill(zfill_num)
+        os.rename(os.path.join(path, file), os.path.join(path, file_name_zfilled + file_ext))
+    dirs=[f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+    for dir in dirs:
+        dir_name,dir_ext=os.path.splitext(dir)
+        dir_name_zfilled=dir_name.zfill(zfill_num)
+        os.rename(os.path.join(path, dir), os.path.join(path, dir_name_zfilled + dir_ext))
 
 def os_file_process(num=0):
     operations = {
         1: get_kg_bassets_folder_keyword,
         2: add_timestamp_to_filenames,
         3: get_current_timestamp,
+        4: zfill_folder_files,
 
 
     }
@@ -1746,8 +1703,7 @@ def main():
     parser.add_argument('-at', '--add_timestamp', action='store_true',
                         help='call add_timestamp_to_filenames')
 
-    parser.add_argument('-regmd', '--perform_regex_replacement_on_md_files', action='store_true',
-                        help='call perform_regex_replacement_on_md_files')
+
     parser.add_argument('-mdx', '--mdx2md',
                         action='store_true', help='call mdx2md')
     parser.add_argument('-oaf', '--open_b_assets_folder',
@@ -1819,8 +1775,7 @@ def main():
     elif args.add_timestamp:
         add_timestamp_to_filenames()
 
-    elif args.perform_regex_replacement_on_md_files:
-        perform_regex_replacement_on_md_files()
+
     elif args.create_imgs_folder:
         create_directory_assets_imgs()
     elif args.creat_concept_folder:
