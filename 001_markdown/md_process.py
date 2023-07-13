@@ -781,9 +781,8 @@ def get_note_assets_dir_path(sub_topic1_to_sub_topicn_folder_list, current_dir):
 
 
 def init_note():
-    import os
+
     import pyperclip
-    import time
 
     # Get content from clipboard
     content = pyperclip.paste()
