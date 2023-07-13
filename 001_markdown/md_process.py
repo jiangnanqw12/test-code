@@ -756,7 +756,7 @@ def get_assets_root_path(current_dir=None):
             if current_dir == '':
                 raise Exception('assets folder not found')
 
-def get_note_assets_path(sub_topic1_to_sub_topicn_folder_list, current_dir):
+def get_note_assets_dir_path(sub_topic1_to_sub_topicn_folder_list, current_dir):
     # sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
     # current_dir = get_parent_dir(current_dir)
     while True:
@@ -764,17 +764,17 @@ def get_note_assets_path(sub_topic1_to_sub_topicn_folder_list, current_dir):
         if 'assets' in os.listdir(current_dir):
             sub_topic1_to_sub_topicn_folder_list.reverse()
             if sub_topic1_to_sub_topicn_folder_list != []:
-                assets_dir_path = os.path.join(current_dir, 'assets')
+                note_assets_dir_path = os.path.join(current_dir, 'assets')
                 for folder_name in sub_topic1_to_sub_topicn_folder_list:
-                    assets_dir_path = os.path.join(
-                        assets_dir_path, folder_name)
-                    # print(assets_dir_path)
-                    # if os.path.isdir(assets_dir_path):
-                    if not os.path.exists(assets_dir_path):
-                        os.makedirs(assets_dir_path)
-                return assets_dir_path
+                    note_assets_dir_path = os.path.join(
+                        note_assets_dir_path, folder_name)
+                    # print(note_assets_dir_path)
+                    # if os.path.isdir(note_assets_dir_path):
+                    if not os.path.exists(note_assets_dir_path):
+                        os.makedirs(note_assets_dir_path)
+                return note_assets_dir_path
                 # else:
-                #     raise Exception('not a directory ',assets_dir_path)
+                #     raise Exception('not a directory ',note_assets_dir_path)
             else:
                 raise Exception("No folder name found")
 
@@ -816,9 +816,9 @@ def init_note():
     sub_topic1_to_sub_topicn_folder_list.append(note_file[:-3])
     #sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
 
-    assets_dir_path = get_note_assets_path(sub_topic1_to_sub_topicn_folder_list, current_dir)
+    note_assets_dir_path = get_note_assets_dir_path(sub_topic1_to_sub_topicn_folder_list, current_dir)
 
-    create_file_subtitle_summary_gpt_md(assets_dir_path)
+    create_file_subtitle_summary_gpt_md(note_assets_dir_path)
 
 
 
@@ -1487,6 +1487,16 @@ def get_bvid_reg_string(sub_topic1_to_sub_topicn_folder_list,TR_MODE=0):
     return bvid_reg_string,bvid_srt_reg_string
 
 
+def get_bvids_origin_topic_path(TR_MODE=0):
+    # bvids_origin_topic_path = get_bvids_origin_topic_path(BaiduSyncdisk_assets_root)
+    # bvids_origin_topic_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
+    #bvids_origin_topic_path=r'C:\BaiduSyncdisk\First Principles of Computer Vision Specialization\Features and Boundaries'
+    bvids_origin_topic_path=r'C:\BaiduSyncdisk\00_MOOC_b\Algorithms_Princeton'
+    #bvids_origin_topic_path=r'C:\BaiduSyncdisk\deep'
+    #bvids_origin_topic_path=r'C:\BaiduSyncdisk\Introduction'
+    if TR_MODE:
+        print("bvids_origin_topic_path:",bvids_origin_topic_path)
+
 
 
 def move_origin_vid_to_destination(TR_MODE=0):
@@ -1515,12 +1525,10 @@ def move_origin_vid_to_destination(TR_MODE=0):
     BaiduSyncdisk_KG_note_root_directory_path = get_b_KG_directory_path(OneDrive_KG_note_root_directory_path)
     if TR_MODE:
         print("BaiduSyncdisk assets root _directory_path:",BaiduSyncdisk_KG_note_root_directory_path)
-    # bvids_origin_topic_path = get_bvids_origin_topic_path(BaiduSyncdisk_assets_root)
-    # bvids_origin_topic_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
-    #bvids_origin_topic_path=r'C:\BaiduSyncdisk\First Principles of Computer Vision Specialization\Features and Boundaries'
-    bvids_origin_topic_path=r'C:\BaiduSyncdisk\00_MOOC_b\Algorithms_Princeton'
-    #bvids_origin_topic_path=r'C:\BaiduSyncdisk\deep'
-    #bvids_origin_topic_path=r'C:\BaiduSyncdisk\Introduction'
+
+
+    bvids_origin_topic_path=get_bvids_origin_topic_path(TR_MODE)
+
     if os.path.basename(bvids_origin_topic_path)!=Topic:
         raise Exception("Topic name not match")
     if flag_search_sub_topic1:
