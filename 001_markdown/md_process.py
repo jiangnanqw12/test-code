@@ -44,9 +44,9 @@ def back_up_dir(src_dir):
             shutil.copy2(src_path, dst_path)
 
 
-
 def num2str_title(num):
     return str(num).zfill(3)
+
 
 def rename_files_base_on_index_markdown(path=None):
     counter = 0
@@ -61,12 +61,10 @@ def rename_files_base_on_index_markdown(path=None):
         if note_name in files:
             counter += 1
             os.replace(os.path.join(path, note_name),
-                        os.path.join(path, num2str_title(counter) + "_" + note_name))
+                       os.path.join(path, num2str_title(counter) + "_" + note_name))
         else:
             print(files)
             raise FileNotFoundError(f"{note_name} not in the files list")
-
-
 
 
 def add_timestamp_to_filenames():
@@ -81,7 +79,7 @@ def add_timestamp_to_filenames():
 
 
 def text_replace(root_dir: str, replace_list: list):
-    assets_root_path,assets_root_dir=get_assets_root_path()
+    assets_root_path, assets_root_dir = get_assets_root_path()
     output_dir = create_output_directory(assets_root_path)
     for filename_with_ext in os.listdir(root_dir):
         if filename_with_ext.endswith('.md'):
@@ -95,9 +93,8 @@ def text_replace(root_dir: str, replace_list: list):
                     f_dest.write(line)
 
 
-
 def mdx2md(timestamp: int = 1676880280):
-    assets_root_path,assets_root_dir=get_assets_root_path()
+    assets_root_path, assets_root_dir = get_assets_root_path()
     output_dir = create_output_directory(assets_root_path)
     cwd = os.getcwd()
     # text_replace_list_mdx2md3 = [
@@ -120,7 +117,7 @@ def mdx2md(timestamp: int = 1676880280):
 
             replace_list_regex = [
                                  [r"<PiCreature\n{0,}\s{0,}(.+)\n{0,}\s{0,}(.+)\n{0,}\s{0,}/>", r"\1\n\2\n"],
-                #[r"show=\"video\"\n", r""],
+                # [r"show=\"video\"\n", r""],
                 #  [r"<!--", r""],
                 #  [r"-->", r""],
                                  [r"<Question", r"---"],
@@ -131,12 +128,12 @@ def mdx2md(timestamp: int = 1676880280):
                                      r'![](\1_'+str(timestamp)+r'\2)'],
                 [r'<Accordion\stitle=".+">\n', r''],
                 [r'</Accordion>\n', r''],
-                #[r'emotion="\w+"[ \t]+\n', r''],
-                #[r'flip=\{(true|false)\}\n', r''],
-                #[r'(?s)<Question .+?</Question>', r'tttttttttttttttttttt'],
+                # [r'emotion="\w+"[ \t]+\n', r''],
+                # [r'flip=\{(true|false)\}\n', r''],
+                # [r'(?s)<Question .+?</Question>', r'tttttttttttttttttttt'],
                 [r'answer=\{(\d)\}[ \n\t]{0,}>',
                                      r'\n<details><summary>answer</summary><p>Choice= \1</p></details>\n\n- **Explanation**'],
-                #[r'''<Question[\n \t]{0,}question="(.+)"[\n \t]{0,}choice1="(.+)"[\n \t]{0,}choice2="(.+)"[\n \t]{0,}choice3="(.+)"[\n \t]{0,}choice4="(.+)"[\n \t]answer=\{(\d)\}[\n \t]{0,}>''',r'- **Question**\n\t\1']
+                # [r'''<Question[\n \t]{0,}question="(.+)"[\n \t]{0,}choice1="(.+)"[\n \t]{0,}choice2="(.+)"[\n \t]{0,}choice3="(.+)"[\n \t]{0,}choice4="(.+)"[\n \t]answer=\{(\d)\}[\n \t]{0,}>''',r'- **Question**\n\t\1']
                 [r'[ \t]{0,}question="(.+)"',
                                      r'- **Question**\n\t\1'],
                 [r'[ \t]{0,}choice1="(.+)"',
@@ -145,16 +142,15 @@ def mdx2md(timestamp: int = 1676880280):
                                      r'    - **Choice 2=** \1'],
                 [r'[ \t]{0,}choice3="(.+)"', r'    - **Choice 3=** \1'],
                 [r'[ \t]{0,}choice4="(.+)"', r'    - **Choice 4=** \1'],
-                #[r'video=".+\.mp4"', r''],
-                #[r'show="video"', r''],
+                # [r'video=".+\.mp4"', r''],
+                # [r'show="video"', r''],
                 [r'([ \t]{0,}\n){3,}', r'\1\1'],
-                #['/>', r''],
+                # ['/>', r''],
             ]
 
             for i in range(len(replace_list_regex)):
                 pattern = replace_list_regex[i][0]
                 replacement = replace_list_regex[i][1]
-
 
                 # Perform the regex replacement
                 content = re.sub(pattern, replacement, content)
@@ -256,7 +252,7 @@ def create_new_file_name(file):
 
 def list_time_head_textshort_text_to_vid_timeline_md(timeline_data, file, match):
     # print(timeline_data)
-    assets_root_path,assets_root_dir=get_assets_root_path()
+    assets_root_path, assets_root_dir = get_assets_root_path()
     output_dir = create_output_directory(assets_root_path)
     new_file_name = create_new_file_name(file)
     with open(os.path.join(output_dir, new_file_name), 'w', encoding='UTF-8') as f:
@@ -296,6 +292,7 @@ def list_time_head_textshort_text_to_vid_timeline_md(timeline_data, file, match)
             if text:
                 f.write(f"{text}\n\n")
     return output_dir, new_file_name
+
 
 def get_list_time_head_textshort_text_4_file(file, key_word):
     print("start to generate time line for video and head text:")
@@ -356,10 +353,12 @@ def timestamps_3blue1brown_2_timeline(str_url):
                 list_time_head_textshort_text = get_list_time_head_textshort_text_4_file(
                     file, key_word)
 
-                output_dir,file_name=list_time_head_textshort_text_to_vid_timeline_md(
+                output_dir, file_name = list_time_head_textshort_text_to_vid_timeline_md(
                     list_time_head_textshort_text, file, match1)
 
-                return output_dir,file_name
+                return output_dir, file_name
+
+
 def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
 
     # str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
@@ -367,7 +366,7 @@ def convert_subtitle_chatgpt_summary_to_markdown_vid_timeline(str_url):
     match1 = check_video_file_path_conforms_to_pattern(str_url)
     cwd = os.getcwd()
     file_list = os.listdir(cwd)
-    assets_root_path,assets_root_dir=get_assets_root_path()
+    assets_root_path, assets_root_dir = get_assets_root_path()
     create_output_directory(assets_root_path)
 
     for file in file_list:
@@ -439,7 +438,7 @@ def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
     match1 = check_video_file_path_conforms_to_pattern(str_url)
     cwd = os.getcwd()
     file_list = os.listdir(cwd)
-    assets_root_path,assets_root_dir=get_assets_root_path()
+    assets_root_path, assets_root_dir = get_assets_root_path()
     output_dir = create_output_directory(assets_root_path)
 
     for file in file_list:
@@ -553,16 +552,13 @@ def open_b_assets_folder(cwd=None):
     open_folder_in_windows(assets_path)
 
 
-
-
-
 def html2md(path=None, output_root="C://Output//", output_folder_name=None):
     if path is None:
         path = os.getcwd()
     timestamp = int(time.time())
     intput_path = path
     input_floder_name = os.path.basename(intput_path)
-    #replace_list_regex2=[[r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)',r'0\1_\2'],]
+    # replace_list_regex2=[[r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)',r'0\1_\2'],]
     input_floder_name = re.sub(
         r'Part \d{2}-Module \d{2}-Lesson (\d{2})_(.+)', r'0\1_\2', input_floder_name)
     # Part 01-Module 01-Lesson 01_Welcome to the C++ Developer Nanodegree Program
@@ -718,9 +714,6 @@ def html2md_tree():
             html2md(input_path, output_folder1, output_folder2)
 
 
-
-
-
 def create_file_subtitle_summary_gpt_md(path=None):
     # Create a file named subtitle.md and summary_gpt.md
     print("create_file_subtitle_summary_gpt_md")
@@ -745,16 +738,18 @@ def create_file(path, content=""):
     with open(path, 'w') as f:
         f.write(content)
 
+
 def get_assets_root_path(current_dir=None):
     if current_dir is None:
         current_dir = os.getcwd()
     while True:
         if 'assets' in os.listdir(current_dir):
-            return current_dir,os.path.basename(current_dir)
+            return current_dir, os.path.basename(current_dir)
         else:
             current_dir = get_parent_dir(current_dir)
             if current_dir == '':
                 raise Exception('assets folder not found')
+
 
 def get_note_assets_dir_path(sub_topic1_to_sub_topicn_folder_list, current_dir):
     # sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
@@ -780,7 +775,8 @@ def get_note_assets_dir_path(sub_topic1_to_sub_topicn_folder_list, current_dir):
 
             break
         else:
-            sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
+            sub_topic1_to_sub_topicn_folder_list.append(
+                os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
 
 
@@ -814,34 +810,32 @@ def init_note():
         create_file(note_path)
     sub_topic1_to_sub_topicn_folder_list = []
     sub_topic1_to_sub_topicn_folder_list.append(note_file[:-3])
-    #sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
+    # sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
 
-    note_assets_dir_path = get_note_assets_dir_path(sub_topic1_to_sub_topicn_folder_list, current_dir)
+    note_assets_dir_path = get_note_assets_dir_path(
+        sub_topic1_to_sub_topicn_folder_list, current_dir)
 
     create_file_subtitle_summary_gpt_md(note_assets_dir_path)
-
-
-
-
-
-
-
 
 
 def get_md_files(directory='.'):
     """Return a sorted list of markdown filenames in a given directory."""
     files = [f for f in os.listdir(directory) if f.endswith('.md')]
     # Extract numeric prefix and sort based on it
-    files.sort(key=lambda x: int(re.match(r'(\d{3})_', x).group(1)) if re.match(r'(\d{3})_', x) else float('inf'))
+    files.sort(key=lambda x: int(re.match(r'(\d{3})_', x).group(
+        1)) if re.match(r'(\d{3})_', x) else float('inf'))
     return files
-def check_md_files(files):
 
+
+def check_md_files(files):
 
     # Check if files are in expected order
     for i, filename in enumerate(files):
         expected_prefix = f"{i:03d}_"
         if not filename.startswith(expected_prefix):
-            print(f"Warning: {filename} does not match expected prefix {expected_prefix}")
+            print(
+                f"Warning: {filename} does not match expected prefix {expected_prefix}")
+
 
 def merge_files(filenames, output_filename):
     """Merge the content of a list of files and write to a new file."""
@@ -855,10 +849,11 @@ def merge_files(filenames, output_filename):
             except IOError:
                 print(f'Error opening file {fname}, skipping.')
 
+
 def merge_all_md_files_into_one():
     """Merge all markdown files in the current directory into one file."""
     root_path, root_dir = get_assets_root_path()
-    output_file = os.path.join(root_path,root_dir+".md")
+    output_file = os.path.join(root_path, root_dir+".md")
     md_files = get_md_files()
     check_md_files(md_files)
     merge_files(md_files, output_file)
@@ -868,13 +863,14 @@ def Merge_all_md_files_into_one_file_base_on_num_index():
     files = [f for f in os.listdir() if f.endswith('.md')]
     files.sort()
     print(files)
-    root_path,root_dir=get_assets_root_path()
-    with open(os.path.join(root_path,root_dir+".md"), 'w', encoding='utf-8') as f:
+    root_path, root_dir = get_assets_root_path()
+    with open(os.path.join(root_path, root_dir+".md"), 'w', encoding='utf-8') as f:
         for file in files:
             with open(file, 'r', encoding='utf-8') as f2:
                 content = f2.read()
                 f.write(content)
                 f.write('\n\n')
+
 
 def zhi_book_process(num=0):
     operations = {
@@ -898,10 +894,12 @@ def zhi_book_process(num=0):
         for num, func in operations.items():
             print(f"{num}: {func.__name__}")
     else:
-        raise ValueError("Invalid operation number. Please choose a number between 0 and 4.")
+        raise ValueError(
+            "Invalid operation number. Please choose a number between 0 and 4.")
+
+
 def test():
     pass
-
 
 
 def html2md2():
@@ -924,7 +922,8 @@ def get_bvids_destination_short(sub_topic1_to_sub_topicn_folder_list, BaiduSyncd
         if folder_temp != "FPCV":
             path_temp = os.path.join(path_temp, folder_temp)
         else:
-            path_temp = os.path.join(path_temp, sub_topic1_to_sub_topicn_folder_list[i])
+            path_temp = os.path.join(
+                path_temp, sub_topic1_to_sub_topicn_folder_list[i])
         if not os.path.exists(path_temp):
             os.makedirs(path_temp)
     return path_temp
@@ -942,12 +941,18 @@ def get_current_bvid_name():
 def get_note_name():
     file = os.path.basename(os.getcwd())
     return file+".md"
+
+
 def get_note_vid_tra_name():
     file = os.path.basename(os.getcwd())
     return file+r'_vid_tra'+".md"
+
+
 def get_note_vid_name():
     file = os.path.basename(os.getcwd())
     return file+r'_vid'+".md"
+
+
 def get_OneDrive_KG_note_path(OneDrive_KG_root, sub_topic1_to_sub_topicn_folder_list):
     OneDrive_KG_note_path = OneDrive_KG_root
     for i in range(2, len(sub_topic1_to_sub_topicn_folder_list)-1):
@@ -965,15 +970,13 @@ def vid_path_2_md_vid_link(vid_path, current_bvid_name):
     return md_show_url, md_url
 
 
-
-
 def lower_header_level_in_md_files(path=None):
     if path is None:
         path = os.getcwd()
 
     files_md = [f for f in os.listdir(path) if f.endswith('.md')]
     reg_string_head = re.compile(r"(#{1,6}) (.+)")
-    #what is compile
+    # what is compile
     for file in files_md:
         try:
             with open(os.path.join(path, file), "r", encoding="utf-8") as f:
@@ -985,7 +988,8 @@ def lower_header_level_in_md_files(path=None):
                 if match:
                     string_sharp = match.group(1)
                     head_num = string_sharp.count("#")
-                    line = reg_string_head.sub((head_num + 1) * "#" + r" \2", line)
+                    line = reg_string_head.sub(
+                        (head_num + 1) * "#" + r" \2", line)
                 processed_lines.append(line)
 
             with open(os.path.join(path, file), "w", encoding="utf-8") as f:
@@ -993,41 +997,43 @@ def lower_header_level_in_md_files(path=None):
         except Exception as e:
             print(f"Failed to process file {file} due to {str(e)}")
 
+
 def prepend_filename_as_header_if_chapter_present(directory=None):
-    reg_string1=r"\d{3}_(第.{1,2}章.+)"
-    reg_string2=r"\d{3}_(\d{1,2} .+)\.md"
+    reg_string1 = r"\d{3}_(第.{1,2}章.+)"
+    reg_string2 = r"\d{3}_(\d{1,2} .+)\.md"
 
     if directory is None:
         directory = os.getcwd()
-    reg_string=reg_string2
+    reg_string = reg_string2
     files_md = [f for f in os.listdir(directory) if f.endswith('.md')]
     # Iterate over all files in the directory
     for filename in files_md:
         # If the filename contains 'Chapter'
-        match=re.search(reg_string, filename)
+        match = re.search(reg_string, filename)
         if match:
-            chapter_name=match.group(1)
+            chapter_name = match.group(1)
             print(chapter_name)
             # Open the file and read its contents
-            with open(os.path.join(directory, filename), 'r',encoding="utf-8") as f:
+            with open(os.path.join(directory, filename), 'r', encoding="utf-8") as f:
                 content = f.readlines()
 
             # Prepend the filename as a level 2 header
             content.insert(0, f'## {chapter_name}\n')
 
             # Write the modified content back to the file
-            with open(os.path.join(directory, filename), 'w',encoding="utf-8") as f:
+            with open(os.path.join(directory, filename), 'w', encoding="utf-8") as f:
                 f.writelines(content)
+
+
 def remove_md_copy_code(path=None):
     if path is None:
         path = os.getcwd()
-    reg_string_copy_code=[r"```\n(.+)Copy code",r"```\1\n"]
-    reg_string_list=[]
+    reg_string_copy_code = [r"```\n(.+)Copy code", r"```\1\n"]
+    reg_string_list = []
     reg_string_list.append(reg_string_copy_code)
 
     files_md = [f for f in os.listdir(path) if f.endswith('.md')]
-    perform_regex_replacement_on_files(reg_string_list,path,files_md)
-
+    perform_regex_replacement_on_files(reg_string_list, path, files_md)
 
 
 def perform_regex_replacement_on_index_file(directory_path=None):
@@ -1050,7 +1056,10 @@ def perform_regex_replacement_on_index_file(directory_path=None):
     file_paths = [os.path.join(directory_path, index_filename)]
     regex_patterns = [(r"- \[(.+)\]\(.+\)", r"\1")]
 
-    perform_regex_replacement_on_files(regex_patterns, directory_path, file_paths)
+    perform_regex_replacement_on_files(
+        regex_patterns, directory_path, file_paths)
+
+
 def perform_regex_replacement_on_zhi_mds(directory_path=None):
 
     if directory_path is None:
@@ -1058,15 +1067,19 @@ def perform_regex_replacement_on_zhi_mds(directory_path=None):
 
     files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
 
-    reg_string_list=[]
-    reg_index_link=[r"-\s+\[.+\]\(https://www.zhihu.com/pub/reader/.+\)\n",r""]
+    reg_string_list = []
+    reg_index_link = [
+        r"-\s+\[.+\]\(https://www.zhihu.com/pub/reader/.+\)\n", r""]
     reg_string_list.extend([reg_index_link])
-    reg_zhi_sao_ma=[r"扫码下载知乎APP 客户端\n\n!\[\]\(.+sidebar-download-qrcode.wybWudky.png\)\n",r""]
+    reg_zhi_sao_ma = [
+        r"扫码下载知乎APP 客户端\n\n!\[\]\(.+sidebar-download-qrcode.wybWudky.png\)\n", r""]
     reg_string_list.extend([reg_zhi_sao_ma])
-    reg_Back_matter_template=[r"---\n\n- created:.+\n- source: .+",r""]
+    reg_Back_matter_template = [r"---\n\n- created:.+\n- source: .+", r""]
     reg_string_list.extend([reg_Back_matter_template])
 
-    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+    perform_regex_replacement_on_files(
+        reg_string_list, directory_path, files_md)
+
 
 def convert_zhi_footnote_to_obsidian(directory_path=None):
     if directory_path is None:
@@ -1074,31 +1087,38 @@ def convert_zhi_footnote_to_obsidian(directory_path=None):
 
     files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
 
-    reg_string_list=[]
-    #r"[\[1\]](https://www.zhihu.com/pub/reader/120057501/chapter/1302455544230445056#n1s) 在英语中，发散一词是diffuse。注意focused（专注）一词的词尾是-ed，而diffuse则不是。发散一词的意思是“薄薄地弥漫出去”。"
-    reg_string1=[r'<sup><a href="https://www\.zhihu\.com/pub/reader.+n\d{1,2}" id="n\d{1,2}s">\[(\d{1,2})\]</a></sup>',r"[^\1]"]
-    #r'<sup><a href="https://www\.zhihu\.com/pub/reader.+n\d{1,2}" id="n\d{1,2}s">\[\d{1,2}\]</a></sup>'
+    reg_string_list = []
+    # r"[\[1\]](https://www.zhihu.com/pub/reader/120057501/chapter/1302455544230445056#n1s) 在英语中，发散一词是diffuse。注意focused（专注）一词的词尾是-ed，而diffuse则不是。发散一词的意思是“薄薄地弥漫出去”。"
+    reg_string1 = [
+        r'<sup><a href="https://www\.zhihu\.com/pub/reader.+n\d{1,2}" id="n\d{1,2}s">\[(\d{1,2})\]</a></sup>', r"[^\1]"]
+    # r'<sup><a href="https://www\.zhihu\.com/pub/reader.+n\d{1,2}" id="n\d{1,2}s">\[\d{1,2}\]</a></sup>'
     reg_string_list.extend([reg_string1])
-    reg_string2=[r'\[\\\[(\d{1,2})\\\]\]\(https://www\.zhihu\.com/pub/.+\) (.+)',r"[^\1]: (\2)"]
+    reg_string2 = [
+        r'\[\\\[(\d{1,2})\\\]\]\(https://www\.zhihu\.com/pub/.+\) (.+)', r"[^\1]: (\2)"]
     reg_string_list.extend([reg_string2])
 
-    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+    perform_regex_replacement_on_files(
+        reg_string_list, directory_path, files_md)
+
+
 def perform_regex_replacement_on_zhi_book_mds_name(path=None):
     if path is None:
         path = os.getcwd()
-    files_md=[f for f in os.listdir(path) if f.endswith('.md')]
+    files_md = [f for f in os.listdir(path) if f.endswith('.md')]
     reg_string_dir = [r"(.+) - .+ - 知乎书店", r"\1"]
     reg_string_md = [r"(.+) - .+ - 知乎书店(\.md)", r"\1\2"]
-    reg_string_md2=[r"{ (.+) }", r"{\1}"]
-    reg_string_list=[]
+    reg_string_md2 = [r"{ (.+) }", r"{\1}"]
+    reg_string_list = []
     reg_string_list.append(reg_string_md)
-    perform_regex_rename_on_files(reg_string_list,path,files_md)
-    dirs = [directory for directory in os.listdir(path) if os.path.isdir(directory)]
-    reg_string_list=[]
+    perform_regex_rename_on_files(reg_string_list, path, files_md)
+    dirs = [directory for directory in os.listdir(
+        path) if os.path.isdir(directory)]
+    reg_string_list = []
     reg_string_list.append(reg_string_dir)
-    perform_regex_rename_on_files(reg_string_list,path,dirs)
+    perform_regex_rename_on_files(reg_string_list, path, dirs)
 
-def perform_regex_replacement_on_files(reg_string_list,path=None,files=None):
+
+def perform_regex_replacement_on_files(reg_string_list, path=None, files=None):
 
     if path is None:
         path = os.getcwd()
@@ -1108,13 +1128,14 @@ def perform_regex_replacement_on_files(reg_string_list,path=None,files=None):
     for file in files:
 
         with open(os.path.join(path, file), "r", encoding="utf-8") as f1:
-            content=f1.read()
+            content = f1.read()
         for regex in reg_string_list:
-            content=re.sub(regex[0],regex[1],content)
+            content = re.sub(regex[0], regex[1], content)
         with open(os.path.join(path, file), "w", encoding="utf-8") as f:
             f.write(content)
-def perform_regex_replacement_on_files_tree(reg_string_list,path=None):
 
+
+def perform_regex_replacement_on_files_tree(reg_string_list, path=None):
 
     if path is None:
         path = os.getcwd()
@@ -1133,6 +1154,7 @@ def perform_regex_replacement_on_files_tree(reg_string_list,path=None):
             if new_content != content:
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(new_content)
+
 
 def perform_regex_rename_on_files(reg_string_list, path=None, files=None):
     if path is None:
@@ -1168,6 +1190,7 @@ def md_note_process(num=0):
     else:
         raise ValueError("Invalid operation number.")
 
+
 def remove_back_matter_and_copy_code(directory_path=None):
 
     if directory_path is None:
@@ -1175,13 +1198,15 @@ def remove_back_matter_and_copy_code(directory_path=None):
 
     files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
 
-    reg_string_list=[]
+    reg_string_list = []
 
-    reg_Back_matter_template=[r"---\n\n- created:.+\n- source: .+",r""]
+    reg_Back_matter_template = [r"---\n\n- created:.+\n- source: .+", r""]
     reg_string_list.extend([reg_Back_matter_template])
-    reg_string_copy_code=[r"```\n(.+)Copy code",r"```\1\n"]
+    reg_string_copy_code = [r"```\n(.+)Copy code", r"```\1\n"]
     reg_string_list.extend([reg_string_copy_code])
-    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+    perform_regex_replacement_on_files(
+        reg_string_list, directory_path, files_md)
+
 
 def wiki_note_process(num=0):
     operations = {
@@ -1199,6 +1224,8 @@ def wiki_note_process(num=0):
             print(f"{num}: {func.__name__}")
     else:
         raise ValueError("Invalid operation number.")
+
+
 def remove_wiki_edit_link(directory_path=None):
 
     if directory_path is None:
@@ -1206,27 +1233,30 @@ def remove_wiki_edit_link(directory_path=None):
 
     files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
 
-    reg_string_list=[]
+    reg_string_list = []
 
-    reg_wiki_edit_link=[r'\\\[\[edit\]\(https://en\.wikipedia\.org/w/index\.php\?title=.+ "Edit section: (.+)"\)\\\]',r""]
+    reg_wiki_edit_link = [
+        r'\\\[\[edit\]\(https://en\.wikipedia\.org/w/index\.php\?title=.+ "Edit section: (.+)"\)\\\]', r""]
     reg_string_list.extend([reg_wiki_edit_link])
 
+    perform_regex_replacement_on_files(
+        reg_string_list, directory_path, files_md)
 
-    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+
 def remove_wiki_equation_svg(directory_path=None):
     if directory_path is None:
         directory_path = os.getcwd()
 
     files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
 
-    reg_string_list=[]
+    reg_string_list = []
 
-
-    reg_wiki_equation_svg=[r'!\[([^\]]+)\]\([A-Za-z0-9]+\.svg\)',r"$\1$"]
+    reg_wiki_equation_svg = [r'!\[([^\]]+)\]\([A-Za-z0-9]+\.svg\)', r"$\1$"]
 
     reg_string_list.extend([reg_wiki_equation_svg])
 
-    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+    perform_regex_replacement_on_files(
+        reg_string_list, directory_path, files_md)
 
 
 def vid_note_process(num=0):
@@ -1249,43 +1279,51 @@ def vid_note_process(num=0):
     else:
         raise ValueError("Invalid operation number.")
 
-def generate_vid_notes_with_timeline_from_text_summary():
-    TR_MODE=1
 
-    origin_current_vid_file_name,current_bvid_destination_file_path,OneDrive_KG_current_note_directory_path=move_origin_vid_to_destination(TR_MODE)
+def generate_vid_notes_with_timeline_from_text_summary():
+    TR_MODE = 1
+
+    origin_current_vid_file_name, current_bvid_destination_file_path, OneDrive_KG_current_note_directory_path = move_origin_vid_to_destination(
+        TR_MODE)
     current_bvid_name = get_current_bvid_name()
     if TR_MODE:
-        print("current_bvid_name:",current_bvid_name)
+        print("current_bvid_name:", current_bvid_name)
 
-    md_show_url, md_url = vid_path_2_md_vid_link(current_bvid_destination_file_path, current_bvid_name)
+    md_show_url, md_url = vid_path_2_md_vid_link(
+        current_bvid_destination_file_path, current_bvid_name)
     current_vid_md_link_content = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
     if TR_MODE:
-        print("md_show_url:",md_show_url)
-        print("md_url:",md_url)
+        print("md_show_url:", md_show_url)
+        print("md_url:", md_url)
     convert_chatgpt_summary_text_to_one_line_summary()
-    output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(md_show_url)
-    file_summary_path=os.path.join(output_dir, file_summary)
+    output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
+        md_show_url)
+    file_summary_path = os.path.join(output_dir, file_summary)
     note_name = get_note_vid_tra_name()
     if TR_MODE:
-        print("note_name:",note_name)
+        print("note_name:", note_name)
     if not os.path.exists(os.path.join(OneDrive_KG_current_note_directory_path, note_name)):
         # print(os.path.join(OneDrive_KG_current_note_directory_path, note_name),"is note exists")
         # raise Exception("note not found")
         with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "w", encoding="utf-8") as f:
             pass
 
-    merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content,OneDrive_KG_current_note_directory_path)
+    merge_all_content_into_md_note_file(note_name, file_summary_path, origin_current_vid_file_name,
+                                        current_vid_md_link_content, OneDrive_KG_current_note_directory_path)
     convert_md_vid_link_to_html(OneDrive_KG_current_note_directory_path)
+
+
 def get_bassets_keyword_path(current_dir=None, key_word="mc_1683793602"):
     '''
     kg and bkg 中的 bassets path
     '''
-    TR_MODE=1
+    TR_MODE = 1
     if current_dir is None:
         current_dir = os.getcwd()
     keyword_sub_topic1_to_sub_topicn_folder_list = []
 
-    keyword_sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
+    keyword_sub_topic1_to_sub_topicn_folder_list.append(
+        os.path.basename(current_dir))
     current_dir = get_parent_dir(current_dir)
     while True:
 
@@ -1296,52 +1334,62 @@ def get_bassets_keyword_path(current_dir=None, key_word="mc_1683793602"):
             return keyword_sub_topic1_to_sub_topicn_folder_list, current_dir
 
         else:
-            keyword_sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
+            keyword_sub_topic1_to_sub_topicn_folder_list.append(
+                os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
+
+
 def get_kg_assets_root(current_dir=None):
     '''
 
     '''
-    TR_MODE=1
+    TR_MODE = 1
     if current_dir is None:
         current_dir = os.getcwd()
     sub_topic1_to_sub_topicn_folder_list = []
-
 
     while True:
 
         if 'assets' in os.listdir(current_dir):
             sub_topic1_to_sub_topicn_folder_list.reverse()
 
-
             return sub_topic1_to_sub_topicn_folder_list, current_dir
 
         else:
-            sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
+            sub_topic1_to_sub_topicn_folder_list.append(
+                os.path.basename(current_dir))
             current_dir = get_parent_dir(current_dir)
+
+
 def get_kg_bassets_folder_keyword():
-    TR_MODE=1
+    TR_MODE = 1
     sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
 
     if TR_MODE:
-        print("Folder list:",sub_topic1_to_sub_topicn_folder_list)
-        print("OneDrive KG root directory_path:",OneDrive_KG_note_root_directory_path)
-    OneDrive_KG_assets_directory_path = os.path.join(OneDrive_KG_note_root_directory_path,"assets")
+        print("Folder list:", sub_topic1_to_sub_topicn_folder_list)
+        print("OneDrive KG root directory_path:",
+              OneDrive_KG_note_root_directory_path)
+    OneDrive_KG_assets_directory_path = os.path.join(
+        OneDrive_KG_note_root_directory_path, "assets")
     if TR_MODE:
-        print("OneDrive KG assets directory_path:",OneDrive_KG_assets_directory_path)
-    dirs=[directory for directory in os.listdir(OneDrive_KG_assets_directory_path) if os.path.isdir(os.path.join(OneDrive_KG_assets_directory_path,directory))]
+        print("OneDrive KG assets directory_path:",
+              OneDrive_KG_assets_directory_path)
+    dirs = [directory for directory in os.listdir(OneDrive_KG_assets_directory_path) if os.path.isdir(
+        os.path.join(OneDrive_KG_assets_directory_path, directory))]
     if TR_MODE:
-        print("dirs:",dirs)
-    reg_string=[r".+_\d{10}",r"\1"]
+        print("dirs:", dirs)
+    reg_string = [r".+_\d{10}", r"\1"]
     for dir in dirs:
-        match=re.search(reg_string[0],dir)
+        match = re.search(reg_string[0], dir)
         if match:
             if TR_MODE:
-                print("match.group(0):",match.group(0))
-            keyword_path=os.path.join(OneDrive_KG_assets_directory_path,dir)
+                print("match.group(0):", match.group(0))
+            keyword_path = os.path.join(OneDrive_KG_assets_directory_path, dir)
             if TR_MODE:
-                print("keyword_path:",keyword_path)
-            return match.group(0),keyword_path
+                print("keyword_path:", keyword_path)
+            return match.group(0), keyword_path
+
+
 def get_b_KG_directory_path(path=None):
     if path is None:
         path = os.getcwd()
@@ -1359,96 +1407,122 @@ def get_b_KG_directory_path(path=None):
     match1 = re.search(reg_search[0][0], path)
     if match1:
         path_b_assets = re.sub(reg_search[0][0], reg_search[0][1], path)
-        #print(path_b_assets)
+        # print(path_b_assets)
         return path_b_assets
+
+
 def get_bvids_destination_long(sub_topic1_to_sub_topicn_folder_list, BaiduSyncdisk_assets_root):
     path_temp = BaiduSyncdisk_assets_root
     for i in range(len(sub_topic1_to_sub_topicn_folder_list)-1):
-        path_temp = os.path.join(path_temp, sub_topic1_to_sub_topicn_folder_list[i])
+        path_temp = os.path.join(
+            path_temp, sub_topic1_to_sub_topicn_folder_list[i])
 
         if not os.path.exists(path_temp):
             os.makedirs(path_temp)
     return path_temp
 
-def get_bvid_reg_string(sub_topic1_to_sub_topicn_folder_list,TR_MODE=0):
 
-    #sub_topic=sub_topic1_to_sub_topicn_folder_list[-2].split("_")[-2]+" "+sub_topic1_to_sub_topicn_folder_list[-2].split("_")[-1]
-    #sub_topic=sub_topic1_to_sub_topicn_folder_list[-2].split("_")[-1]
-    reg_sub=[r'\d{3}_(.+)',r'\1']
+def get_bvid_reg_string(sub_topic1_to_sub_topicn_folder_list, TR_MODE=0):
 
-    match=re.search(reg_sub[0],sub_topic1_to_sub_topicn_folder_list[-2])
+    # sub_topic=sub_topic1_to_sub_topicn_folder_list[-2].split("_")[-2]+" "+sub_topic1_to_sub_topicn_folder_list[-2].split("_")[-1]
+    # sub_topic=sub_topic1_to_sub_topicn_folder_list[-2].split("_")[-1]
+    reg_sub = [r'\d{3}_(.+)', r'\1']
+
+    match = re.search(reg_sub[0], sub_topic1_to_sub_topicn_folder_list[-2])
     if match:
-        sub_topic1=re.sub(reg_sub[0],reg_sub[1],sub_topic1_to_sub_topicn_folder_list[-2])
-        sub_topic1.replace("_"," ")
+        sub_topic1 = re.sub(reg_sub[0], reg_sub[1],
+                            sub_topic1_to_sub_topicn_folder_list[-2])
+        sub_topic1.replace("_", " ")
     else:
         raise Exception("sub_topic1 not found")
     if TR_MODE:
-        print("Sub topic1:",sub_topic1)
-    current_topic=sub_topic1_to_sub_topicn_folder_list[-1].split("_")[-1]
+        print("Sub topic1:", sub_topic1)
+    current_topic = sub_topic1_to_sub_topicn_folder_list[-1].split("_")[-1]
     if TR_MODE:
-        print("Current topic:",current_topic)
-    bvid_reg_string=current_topic+r'(( - )|(- - ))'+sub_topic1+r'\.mp4'
+        print("Current topic:", current_topic)
+    bvid_reg_string = current_topic+r'(( - )|(- - ))'+sub_topic1+r'\.mp4'
     if TR_MODE:
-        print("bvid_reg_string:",bvid_reg_string)
-    bvid_srt_reg_string=current_topic+r'(( - )|(- - ))'+sub_topic1+r'(\.en|\.en.+)'+r'\.srt'
-    return bvid_reg_string,bvid_srt_reg_string
+        print("bvid_reg_string:", bvid_reg_string)
+    bvid_srt_reg_string = current_topic + \
+        r'(( - )|(- - ))'+sub_topic1+r'(\.en|\.en.+)'+r'\.srt'
+    return bvid_reg_string, bvid_srt_reg_string
 
 
 def get_bvids_origin_topic_path(TR_MODE=0):
     # bvids_origin_topic_path = get_bvids_origin_topic_path(BaiduSyncdisk_assets_root)
     # bvids_origin_topic_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
-    #bvids_origin_topic_path=r'C:\BaiduSyncdisk\First Principles of Computer Vision Specialization\Features and Boundaries'
-    bvids_origin_topic_path=r'C:\BaiduSyncdisk\00_MOOC_b\Algorithms_Princeton'
-    #bvids_origin_topic_path=r'C:\BaiduSyncdisk\deep'
-    #bvids_origin_topic_path=r'C:\BaiduSyncdisk\Introduction'
+    # bvids_origin_topic_path=r'C:\BaiduSyncdisk\First Principles of Computer Vision Specialization\Features and Boundaries'
+    bvids_origin_topic_path = r'C:\BaiduSyncdisk\00_MOOC_b\Algorithms_Princeton'
+    # bvids_origin_topic_path=r'C:\BaiduSyncdisk\deep'
+    # bvids_origin_topic_path=r'C:\BaiduSyncdisk\Introduction'
     if TR_MODE:
-        print("bvids_origin_topic_path:",bvids_origin_topic_path)
+        print("bvids_origin_topic_path:", bvids_origin_topic_path)
+    return bvids_origin_topic_path
 
+
+def get_Topic(TR_MODE=0):
+    sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
+    if TR_MODE:
+        print("Folder list:", sub_topic1_to_sub_topicn_folder_list)
+        print("OneDrive KG root directory_path:",
+              OneDrive_KG_note_root_directory_path)
+    Topic = os.path.basename(OneDrive_KG_note_root_directory_path)
+    if TR_MODE:
+        print("Topic:", Topic)
+    return Topic
 
 
 def move_origin_vid_to_destination(TR_MODE=0):
 
     flag_one_by_one = True
     flag_search_sub_topic1 = True
-    key_word,key_word_path=get_kg_bassets_folder_keyword()
-    sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(key_word=key_word)
-    #sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(key_word="NN_1687967434")
+    key_word, key_word_path = get_kg_bassets_folder_keyword()
+    sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(
+        key_word=key_word)
+    # sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(key_word="NN_1687967434")
     origin_current_vid_file_name = ""
-    #sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
-    Topic=os.path.basename(OneDrive_KG_note_root_directory_path)
-    if TR_MODE:
-        print("Topic:",Topic)
-    reg_sub=[r'\d{3}_(.+)',r'\1']
-    match=re.search(reg_sub[0],sub_topic1_to_sub_topicn_folder_list[-2])
+    # sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
+    Topic = get_Topic(TR_MODE)
+
+    reg_sub = [r'\d{3}_(.+)', r'\1']
+    match = re.search(reg_sub[0], sub_topic1_to_sub_topicn_folder_list[-2])
     if match:
-        sub_topic1=re.sub(reg_sub[0],reg_sub[1],sub_topic1_to_sub_topicn_folder_list[-2])
+        sub_topic1 = re.sub(reg_sub[0], reg_sub[1],
+                            sub_topic1_to_sub_topicn_folder_list[-2])
         if TR_MODE:
-            print("sub_topic1:",sub_topic1)
+            print("sub_topic1:", sub_topic1)
     else:
         raise Exception("sub_topic1 not found")
     if TR_MODE:
-        print("Folder list:",sub_topic1_to_sub_topicn_folder_list)
-        print("OneDrive KG root directory_path:",OneDrive_KG_note_root_directory_path)
+        print("Folder list:", sub_topic1_to_sub_topicn_folder_list)
+        print("OneDrive KG root directory_path:",
+              OneDrive_KG_note_root_directory_path)
 
-    BaiduSyncdisk_KG_note_root_directory_path = get_b_KG_directory_path(OneDrive_KG_note_root_directory_path)
+    BaiduSyncdisk_KG_note_root_directory_path = get_b_KG_directory_path(
+        OneDrive_KG_note_root_directory_path)
     if TR_MODE:
-        print("BaiduSyncdisk assets root _directory_path:",BaiduSyncdisk_KG_note_root_directory_path)
+        print("BaiduSyncdisk assets root _directory_path:",
+              BaiduSyncdisk_KG_note_root_directory_path)
 
+    bvids_origin_topic_path = get_bvids_origin_topic_path(TR_MODE)
 
-    bvids_origin_topic_path=get_bvids_origin_topic_path(TR_MODE)
+    if os.path.basename(bvids_origin_topic_path) != Topic:
+        print("bvids_origin_topic_path:", bvids_origin_topic_path)
+        print("Topic:", Topic)
 
-    if os.path.basename(bvids_origin_topic_path)!=Topic:
         raise Exception("Topic name not match")
     if flag_search_sub_topic1:
-        dirs=[d for d in os.listdir(bvids_origin_topic_path) if os.path.isdir(os.path.join(bvids_origin_topic_path, d))]
+        dirs = [d for d in os.listdir(bvids_origin_topic_path) if os.path.isdir(
+            os.path.join(bvids_origin_topic_path, d))]
         if TR_MODE:
-            print("dirs:",dirs)
-        reg_string=r"\d{1,3}_"+sub_topic1
-        flag_find_sub_topic=False
+            print("dirs:", dirs)
+        reg_string = r"\d{1,3}_"+sub_topic1
+        flag_find_sub_topic = False
         for dir in dirs:
-            if re.match(reg_string,dir):
-                bvids_origin_topic_path=os.path.join(bvids_origin_topic_path,dir)
-                flag_find_sub_topic=True
+            if re.match(reg_string, dir):
+                bvids_origin_topic_path = os.path.join(
+                    bvids_origin_topic_path, dir)
+                flag_find_sub_topic = True
                 break
         if not flag_find_sub_topic:
             raise Exception("sub topic not found")
@@ -1456,92 +1530,114 @@ def move_origin_vid_to_destination(TR_MODE=0):
         os.path.join(bvids_origin_topic_path, f)) and f.endswith(".mp4")]
     files.sort()
     if TR_MODE:
-        print("Files:",files)
+        print("Files:", files)
     OneDrive_KG_current_note_directory_path = get_OneDrive_KG_note_path(
         OneDrive_KG_note_root_directory_path, sub_topic1_to_sub_topicn_folder_list)
 
     if TR_MODE:
-        print("OneDrive KG note directory_path:",OneDrive_KG_current_note_directory_path)
+        print("OneDrive KG note directory_path:",
+              OneDrive_KG_current_note_directory_path)
     current_bvid_name = get_current_bvid_name()
     if TR_MODE:
-        print("current_bvid_name:",current_bvid_name)
+        print("current_bvid_name:", current_bvid_name)
     serial_number = current_bvid_name[:3]
     if TR_MODE:
-        print("serial_number:",serial_number)
+        print("serial_number:", serial_number)
     bvids_destination_directory_path = get_bvids_destination_long(
         sub_topic1_to_sub_topicn_folder_list, BaiduSyncdisk_KG_note_root_directory_path)
     if TR_MODE:
-        print("bvids_destination_directory_path:",bvids_destination_directory_path)
+        print("bvids_destination_directory_path:",
+              bvids_destination_directory_path)
     # bvid_reg_string = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
 
-    bvid_reg_string,bvid_srt_reg_string=get_bvid_reg_string(sub_topic1_to_sub_topicn_folder_list,TR_MODE)
+    bvid_reg_string, bvid_srt_reg_string = get_bvid_reg_string(
+        sub_topic1_to_sub_topicn_folder_list, TR_MODE)
 
-    current_bvid_destination_file_path = os.path.join(bvids_destination_directory_path, current_bvid_name)
+    current_bvid_destination_file_path = os.path.join(
+        bvids_destination_directory_path, current_bvid_name)
     if flag_one_by_one:
-
 
         if not os.path.exists(current_bvid_destination_file_path):
             vid_name_origin = files[0]
-        #origin_current_vid_file_name = "\n"+re.sub(bvid_reg_string, r'\1', vid_name_origin)
+        # origin_current_vid_file_name = "\n"+re.sub(bvid_reg_string, r'\1', vid_name_origin)
             origin_current_vid_file_name = vid_name_origin
             os.rename(os.path.join(bvids_origin_topic_path,
                       vid_name_origin), current_bvid_destination_file_path)
+        files_srt_dest = [f for f in os.listdir(bvids_destination_directory_path) if os.path.isfile(
+            os.path.join(bvids_destination_directory_path, f)) and f.endswith(".srt")]
+        current_bsrt_name = current_bvid_name[:-4]+".srt"
+        if TR_MODE:
+            print("current_bsrt_name:", current_bsrt_name)
+        current_bsrt_name_en = current_bvid_name[:-4]+".en.srt"
+        if TR_MODE:
+            print("current_bsrt_name_en:", current_bsrt_name_en)
+        current_bsrt_file_path = os.path.join(
+            bvids_destination_directory_path, current_bsrt_name)
+        current_bsrt_file_path_en = os.path.join(
+            bvids_destination_directory_path, current_bsrt_name_en)
+        if (not os.path.exists(current_bsrt_file_path)) and (not os.path.exists(current_bsrt_file_path_en)):
 
-        srt_name_front=vid_name_origin[:-4]
-        reg_string_srt=r"^"+srt_name_front+r"(.+)\.srt$"
-        files_srt = [f for f in os.listdir(bvids_origin_topic_path) if os.path.isfile(
+            srt_name_front = vid_name_origin[:-4]
+
+            reg_string_srt = r"^"+srt_name_front+r"(.+)\.srt$"
+            files_srt = [f for f in os.listdir(bvids_origin_topic_path) if os.path.isfile(
                 os.path.join(bvids_origin_topic_path, f)) and f.endswith(".srt")]
-        for file_srt in files_srt:
-            match=re.search(reg_string_srt,file_srt)
-            if match:
-                srt_name_origin=file_srt
-                new_srt_name=current_bvid_name+match.group(1)+".srt"
-                os.rename(os.path.join(
-                    bvids_origin_topic_path, srt_name_origin), os.path.join(bvids_destination_directory_path, new_srt_name))
+            for file_srt in files_srt:
+                match = re.search(reg_string_srt, file_srt)
+                if match:
+                    srt_name_origin = file_srt
 
+                    new_srt_name = current_bvid_name[:-4]+match.group(1)+".srt"
+                    if TR_MODE:
+                        print("srt_name_origin:", srt_name_origin)
+                        print("new_srt_name:", new_srt_name)
+                    new_srt_file_path = os.path.join(
+                        bvids_destination_directory_path, new_srt_name)
+                    os.rename(os.path.join(
+                        bvids_origin_topic_path, srt_name_origin), new_srt_file_path)
 
     else:
 
-
-        flag_match=0
+        flag_match = 0
         for file in files:
-            match=re.search(bvid_reg_string, file)
+            match = re.search(bvid_reg_string, file)
             if match:
-                flag_match=1
-                vid_name_origin=file
+                flag_match = 1
+                vid_name_origin = file
                 if TR_MODE:
-                    print("vid_name_origin:",vid_name_origin)
+                    print("vid_name_origin:", vid_name_origin)
                     print(match.group(0))
                 break
 
-
-        if flag_match==0 and (not os.path.exists(current_bvid_destination_file_path)):
+        if flag_match == 0 and (not os.path.exists(current_bvid_destination_file_path)):
             raise ValueError("No match found.")
         if not os.path.exists(current_bvid_destination_file_path):
 
             os.rename(os.path.join(bvids_origin_topic_path,
                       vid_name_origin), current_bvid_destination_file_path)
 
-
         files_srt = [f for f in os.listdir(bvids_origin_topic_path) if os.path.isfile(
             os.path.join(bvids_origin_topic_path, f)) and f.endswith(".srt")]
         for file_srt in files_srt:
             match = re.search(bvid_srt_reg_string, file_srt)
             if match:
-                new_srt_name=current_bvid_name[:-4]+".srt"
-                new_srt_path = os.path.join(bvids_destination_directory_path, new_srt_name)
+                new_srt_name = current_bvid_name[:-4]+".srt"
+                new_srt_path = os.path.join(
+                    bvids_destination_directory_path, new_srt_name)
                 if not os.path.exists(new_srt_path):
                     os.rename(os.path.join(
                         bvids_origin_topic_path, file_srt), new_srt_path)
-    return origin_current_vid_file_name,current_bvid_destination_file_path,OneDrive_KG_current_note_directory_path
+    return origin_current_vid_file_name, current_bvid_destination_file_path, OneDrive_KG_current_note_directory_path
 
-def merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content,OneDrive_KG_current_note_directory_path):
+
+def merge_all_content_into_md_note_file(note_name, file_summary_path, origin_current_vid_file_name, current_vid_md_link_content, OneDrive_KG_current_note_directory_path):
     with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "r", encoding="utf-8") as f:
         current_note_origin_content = f.read()
     with open(file_summary_path, "r", encoding="utf-8") as f:
         current_vid_summary = f.read()
     with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "w", encoding="utf-8") as f:
-        f.write(current_note_origin_content+origin_current_vid_file_name+current_vid_md_link_content+current_vid_summary)
+        f.write(current_note_origin_content+origin_current_vid_file_name +
+                current_vid_md_link_content+current_vid_summary)
 
 
 def convert_chatgpt_summary_text_to_one_line_summary(directory_path=None):
@@ -1550,15 +1646,20 @@ def convert_chatgpt_summary_text_to_one_line_summary(directory_path=None):
 
     files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
 
-    reg_string_list=[]
-    reg_string1=[r'Section \d{1,2}: (.+)\n\nStart: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)',r"- \1 (\2) \4"]
+    reg_string_list = []
+    reg_string1 = [
+        r'Section \d{1,2}: (.+)\n\nStart: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)', r"- \1 (\2) \4"]
     reg_string_list.extend([reg_string1])
-    reg_string2=[r'Title: (.+)\nStart Timestamp: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)',r"- \1 (\2) \4"]
+    reg_string2 = [
+        r'Title: (.+)\nStart Timestamp: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)', r"- \1 (\2) \4"]
     reg_string_list.extend([reg_string2])
-    reg_string2=[r'Title: (.+)\nStart Timestamp: \d{1,2}:(\d{1,2}:\d{1,2}),\d{1,3}\nSummary(: |:\n)(.+)',r"- \1 (\2) \4"]
+    reg_string2 = [
+        r'Title: (.+)\nStart Timestamp: \d{1,2}:(\d{1,2}:\d{1,2}),\d{1,3}\nSummary(: |:\n)(.+)', r"- \1 (\2) \4"]
     reg_string_list.extend([reg_string2])
 
-    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+    perform_regex_replacement_on_files(
+        reg_string_list, directory_path, files_md)
+
 
 def convert_md_vid_link_to_html(directory_path=None):
     if directory_path is None:
@@ -1566,48 +1667,55 @@ def convert_md_vid_link_to_html(directory_path=None):
 
     files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
 
-    reg_string_list=[]
+    reg_string_list = []
 
-    reg_string2=[r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']
+    reg_string2 = [r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)',
+                   r'<video src="\2" controls></video>']
     reg_string_list.extend([reg_string2])
 
-    perform_regex_replacement_on_files(reg_string_list, directory_path, files_md)
+    perform_regex_replacement_on_files(
+        reg_string_list, directory_path, files_md)
+
 
 def convert_md_vid_link_to_html_tree(directory_path=None):
     if directory_path is None:
         directory_path = os.getcwd()
 
+    reg_string_list = []
 
-
-    reg_string_list=[]
-
-    reg_string2=[r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)', r'<video src="\2" controls></video>']
+    reg_string2 = [r'(!\[\]|!\[.+\])\((file:///.+(\.mp4|\.mp4#t=.+))\)',
+                   r'<video src="\2" controls></video>']
     reg_string_list.extend([reg_string2])
 
     perform_regex_replacement_on_files_tree(reg_string_list, directory_path)
 
-def generate_vid_notes_with_timeline_from_timestamps():
-    TR_MODE=1
 
-    origin_current_vid_file_name,current_bvid_destination_file_path,OneDrive_KG_current_note_directory_path=move_origin_vid_to_destination(TR_MODE)
-    current_bvid_name=get_current_bvid_name(current_bvid_destination_file_path)
-    md_show_url, md_url = vid_path_2_md_vid_link(current_bvid_destination_file_path, current_bvid_name)
+def generate_vid_notes_with_timeline_from_timestamps():
+    TR_MODE = 1
+
+    origin_current_vid_file_name, current_bvid_destination_file_path, OneDrive_KG_current_note_directory_path = move_origin_vid_to_destination(
+        TR_MODE)
+    current_bvid_name = get_current_bvid_name(
+        current_bvid_destination_file_path)
+    md_show_url, md_url = vid_path_2_md_vid_link(
+        current_bvid_destination_file_path, current_bvid_name)
     current_vid_md_link_content = '\n\n'+md_url+'\n'+md_show_url+'\n\n'
     if TR_MODE:
-        print("md_show_url:",md_show_url)
-        print("md_url:",md_url)
+        print("md_show_url:", md_show_url)
+        print("md_url:", md_url)
 
     output_dir, file_summary = timestamps_3blue1brown_2_timeline(md_show_url)
-    file_summary_path=os.path.join(output_dir, file_summary)
+    file_summary_path = os.path.join(output_dir, file_summary)
     note_name = get_note_vid_name()
     if TR_MODE:
-        print("note_name:",note_name)
+        print("note_name:", note_name)
     if not os.path.exists(os.path.join(OneDrive_KG_current_note_directory_path, note_name)):
         # print(os.path.join(OneDrive_KG_current_note_directory_path, note_name),"is note exists")
         # raise Exception("note not found")
         with open(os.path.join(OneDrive_KG_current_note_directory_path, note_name), "w", encoding="utf-8") as f:
             pass
-    merge_all_content_into_md_note_file(note_name,file_summary_path,origin_current_vid_file_name,current_vid_md_link_content)
+    merge_all_content_into_md_note_file(
+        note_name, file_summary_path, origin_current_vid_file_name, current_vid_md_link_content)
     convert_md_vid_link_to_html(OneDrive_KG_current_note_directory_path)
 
 
@@ -1615,16 +1723,21 @@ def zfill_folder_files(path=None, zfill_num=3):
     if path is None:
         path = os.getcwd()
 
-    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    files = [f for f in os.listdir(
+        path) if os.path.isfile(os.path.join(path, f))]
     for file in files:
         file_name, file_ext = os.path.splitext(file)
         file_name_zfilled = file_name.zfill(zfill_num)
-        os.rename(os.path.join(path, file), os.path.join(path, file_name_zfilled + file_ext))
-    dirs=[f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+        os.rename(os.path.join(path, file), os.path.join(
+            path, file_name_zfilled + file_ext))
+    dirs = [f for f in os.listdir(
+        path) if os.path.isdir(os.path.join(path, f))]
     for dir in dirs:
-        dir_name,dir_ext=os.path.splitext(dir)
-        dir_name_zfilled=dir_name.zfill(zfill_num)
-        os.rename(os.path.join(path, dir), os.path.join(path, dir_name_zfilled + dir_ext))
+        dir_name, dir_ext = os.path.splitext(dir)
+        dir_name_zfilled = dir_name.zfill(zfill_num)
+        os.rename(os.path.join(path, dir), os.path.join(
+            path, dir_name_zfilled + dir_ext))
+
 
 def os_file_process(num=0):
     operations = {
@@ -1645,6 +1758,7 @@ def os_file_process(num=0):
     else:
         raise ValueError("Invalid operation number.")
 
+
 def main():
     # create a parser object
     parser = argparse.ArgumentParser()
@@ -1655,12 +1769,11 @@ def main():
     parser.add_argument('-u', '--str_url', type=str, default=r'test',
                         help='input str_url to pass to the function')
     parser.add_argument('-ii', '--input_int', type=int, default=r'0',
-                    help='input input_int to pass to the function')
+                        help='input input_int to pass to the function')
     parser.add_argument('-gt', '--get_timestamp',
                         action='store_true', help='call get_current_timestamp')
     parser.add_argument('-at', '--add_timestamp', action='store_true',
                         help='call add_timestamp_to_filenames')
-
 
     parser.add_argument('-mdx', '--mdx2md',
                         action='store_true', help='call mdx2md')
@@ -1703,7 +1816,8 @@ def main():
                         action='store_true', help='call test')
     parser.add_argument('-zbp', '--zhi_book_process',
                         action='store_true', help='call zhi_book_process')
-    parser.add_argument('-osf', '--os_file_process',action='store_true', help='call os_file_process')
+    parser.add_argument('-osf', '--os_file_process',
+                        action='store_true', help='call os_file_process')
     parser.add_argument('-vls', '--full_fill_vid_link_2_summary',
                         action='store_true', help='call full_fill_vid_link_2_summary')
     # parse the command-line arguments
@@ -1732,7 +1846,6 @@ def main():
         get_current_timestamp()
     elif args.add_timestamp:
         add_timestamp_to_filenames()
-
 
     elif args.create_imgs_folder:
         create_directory_assets_imgs()
