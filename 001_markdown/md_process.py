@@ -780,43 +780,6 @@ def get_note_assets_dir_path(sub_topic1_to_sub_topicn_folder_list, current_dir):
             current_dir = get_parent_dir(current_dir)
 
 
-def init_note():
-
-    import pyperclip
-
-    # Get content from clipboard
-    content = pyperclip.paste()
-
-    # Get current directory
-    current_dir = os.getcwd()
-
-    # Check for existing serial numbers (first three digits of filenames)
-    serial_numbers = [f[:3] for f in os.listdir(current_dir) if os.path.isfile(
-        os.path.join(current_dir, f)) and f[:3].isdigit()]
-
-    # Generate filename
-    if serial_numbers:
-        max_serial_number = max(serial_numbers)
-
-        note_file = str(int(max_serial_number) + 1).zfill(3)+"_"+content+".md"
-
-    else:
-        note_file = "001"+"_"+content+".md"
-
-    # Add the filename to the current_dir
-    note_path = os.path.join(current_dir, note_file)
-    if not os.path.exists(note_path):
-        create_file(note_path)
-    sub_topic1_to_sub_topicn_folder_list = []
-    sub_topic1_to_sub_topicn_folder_list.append(note_file[:-3])
-    # sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
-
-    note_assets_dir_path = get_note_assets_dir_path(
-        sub_topic1_to_sub_topicn_folder_list, current_dir)
-
-    create_file_subtitle_summary_gpt_md(note_assets_dir_path)
-
-
 def get_md_files(directory='.'):
     """Return a sorted list of markdown filenames in a given directory."""
     files = [f for f in os.listdir(directory) if f.endswith('.md')]
@@ -1279,6 +1242,112 @@ def vid_note_process(num=0):
         raise ValueError("Invalid operation number.")
 
 
+def init_note(current_dir=None):
+
+    import pyperclip
+    TR_MODE = 1
+    # Get content from clipboard
+    content = pyperclip.paste()
+    reg_content_to_current_topic=[r"\d{1,3}_(.+)\.mp4",r"\1"]
+    match = re.search(reg_content_to_current_topic[0], content)
+    if match:
+        current_topic = re.sub(reg_content_to_current_topic[0], reg_content_to_current_topic[1], content)
+    else:
+        reg_content_to_current_topic=[r"(.+)\.mp4",r"\1"]
+        match = re.search(reg_content_to_current_topic[0], content)
+        if match:
+            current_topic = re.sub(reg_content_to_current_topic[0], reg_content_to_current_topic[1], content)
+        else:
+            current_topic = content
+    if TR_MODE == 1:
+        print("current_topic: ", current_topic)
+    if current_dir is None:
+        current_dir = os.getcwd()
+
+    # Check for existing serial numbers (first three digits of filenames)
+    serial_numbers = [f[:3] for f in os.listdir(current_dir) if os.path.isfile(
+        os.path.join(current_dir, f)) and f[:3].isdigit()]
+
+    # Generate filename
+    if serial_numbers:
+        max_serial_number = max(serial_numbers)
+
+        note_file = str(int(max_serial_number) + 1).zfill(3)+"_"+current_topic+".md"
+
+    else:
+        note_file = "001"+"_"+current_topic+".md"
+    if TR_MODE == 1:
+        print("note_file: ", note_file)
+
+    # Add the filename to the current_dir
+    note_file_path = os.path.join(current_dir, note_file)
+    if not os.path.exists(note_file_path):
+        create_file(note_file_path)
+    sub_topic1_to_sub_topicn_folder_list = []
+    sub_topic1_to_sub_topicn_folder_list.append(note_file[:-3])
+    # sub_topic1_to_sub_topicn_folder_list.append(os.path.basename(current_dir))
+
+    note_assets_dir_path = get_note_assets_dir_path(
+        sub_topic1_to_sub_topicn_folder_list, current_dir)
+    if TR_MODE == 1:
+        print("note_assets_dir_path: ", note_assets_dir_path)
+    create_file_subtitle_summary_gpt_md(note_assets_dir_path)
+    Topic, sub_topic1 = get_Topic_in_kg(TR_MODE)
+    if Topic is None:
+        raise ValueError("Topic is None")
+    bvids_origin_topic_path = get_bvids_origin_topic_path(Topic, TR_MODE)
+    flag_search_sub_topic1 = get_flag_search_sub_topic1_in_bvids_origin_topic_path()
+    if flag_search_sub_topic1:
+        dirs = [d for d in os.listdir(bvids_origin_topic_path) if os.path.isdir(
+            os.path.join(bvids_origin_topic_path, d))]
+        if TR_MODE:
+            print("dirs:", dirs)
+        reg_string = r"\d{1,3}_"+sub_topic1
+        flag_find_sub_topic = False
+        for dir in dirs:
+            if re.match(reg_string, dir):
+                bvids_origin_topic_path = os.path.join(
+                    bvids_origin_topic_path, dir)
+                flag_find_sub_topic = True
+                break
+        if not flag_find_sub_topic:
+            raise Exception("sub topic not found")
+    # RUGUO MATCH COPY
+    files_srt= [f for f in os.listdir(bvids_origin_topic_path) if f.endswith('.srt')]
+    if TR_MODE:
+        print("files_srt:", files_srt)
+    reg_srt_string=[r'\d{1,3}_'+current_topic+r'(.+)\.srt',r'']
+    for file_srt in files_srt:
+        match=re.match(reg_srt_string[0],file_srt)
+        if match:
+            #copy srt to note_assets_dir_path
+            new_srt_name=note_file[:-3]+match.group(1)+".md"
+            src_srt_file_path=os.path.join(bvids_origin_topic_path,file_srt)
+            des_srt_file_path=os.path.join(note_assets_dir_path,new_srt_name)
+            shutil.copy(src_srt_file_path,des_srt_file_path)
+
+    srt_format_for_gpt_input(note_assets_dir_path)
+    #todo generate prompt
+def srt_format_for_gpt_input(directory_path=None):
+    if directory_path is None:
+        directory_path = os.getcwd()
+
+    files_md = [f for f in os.listdir(directory_path) if f.endswith('.md')]
+
+    reg_string_list = []
+    reg_string1 = [
+        r'\d{1,3}\n(\d{1,2}:\d{1,2}:\d{1,2},\d{1,3} --> \d{1,2}:\d{1,2}:\d{1,2},\d{1,3})\n(.+)\n(.+)\n\n', r"[[\1],[\2],[\3]]"]
+    reg_string_list.extend([reg_string1])
+    reg_string2 = [
+        r'\d{1,3}\n(\d{1,2}:\d{1,2}:\d{1,2},\d{1,3} --> \d{1,2}:\d{1,2}:\d{1,2},\d{1,3})\n(.+)\n(.+)', r"[[\1],[\2],[\3]]"]
+    reg_string_list.extend([reg_string2])
+    reg_string2 = [
+        r'\d{1,3}\n(\d{1,2}:\d{1,2}:\d{1,2},\d{1,3} --> \d{1,2}:\d{1,2}:\d{1,2},\d{1,3})\n(.+)', r"[[\1],[\2]]"]
+    reg_string_list.extend([reg_string2])
+
+    perform_regex_replacement_on_files(
+        reg_string_list, directory_path, files_md)
+
 def generate_vid_notes_with_timeline_from_text_summary():
     TR_MODE = 1
 
@@ -1447,7 +1516,7 @@ def get_bvid_reg_string(sub_topic1_to_sub_topicn_folder_list, TR_MODE=0):
     return bvid_reg_string, bvid_srt_reg_string
 
 
-def get_bvids_origin_topic_path(TR_MODE=0):
+def get_bvids_origin_topic_path(Topic, TR_MODE=0):
     # bvids_origin_topic_path = get_bvids_origin_topic_path(BaiduSyncdisk_assets_root)
     # bvids_origin_topic_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
     # bvids_origin_topic_path=r'C:\BaiduSyncdisk\First Principles of Computer Vision Specialization\Features and Boundaries'
@@ -1456,42 +1525,90 @@ def get_bvids_origin_topic_path(TR_MODE=0):
     # bvids_origin_topic_path=r'C:\BaiduSyncdisk\Introduction'
     if TR_MODE:
         print("bvids_origin_topic_path:", bvids_origin_topic_path)
+    if os.path.basename(bvids_origin_topic_path) != Topic:
+        print("bvids_origin_topic_path:", bvids_origin_topic_path)
+        print("Topic:", Topic)
+
+        raise Exception("Topic name not match")
     return bvids_origin_topic_path
 
 
-def get_Topic(TR_MODE=0):
-    sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
+def get_Topic_in_kg(TR_MODE=0):
+    assets_sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
     if TR_MODE:
-        print("Folder list:", sub_topic1_to_sub_topicn_folder_list)
+        print("assets_sub_topic1_to_sub_topicn_folder_list:",
+              assets_sub_topic1_to_sub_topicn_folder_list)
         print("OneDrive KG root directory_path:",
               OneDrive_KG_note_root_directory_path)
     Topic = os.path.basename(OneDrive_KG_note_root_directory_path)
     if TR_MODE:
         print("Topic:", Topic)
-    return Topic
+    num_topic = len(assets_sub_topic1_to_sub_topicn_folder_list)
+    reg_sub1 = [r'\d{3}_(.+)', r'\1']
+    if num_topic < 1:
+        sub_topic1 = None
+    elif num_topic >= 1:
+        sub_topic1 = assets_sub_topic1_to_sub_topicn_folder_list[0]
+        match = re.search(reg_sub1[0], sub_topic1)
+        if match:
+            sub_topic1 = re.sub(reg_sub1[0], reg_sub1[1], sub_topic1)
+            if TR_MODE:
+                print("sub_topic1:", sub_topic1)
+
+    return Topic, sub_topic1
+
+
+def get_Topic_in_kg_assets(TR_MODE=0):
+    assets_sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
+    if TR_MODE:
+        print("assets_sub_topic1_to_sub_topicn_folder_list:",
+              assets_sub_topic1_to_sub_topicn_folder_list)
+        print("OneDrive KG root directory_path:",
+              OneDrive_KG_note_root_directory_path)
+    Topic = os.path.basename(OneDrive_KG_note_root_directory_path)
+    if TR_MODE:
+        print("Topic:", Topic)
+    num_topic = len(assets_sub_topic1_to_sub_topicn_folder_list)
+    reg_sub1 = [r'\d{3}_(.+)', r'\1']
+    if num_topic <= 1:
+        raise Exception("num_topic<=1")
+    elif num_topic == 2:
+        sub_topic1 = None
+
+    elif num_topic >= 3:
+
+        match = re.search(
+            reg_sub1[0], assets_sub_topic1_to_sub_topicn_folder_list[1])
+        if match:
+            sub_topic1 = re.sub(reg_sub1[0], reg_sub1[1],
+                                assets_sub_topic1_to_sub_topicn_folder_list[1])
+            if TR_MODE:
+                print("sub_topic1:", sub_topic1)
+        else:
+            raise Exception("sub_topic1 not found")
+
+    current_topic = assets_sub_topic1_to_sub_topicn_folder_list[-1]
+    current_topic = re.sub(reg_sub1[0], reg_sub1[1], current_topic)
+    return Topic, sub_topic1, current_topic
+
+
+def get_flag_search_sub_topic1_in_bvids_origin_topic_path(TR_MODE=0):
+    flag_search_sub_topic1 = True
+    return flag_search_sub_topic1
 
 
 def move_origin_vid_to_destination(TR_MODE=0):
 
     flag_one_by_one = True
-    flag_search_sub_topic1 = True
+    flag_search_sub_topic1 = get_flag_search_sub_topic1_in_bvids_origin_topic_path()
     key_word, key_word_path = get_kg_bassets_folder_keyword()
     sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(
         key_word=key_word)
     # sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(key_word="NN_1687967434")
     origin_current_vid_file_name = ""
     # sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_kg_assets_root()
-    Topic = get_Topic(TR_MODE)
+    Topic, sub_topic1, current_topic = get_Topic_in_kg_assets(TR_MODE)
 
-    reg_sub = [r'\d{3}_(.+)', r'\1']
-    match = re.search(reg_sub[0], sub_topic1_to_sub_topicn_folder_list[-2])
-    if match:
-        sub_topic1 = re.sub(reg_sub[0], reg_sub[1],
-                            sub_topic1_to_sub_topicn_folder_list[-2])
-        if TR_MODE:
-            print("sub_topic1:", sub_topic1)
-    else:
-        raise Exception("sub_topic1 not found")
     if TR_MODE:
         print("Folder list:", sub_topic1_to_sub_topicn_folder_list)
         print("OneDrive KG root directory_path:",
@@ -1503,13 +1620,9 @@ def move_origin_vid_to_destination(TR_MODE=0):
         print("BaiduSyncdisk assets root _directory_path:",
               BaiduSyncdisk_KG_note_root_directory_path)
 
-    bvids_origin_topic_path = get_bvids_origin_topic_path(TR_MODE)
+    bvids_origin_topic_path = get_bvids_origin_topic_path(
+        Topic, TR_MODE=TR_MODE)
 
-    if os.path.basename(bvids_origin_topic_path) != Topic:
-        print("bvids_origin_topic_path:", bvids_origin_topic_path)
-        print("Topic:", Topic)
-
-        raise Exception("Topic name not match")
     if flag_search_sub_topic1:
         dirs = [d for d in os.listdir(bvids_origin_topic_path) if os.path.isdir(
             os.path.join(bvids_origin_topic_path, d))]
