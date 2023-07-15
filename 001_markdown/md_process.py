@@ -430,7 +430,34 @@ def merge_list_time_head_textshort_text(list_time_text, list_time_head_textshort
 
     return list_time_head_textshort_text
 
+def convert_gpt_summary_to_markdown_vid_timeline(str_url,path=None):
 
+    # str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
+
+    match1 = check_video_file_path_conforms_to_pattern(str_url)
+
+    if path is None:
+        path = os.getcwd()
+    file_list = os.listdir(path)
+    assets_root_path, assets_root_dir = get_assets_root_path()
+    output_dir = create_output_directory(assets_root_path)
+
+    for file in file_list:
+        if file.endswith(".md"):
+
+            if file.find("summary_gpt") != -1:
+                cwd_floder_name = os.path.basename(path)
+                file_summary = file
+                key_word = "summary_gpt"
+                list_time_head_textshort = get_list_time_head_textshort_text_4_file(
+                    file, key_word)
+                # list_time_head_textshort_text_to_vid_timeline_md(list_time_head_textshort_text,file,match1)
+
+
+    list_time_head_textshort_text_to_vid_timeline_md(
+        list_time_head_textshort, file_summary, match1)
+    convert_md_vid_link_to_html(output_dir)
+    return output_dir, file_summary
 def convert_subtitle_and_summary_to_markdown_vid_timeline(str_url):
 
     # str_url=r'![009_area-and-slope.mp4](file:///C:%5CBaiduSyncdisk%5Cassets%5CO%5CO1%5CO17%5CO172%5CCalculus%203Blue1Brown%5Cassets%5Cbvids%5C009_area-and-slope.mp4)'
@@ -1292,7 +1319,9 @@ def init_note(current_dir=None):
     if TR_MODE == 1:
         print("note_assets_dir_path: ", note_assets_dir_path)
     create_file_subtitle_summary_gpt_md(note_assets_dir_path)
+
     Topic, sub_topic1 = get_Topic_in_kg(TR_MODE)
+
     if Topic is None:
         raise ValueError("Topic is None")
     bvids_origin_topic_path = get_bvids_origin_topic_path(Topic, TR_MODE)
@@ -1316,12 +1345,12 @@ def init_note(current_dir=None):
     files_srt= [f for f in os.listdir(bvids_origin_topic_path) if f.endswith('.srt')]
     if TR_MODE:
         print("files_srt:", files_srt)
-    reg_srt_string=[r'\d{1,3}_'+current_topic+r'(.+)\.srt',r'']
+    reg_srt_string=[r'(\d{1,3}_|)'+current_topic+r'(.+)\.srt',r'']
     for file_srt in files_srt:
         match=re.match(reg_srt_string[0],file_srt)
         if match:
             #copy srt to note_assets_dir_path
-            new_srt_name=note_file[:-3]+match.group(1)+".md"
+            new_srt_name=note_file[:-3]+match.group(2)+".md"
             src_srt_file_path=os.path.join(bvids_origin_topic_path,file_srt)
             des_srt_file_path=os.path.join(note_assets_dir_path,new_srt_name)
             shutil.copy(src_srt_file_path,des_srt_file_path)
@@ -1364,10 +1393,11 @@ def generate_vid_notes_with_timeline_from_text_summary():
         print("md_show_url:", md_show_url)
         print("md_url:", md_url)
     convert_chatgpt_summary_text_to_one_line_summary()
-    output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
-        md_show_url)
+    # output_dir, file_summary = convert_subtitle_and_summary_to_markdown_vid_timeline(
+    #     md_show_url)
+    output_dir, file_summary=convert_gpt_summary_to_markdown_vid_timeline(md_show_url)
     file_summary_path = os.path.join(output_dir, file_summary)
-    note_name = get_note_vid_tra_name()
+    note_name = get_note_vid_name()
     if TR_MODE:
         print("note_name:", note_name)
     if not os.path.exists(os.path.join(OneDrive_KG_current_note_directory_path, note_name)):
@@ -1520,16 +1550,21 @@ def get_bvids_origin_topic_path(Topic, TR_MODE=0):
     # bvids_origin_topic_path = get_bvids_origin_topic_path(BaiduSyncdisk_assets_root)
     # bvids_origin_topic_path = r"C:\BaiduSyncdisk\Multivariable_calculus_Khan_Academy_youtube"
     # bvids_origin_topic_path=r'C:\BaiduSyncdisk\First Principles of Computer Vision Specialization\Features and Boundaries'
-    bvids_origin_topic_path = r'C:\BaiduSyncdisk\00_MOOC_b\Algorithms_Princeton'
+    bvids_origin_topic_path = r'C:\BaiduSyncdisk\00_MOOC_b'
     # bvids_origin_topic_path=r'C:\BaiduSyncdisk\deep'
     # bvids_origin_topic_path=r'C:\BaiduSyncdisk\Introduction'
+
+    if Topic is None:
+        raise Exception("Topic is None")
+    bvids_origin_topic_path = os.path.join(
+        bvids_origin_topic_path, Topic)
     if TR_MODE:
         print("bvids_origin_topic_path:", bvids_origin_topic_path)
-    if os.path.basename(bvids_origin_topic_path) != Topic:
-        print("bvids_origin_topic_path:", bvids_origin_topic_path)
-        print("Topic:", Topic)
+    # if os.path.basename(bvids_origin_topic_path) != Topic:
+    #     print("bvids_origin_topic_path:", bvids_origin_topic_path)
+    #     print("Topic:", Topic)
 
-        raise Exception("Topic name not match")
+    #     raise Exception("Topic name not match")
     return bvids_origin_topic_path
 
 
@@ -1593,7 +1628,7 @@ def get_Topic_in_kg_assets(TR_MODE=0):
 
 
 def get_flag_search_sub_topic1_in_bvids_origin_topic_path(TR_MODE=0):
-    flag_search_sub_topic1 = True
+    flag_search_sub_topic1 = False
     return flag_search_sub_topic1
 
 
@@ -1622,6 +1657,7 @@ def move_origin_vid_to_destination(TR_MODE=0):
 
     bvids_origin_topic_path = get_bvids_origin_topic_path(
         Topic, TR_MODE=TR_MODE)
+
 
     if flag_search_sub_topic1:
         dirs = [d for d in os.listdir(bvids_origin_topic_path) if os.path.isdir(
@@ -1662,8 +1698,7 @@ def move_origin_vid_to_destination(TR_MODE=0):
               bvids_destination_directory_path)
     # bvid_reg_string = r'.+\(P\d{1,3}\. \d{1,3}\.\d{1,3}\.\d{1,3}(.+)\)\.mp4'
 
-    bvid_reg_string, bvid_srt_reg_string = get_bvid_reg_string(
-        sub_topic1_to_sub_topicn_folder_list, TR_MODE)
+
 
     current_bvid_destination_file_path = os.path.join(
         bvids_destination_directory_path, current_bvid_name)
@@ -1709,7 +1744,8 @@ def move_origin_vid_to_destination(TR_MODE=0):
                         bvids_origin_topic_path, srt_name_origin), new_srt_file_path)
 
     else:
-
+        bvid_reg_string, bvid_srt_reg_string = get_bvid_reg_string(
+        sub_topic1_to_sub_topicn_folder_list, TR_MODE)
         flag_match = 0
         for file in files:
             match = re.search(bvid_reg_string, file)
