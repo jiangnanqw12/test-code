@@ -1345,9 +1345,10 @@ def init_note(current_dir=None):
     files_srt= [f for f in os.listdir(bvids_origin_topic_path) if f.endswith('.srt')]
     if TR_MODE:
         print("files_srt:", files_srt)
-    reg_srt_string=[r'(\d{1,3}_|)'+current_topic+r'(.+)\.srt',r'']
+    reg_srt_string_current_topic=[r'(\d{1,3}_|)'+current_topic+r'(.+)\.srt',r'']
+
     for file_srt in files_srt:
-        match=re.match(reg_srt_string[0],file_srt)
+        match=re.match(reg_srt_string_current_topic[0],file_srt)
         if match:
             #copy srt to note_assets_dir_path
             new_srt_name=note_file[:-3]+match.group(2)+".md"
