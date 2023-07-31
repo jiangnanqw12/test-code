@@ -1665,6 +1665,8 @@ def get_flag_one_by_one(TR_MODE=0):
 def move_origin_vid_to_destination(TR_MODE=0):
 
     flag_one_by_one = get_flag_one_by_one()
+    if TR_MODE:
+        print("flag_one_by_one:", flag_one_by_one)
     flag_search_sub_topic1 = get_flag_search_sub_topic1_in_bvids_origin_topic_path()
     key_word, key_word_path = get_kg_bassets_folder_keyword()
     sub_topic1_to_sub_topicn_folder_list, OneDrive_KG_note_root_directory_path = get_bassets_keyword_path(

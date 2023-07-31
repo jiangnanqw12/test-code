@@ -1,7 +1,7 @@
 class GlobalFlags:
     def __init__(self):
         self.flags = {
-            'debug': False,
+            'flag_one_by_one': False,
             'verbose': False,
             'feature_x_enabled': True,
         }
