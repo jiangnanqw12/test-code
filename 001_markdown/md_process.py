@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import re
 
 import time
@@ -1947,6 +1948,29 @@ def os_file_process(num=0):
         raise ValueError("Invalid operation number.")
 
 
+# def get_prompt_explain_c_cpp():
+#     import prompts
+#     prompts.get_prompt_explain_c_cpp()
+
+
+def get_prompts(num=0):
+    import prompts
+    operations = {
+        2: prompts.get_prompt_explain_c_cpp,
+
+
+    }
+
+    if num in operations:
+        operations[num]()
+    elif num == 0:
+        print("Available operations:")
+        for num, func in operations.items():
+            print(f"{num}: {func.__name__}")
+    else:
+        raise ValueError("Invalid operation number.")
+
+
 def main():
     # create a parser object
     parser = argparse.ArgumentParser()
@@ -2008,6 +2032,8 @@ def main():
                         action='store_true', help='call os_file_process')
     parser.add_argument('-vls', '--full_fill_vid_link_2_summary',
                         action='store_true', help='call full_fill_vid_link_2_summary')
+    parser.add_argument('-gp', '--get_prompts',
+                        action='store_true', help='call get_prompts')
     # parse the command-line arguments
     args = parser.parse_args()
 
@@ -2060,6 +2086,8 @@ def main():
         zhi_book_process(args.input_int)
     elif args.os_file_process:
         os_file_process(args.input_int)
+    elif args.get_prompts:
+        get_prompts(args.input_int)
     else:
         print("Invalid argument")
 
