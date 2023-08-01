@@ -3,14 +3,43 @@ import pyperclip
 
 
 def get_prompt_explain_c_cpp():
-    prompt_string1 = '''## Exploring Key C/C++ Concepts: A Guide to Understanding and Resources
+    prompt_string1 ='''## Exploring Key C/C++ Concepts: A Guide to Understanding and Resources
 Please provide a detailed explanation for the following C/C++ concepts that I'll specify. Can you also recommend some comprehensive books or resources to aid my understanding of these concepts
 concepts is :
-```\n'''
-    prompt_string2 = '''```\n'''
+```
+'''
+    prompt_string2 = '''```
+    '''
     combine_strings_with_clipboard(prompt_string1, prompt_string2)
 
+def video_summarization_expert_one():
+    prompt_string1 = '''## video summarization expert one
+You are a video summarization expert.
+I will provide you with complete subtitle information for a video. Your task is to segment this subtitle information into as many sections as possible based on its content.
+The summary for each section should include a title, start timestamp, and summary text.
+Here is the format in which the subtitle information will be supplied:
+```srt
+'''
+    prompt_string2='''
+    ```
+Please write in English.And this is the expected output format:
+Title:
+Start Timestamp:
+Summary:
+    '''
+    combine_strings_with_clipboard(prompt_string1, prompt_string2)
 
+def chatbot_prompt_expert():
+    prompt_string1 = '''## chatbot prompt expert
+
+As an AI chatbot prompt expert, could you analyze and provide suggestions to improve the following prompt:
+'[
+'''
+    prompt_string2 = '''
+]'
+Please provide a final revised version.
+'''
+    combine_strings_with_clipboard(prompt_string1, prompt_string2)
 def combine_strings_with_clipboard(prompt_string1, prompt_string2):
     string3 = pyperclip.paste()
     final_string = prompt_string1 + string3 + "\n" + prompt_string2
