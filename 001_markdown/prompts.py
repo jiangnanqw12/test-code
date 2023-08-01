@@ -48,7 +48,7 @@ Translate the following Chinese sentence into English and create a snake_case fu
 [
 '''
     prompt_string2 = '''
-    ]. Your function name should reflect the primary task described in the sentence. Please also provide a brief description of what the function will do
+]. Your function name should reflect the primary task described in the sentence. Please also provide a brief description of what the function will do
 '''
     combine_strings_with_clipboard(prompt_string1, prompt_string2)
 def combine_strings_with_clipboard(prompt_string1, prompt_string2):

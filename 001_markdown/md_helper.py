@@ -1,18 +1,31 @@
 import pyperclip
 
+import re
+
 def get_highest_head_level(content):
     lines = content.split('\n')
-    highest_level = float('inf')
+    lowest_level = float('inf')
+    pattern = re.compile(r"^(#{1,}) ")
+
     for line in lines:
-        head_level = 0
-        for char in line:
-            if char == '#':
-                head_level += 1
-            else:
-                break
-        if head_level > 0 and head_level < highest_level:
-            highest_level = head_level
-    return highest_level
+        match = pattern.match(line)
+        if match:
+            level = len(match.group(1))
+            if level < lowest_level:
+                lowest_level = level
+
+    return lowest_level if lowest_level != float('inf') else None
+
+# def get_highest_head_level(content):
+#     lines = content.split('\n')
+#     highest_level = float('inf')
+#     reg_string=[r"^(#{1,}) .+",r'\1']
+#     for line in lines:
+#         match=line.search(reg_string[0])
+#         if match:
+#             line.count("#")
+
+#     return highest_level
 
 def downgrade_heads(content, downgrade_level):
     lines = content.split('\n')
@@ -26,6 +39,8 @@ def downgrade_heads(content, downgrade_level):
                 break
         if head_level > 0:
             new_head_level = head_level + downgrade_level
+            if new_head_level>6:
+                new_head_level=6
             new_line = '#' * new_head_level + line[head_level:]
             new_lines.append(new_line)
         else:

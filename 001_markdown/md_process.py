@@ -1166,15 +1166,18 @@ def perform_regex_rename_on_files(reg_string_list, path=None, files=None):
                     print(f"Error renaming '{file}' to '{new_file}': {e}")
 
 
-def md_note_process(num=0):
+def md_note_process(num=0,head_num=1):
     operations = {
         1: remove_back_matter_and_copy_code,
-
+        2: degrade_markdown_by_head_number,
 
     }
 
     if num in operations:
-        operations[num]()
+        if num==2:
+            operations[num](head_num)
+        else:
+            operations[num]()
     elif num == 0:
         print("Available operations:")
         for num, func in operations.items():
@@ -1182,6 +1185,19 @@ def md_note_process(num=0):
     else:
         raise ValueError("Invalid operation number.")
 
+def degrade_markdown_by_head_number(head_number):
+    import md_helper
+    import pyperclip
+    content = pyperclip.paste()
+    TR_MODE=1
+    highest_head_level=md_helper.get_highest_head_level(content)
+    #highest_head_level=3
+    if TR_MODE:
+        print("highest_head_level: ",highest_head_level)
+        print("head_number: ",head_number)
+    if highest_head_level<head_number:
+        content=md_helper.downgrade_heads(content,head_number+1-highest_head_level)
+        pyperclip.copy(content)
 
 def remove_back_matter_and_copy_code(directory_path=None):
 
@@ -1987,6 +2003,8 @@ def main():
                         help='input str_url to pass to the function')
     parser.add_argument('-ii', '--input_int', type=int, default=r'0',
                         help='input input_int to pass to the function')
+    parser.add_argument('-hn', '--head_num', type=int, default=r'1',
+                        help='input head_num to pass to the function')
     parser.add_argument('-gt', '--get_timestamp',
                         action='store_true', help='call get_current_timestamp')
     parser.add_argument('-at', '--add_timestamp', action='store_true',
@@ -2044,7 +2062,7 @@ def main():
 
     # call the appropriate function based on the arguments
     if args.md_note_process:
-        md_note_process(args.input_int)
+        md_note_process(args.input_int,args.head_num)
     elif args.wiki_note_process:
         wiki_note_process(args.input_int)
     elif args.vid_note_process:
