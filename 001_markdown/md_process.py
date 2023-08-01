@@ -1958,7 +1958,10 @@ def os_file_process(num=0):
 def get_prompts(num=0):
     import prompts
     operations = {
+        1: prompts.video_summarization_expert_one,
         2: prompts.get_prompt_explain_c_cpp,
+        3: prompts.chatbot_prompt_expert,
+        4: prompts.Translate_Chinese_sentence_into_function_name,
 
 
     }
