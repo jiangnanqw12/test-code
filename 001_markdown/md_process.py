@@ -1166,7 +1166,7 @@ def perform_regex_rename_on_files(reg_string_list, path=None, files=None):
                     print(f"Error renaming '{file}' to '{new_file}': {e}")
 
 
-def md_note_process(num=0,head_num=1):
+def md_note_process(num=0, head_num=1):
     operations = {
         1: remove_back_matter_and_copy_code,
         2: degrade_markdown_by_head_number,
@@ -1174,7 +1174,7 @@ def md_note_process(num=0,head_num=1):
     }
 
     if num in operations:
-        if num==2:
+        if num == 2:
             operations[num](head_num)
         else:
             operations[num]()
@@ -1185,19 +1185,22 @@ def md_note_process(num=0,head_num=1):
     else:
         raise ValueError("Invalid operation number.")
 
+
 def degrade_markdown_by_head_number(head_number):
     import md_helper
     import pyperclip
     content = pyperclip.paste()
-    TR_MODE=1
-    highest_head_level=md_helper.get_highest_head_level(content)
-    #highest_head_level=3
+    TR_MODE = 1
+    highest_head_level = md_helper.get_highest_head_level(content)
+    # highest_head_level=3
     if TR_MODE:
-        print("highest_head_level: ",highest_head_level)
-        print("head_number: ",head_number)
-    if highest_head_level<head_number:
-        content=md_helper.downgrade_heads(content,head_number+1-highest_head_level)
+        print("highest_head_level: ", highest_head_level)
+        print("head_number: ", head_number)
+    if highest_head_level < head_number:
+        content = md_helper.downgrade_heads(
+            content, head_number+1-highest_head_level)
         pyperclip.copy(content)
+
 
 def remove_back_matter_and_copy_code(directory_path=None):
 
@@ -1855,7 +1858,7 @@ def convert_chatgpt_summary_text_to_one_line_summary(directory_path=None):
 
     reg_string_list = []
     reg_string1 = [
-        r'Section \d{1,2}: (.+)\n\nStart: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)', r"- \1 (\2) \4"]
+        r'Section \d{1,2}: (.+)\n{1,2}(Start|Start Timestamp): (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)', r"- \1 (\3) \5"]
     reg_string_list.extend([reg_string1])
     reg_string2 = [
         r'Title: (.+)\nStart Timestamp: (\d{1,2}:\d{1,2})\nSummary(: |:\n)(.+)', r"- \1 (\2) \4"]
@@ -2062,7 +2065,7 @@ def main():
 
     # call the appropriate function based on the arguments
     if args.md_note_process:
-        md_note_process(args.input_int,args.head_num)
+        md_note_process(args.input_int, args.head_num)
     elif args.wiki_note_process:
         wiki_note_process(args.input_int)
     elif args.vid_note_process:
