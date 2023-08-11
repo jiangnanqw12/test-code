@@ -1167,9 +1167,11 @@ def perform_regex_rename_on_files(reg_string_list, path=None, files=None):
 
 
 def md_note_process(num=0, head_num=1):
+    import md_helper
     operations = {
         1: remove_back_matter_and_copy_code,
         2: degrade_markdown_by_head_number,
+        3: md_helper.retrieve_document_summary_info,
 
     }
 
