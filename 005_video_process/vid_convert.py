@@ -2,6 +2,25 @@ from moviepy.editor import *
 import os
 import argparse
 
+import subprocess
+
+
+def vtt2srt(path=None):
+    """
+    将vtt格式字幕转换为srt格式字幕
+    """
+    if path is None:
+        path = os.getcwd()
+    filenames = os.listdir(path)
+    for filename in filenames:
+        if filename.endswith("vtt"):
+            # print(filename)
+            # print(filename[:-3] + "srt")
+            # print(os.path.join(path, filename))
+            # print(os.path.join(path, filename[:-3] + "srt"))
+            subprocess.run(['ffmpeg', '-i', os.path.join(path, filename), os.path.join(
+                path, filename[:-3] + "srt")])
+
 
 def convert_vid(input_file, output_file):
     """
@@ -52,6 +71,8 @@ def main():
                         action='store_true', help='call flv2mp4')
     parser.add_argument('-w2m', '--webm2mp4',
                         action='store_true', help='call webm2mp4')
+    parser.add_argument('-v2s', '--vtt2srt',
+                        action='store_true', help='call vtt2srt')
     parser.add_argument('-i', '--input_extension', type=str, default=r'flv',
                         help='input extension')
     parser.add_argument('-o', '--output_extension', type=str, default=r'mp4',
@@ -64,8 +85,10 @@ def main():
         _flv_2_mp4()
     elif args.webm2mp4:
         _webm_2_mp4()
-    elif args.input_extension and args.output_extension:
-        video_convertor(args.input_extension, args.output_extension)
+    elif args.vtt2srt:
+        vtt2srt()
+    # elif args.input_extension and args.output_extension:
+    #     video_convertor(args.input_extension, args.output_extension)
 
     else:
         print("Invalid argument")
