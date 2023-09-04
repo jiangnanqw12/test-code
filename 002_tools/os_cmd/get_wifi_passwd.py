@@ -1,22 +1,16 @@
 import subprocess
 
-def get_wifi_passwords():
-    command = "netsh wlan show profiles"
-    wifi_profiles = subprocess.check_output(command, shell=True, encoding="utf-8").split("\n")
-    wifi_profiles = [i.split(":")[1][1:-1] for i in wifi_profiles if "所有用户配置文件 :" in i]
+# 获取本机wifi列表
+output = subprocess.run(['netsh', 'wlan', 'show', 'profiles'], capture_output=True).stdout.decode('gbk').split('\n')
+#print(output)
+wifi_list = [item.split(':')[1][1:-1] for item in output if "所有用户配置文件" in item]
 
-    for wifi_name in wifi_profiles:
-        try:
-            password_command = f"netsh wlan show profile name=\"{wifi_name}\" key=clear"
-            password_details = subprocess.check_output(password_command, shell=True, encoding="utf-8").split("\n")
-            password_details = [i.split(":")[1][1:-1] for i in password_details if "关键内容" in i]
+#print(wifi_list)
+# 获取 wifi 密码
+for wifi in wifi_list:
+    ret = subprocess.run(['netsh', 'wlan', 'show', 'profile', f'name={wifi}', 'key=clear'],
+                             capture_output=True).stdout.decode('gbk', errors='ignore').split('\n')
 
-            if password_details:
-                print(f"WiFi Name: {wifi_name}, Password: {password_details[0]}")
-            else:
-                print(f"WiFi Name: {wifi_name}, Password: Not found!")
-        except IndexError:
-            print(f"WiFi Name: {wifi_name}, Password: Could not be retrieved!")
-
-if __name__ == "__main__":
-    get_wifi_passwords()
+    #print(ret)
+    results = [item.split(':')[1][1:-1] for item in ret if "关键内容" in item]
+    print(f'{wifi} 密码:{results[0] if len(results)>0 else "无" }')
