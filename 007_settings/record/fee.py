@@ -141,7 +141,7 @@ monthly_interest_rate = (annual_interest_rate / 100) / 12
 
 # Calculate the equal principal monthly repayment with the adjustment for the first month
 equal_principal_monthly_repayment = [
-    ((principal / loan_term) + (principal - (principal * (k-1) / loan_term)) * monthly_interest_rate * (33/30) if k == 1 else
+    ((principal / loan_term) + (principal - (principal * (k-1) / loan_term)) * monthly_interest_rate * (3/30) if k == 1 else
      (principal / loan_term) + (principal - (principal * (k-1) / loan_term)) * monthly_interest_rate)
     for k in range(1, loan_term+1)
 ]
