@@ -3,7 +3,7 @@ import yt_dlp
 def download_video(url):
     ydl_opts = {
         'format': 'best',
-        'outtmpl': '~/%(playlist)s/%(title)s.%(ext)s',  # Replace with your actual directory path
+        'outtmpl': '~/YouTube/%(playlist)s/%(title)s.%(ext)s',  # Replace with your actual directory path
 
         'writesubtitles': True,  # This option enables the writing of subtitles
         'allsubtitles': True,    # This option enables downloading of all available subtitles
