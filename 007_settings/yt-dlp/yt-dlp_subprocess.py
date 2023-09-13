@@ -17,7 +17,7 @@ import os
 #             subprocess.run(cmd)
 
 
-def download_vid_mul():
+def download_vid_mul(playlist="list1"):
     # Define the file path in a more portable way
     file_path = os.path.join(os.environ['USERPROFILE'], 'OneDrive', '00_source', 'testCode', '007_settings', 'yt-dlp', 'yt.downlist')
 
@@ -30,16 +30,21 @@ def download_vid_mul():
         print(f"File not found: {file_path}")
         return
 
-    for line in lines:
-
-
-        title, ext = get_video_details(line)
-        print(f"Title: {title}")
-        print(f"File Extension: {ext}")
+    for i, line in enumerate(lines, start=1):
+        line =line.strip()
+        playlist=get_playlist_details(line)
+        filename_result = subprocess.run(['yt-dlp', '--get-filename', line], capture_output=True, text=True)
+        if filename_result.returncode == 0:
+            filename = filename_result.stdout.strip()
+        else:
+            filename = f"Failed to get file extension: {filename_result.stderr.strip()}"
+        filename = f"{str(i).zfill(3)}_{filename}"
         if ".bilibili." in line:
             cmd = [
                 'yt-dlp',
                 '--config-locations', config_location,
+                # Save all videos under YouTube directory in your home directory
+                '-o',os.path.expanduser(f'~/bili/{playlist}/{filename}'),
                 line.strip()  # Stripping the newline character from the URL
             ]
             try:
@@ -48,7 +53,24 @@ def download_vid_mul():
                 print(f"Subprocess failed with error: {e}")
 
 
+def get_playlist_details(url):
+    try:
+        # Get the playlist details
+        result = subprocess.run(['yt-dlp', '--flat-playlist', url], capture_output=True, text=True)
 
+        if result.returncode == 0:
+            playlist_details = result.stdout.strip()
+            print("Playlist details fetched successfully.")
+            return playlist_details
+        else:
+            error_message = f"Failed to get playlist details: {result.stderr.strip()}"
+            print(error_message)
+            return error_message
+
+    except Exception as e:
+        error_message = f"An error occurred: {e}"
+        print(error_message)
+        return error_message
 
 def get_video_details(url):
     try:
@@ -58,13 +80,13 @@ def get_video_details(url):
         else:
             playlist_title = f"Failed to get playlist title: {playlist_title_result.stderr.strip()}"
 
-        file_extension_result = subprocess.run(['yt-dlp', '--get-filename', url], capture_output=True, text=True)
-        if file_extension_result.returncode == 0:
-            file_extension = file_extension_result.stdout.strip()
+        filename_result = subprocess.run(['yt-dlp', '--get-filename', url], capture_output=True, text=True)
+        if filename_result.returncode == 0:
+            filename = filename_result.stdout.strip()
         else:
-            file_extension = f"Failed to get file extension: {file_extension_result.stderr.strip()}"
+            filename = f"Failed to get file extension: {filename_result.stderr.strip()}"
 
-        return playlist_title, file_extension
+        return playlist_title, filename
     except Exception as e:
         return f"An error occurred: {e}"
 
