@@ -23,7 +23,9 @@ def download_vid_mul(playlist="list1"):
                                 '00_source', 'testCode', '005_video_process', 'yt-dlp',)
     for file in os.listdir(downlist_dir):
         if file.endswith(".downlist"):
+            print(f"Downloading from {file}")
             playlist = file.split(".")[0]
+
             file_path = os.path.join(downlist_dir, file)
             try:
                 with open(file_path, 'r', encoding='utf-8') as f1:
@@ -34,15 +36,16 @@ def download_vid_mul(playlist="list1"):
 
             for i, line in enumerate(lines, start=1):
                 line = line.strip()
+                print(f"start to download {i}: {line}")
                 # playlist = get_playlist_details(line)
                 # print("playlist:", playlist)
-                filename_result = subprocess.run(
-                    ['yt-dlp', '--get-filename', line], capture_output=True, text=True)
-                if filename_result.returncode == 0:
-                    filename = filename_result.stdout.strip()
-                else:
-                    filename = f"Failed to get file extension: {filename_result.stderr.strip()}"
-                filename = f"{str(i).zfill(3)}_{filename}"
+                # filename_result = subprocess.run(
+                #     ['yt-dlp', '--get-filename', line])
+                # if filename_result.returncode == 0:
+                #     filename = filename_result.stdout.strip()
+                # else:
+                #     filename = f"Failed to get file extension: {filename_result.stderr.strip()}"
+                # filename = f"{str(i).zfill(3)}_{filename}"
                 if ".bilibili." in line:
                     config_location_bili = os.path.join(
                         '~', 'OneDrive', '00_source', 'testCode', '005_video_process', 'yt-dlp', 'yt-dlp_bili.conf')
@@ -51,11 +54,12 @@ def download_vid_mul(playlist="list1"):
                         '--config-locations', config_location_bili,
                         # Save all videos under YouTube directory in your home directory
                         '-o', os.path.expanduser(
-                            f'~/bili/{playlist}/{filename}'),
+                            f'~/bili/{playlist}/%(autonumber)s_%(title)s-[%(id)s]-.%(ext)s'),
                         line.strip()  # Stripping the newline character from the URL
                     ]
                     try:
-                        subprocess.run(cmd, check=True)
+                        subprocess.run(
+                            cmd, check=True)
                     except subprocess.CalledProcessError as e:
                         print(f"Subprocess failed with error: {e}")
                 elif ".youtube." in line:
@@ -66,11 +70,12 @@ def download_vid_mul(playlist="list1"):
                         '--config-locations', config_location_YouTube,
                         # Save all videos under YouTube directory in your home directory
                         '-o', os.path.expanduser(
-                            f'~/YouTube/{playlist}/{filename}'),
+                            f'~/YouTube//{playlist}/%(autonumber)s_%(title)s-[%(id)s]-.%(ext)s'),
                         line.strip()  # Stripping the newline character from the URL
                     ]
                     try:
-                        subprocess.run(cmd, check=True)
+                        subprocess.run(
+                            cmd, check=True)
                     except subprocess.CalledProcessError as e:
                         print(f"Subprocess failed with error: {e}")
 
