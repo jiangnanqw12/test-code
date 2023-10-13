@@ -20,7 +20,7 @@ import os
 def download_vid_mul(playlist="list1"):
     # Define the file path in a more portable way
     downlist_dir = os.path.join(os.environ['USERPROFILE'], 'OneDrive',
-                                '00_source', 'testCode', '005_video_process', 'yt-dlp',)
+                                '00_source', 'testCode', '005_video_process', 'yt-dlp', 'list')
     for file in os.listdir(downlist_dir):
         if file.endswith(".downlist"):
             print(f"Downloading from {file}")
@@ -48,7 +48,7 @@ def download_vid_mul(playlist="list1"):
                 # filename = f"{str(i).zfill(3)}_{filename}"
                 if ".bilibili." in line:
                     config_location_bili = os.path.join(
-                        '~', 'OneDrive', '00_source', 'testCode', '005_video_process', 'yt-dlp', 'yt-dlp_bili.conf')
+                        '~', 'OneDrive', '00_source', 'testCode', '005_video_process', 'yt-dlp', 'conf', 'yt-dlp_bili.conf')
                     cmd = [
                         'yt-dlp',
                         '--config-locations', config_location_bili,
@@ -64,7 +64,7 @@ def download_vid_mul(playlist="list1"):
                         print(f"Subprocess failed with error: {e}")
                 elif ".youtube." in line:
                     config_location_YouTube = os.path.join(
-                        '~', 'OneDrive', '00_source', 'testCode', '005_video_process', 'yt-dlp', 'yt-dlp_YouTube.conf')
+                        '~', 'OneDrive', '00_source', 'testCode', '005_video_process', 'yt-dlp', 'conf', 'yt-dlp_YouTube.conf')
                     cmd = [
                         'yt-dlp',
                         '--config-locations', config_location_YouTube,
