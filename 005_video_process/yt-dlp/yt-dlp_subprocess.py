@@ -2,19 +2,49 @@
 
 import subprocess
 import os
-# def download_vid_mul():
-#     #, encoding="utf-8"
-#     with open("C:\\Users\\shade\OneDrive\\00_source\\testCode\\007_settings\\yt-dlp\\yt.downlist", "r") as f1:
-#         lines = f1.readlines()
-#     for line in lines:
-#         if line.find(".bilibili."):
-#             cmd = [
-#                 'yt-dlp',
 
-#                 '--config-locations', '~\\OneDrive\\00_source\\testCode\\007_settings\yt-dlp\\yt-dlp_bili.conf',
-#                 line.strip()  # Stripping the newline character from the URL
-#             ]
-#             subprocess.run(cmd)
+# Configurable paths
+downlist_dir = os.path.join(os.environ['USERPROFILE'], 'OneDrive',
+                            '00_source', 'testCode', '005_video_process', 'yt-dlp', 'list')
+CONFIG_DIR = os.path.join(os.environ['USERPROFILE'], 'OneDrive',
+                          '00_source', 'testCode', '005_video_process', 'yt-dlp', 'conf')
+
+
+def download_video(playlist, line, config_file, download_folder):
+    config_location = os.path.join(CONFIG_DIR, config_file)
+    cmd = [
+        'yt-dlp',
+        '--config-location', config_location,
+        '-o', os.path.expanduser(
+            f'~/{download_folder}/{playlist}/%(autonumber)s_%(title)s-[%(id)s]-.%(ext)s'),
+        line.strip()
+    ]
+
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Subprocess failed with error: {e}")
+
+
+def download_video_mul(playlist="list1"):
+    for file in os.listdir(downlist_dir):
+        if file.endswith(".downlist"):
+            print(f"Downloading from {file}")
+            playlist = file.split(".")[0]
+
+            file_path = os.path.join(downlist_dir, file)
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f1:
+                    lines = f1.readlines()
+            except FileNotFoundError:
+                print(f"File not found: {file_path}")
+                return
+    for i, line in enumerate(lines, start=1):
+        print(f"Start to download {i}: {line.strip()}")
+        if ".bilibili." in line:
+            download_video(playlist, line, 'yt-dlp_bili.conf', 'bili')
+        elif ".youtube." in line:
+            download_video(playlist, line, 'yt-dlp_YouTube.conf', 'YouTube')
 
 
 def download_vid_mul(playlist="list1"):
@@ -37,15 +67,7 @@ def download_vid_mul(playlist="list1"):
             for i, line in enumerate(lines, start=1):
                 line = line.strip()
                 print(f"start to download {i}: {line}")
-                # playlist = get_playlist_details(line)
-                # print("playlist:", playlist)
-                # filename_result = subprocess.run(
-                #     ['yt-dlp', '--get-filename', line])
-                # if filename_result.returncode == 0:
-                #     filename = filename_result.stdout.strip()
-                # else:
-                #     filename = f"Failed to get file extension: {filename_result.stderr.strip()}"
-                # filename = f"{str(i).zfill(3)}_{filename}"
+
                 if ".bilibili." in line:
                     config_location_bili = os.path.join(
                         '~', 'OneDrive', '00_source', 'testCode', '005_video_process', 'yt-dlp', 'conf', 'yt-dlp_bili.conf')
@@ -123,7 +145,7 @@ def get_video_details(url):
 
 
 def main():
-    download_vid_mul()
+    download_video_mul()
 
 
 if __name__ == "__main__":
