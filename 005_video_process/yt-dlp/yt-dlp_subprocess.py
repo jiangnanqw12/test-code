@@ -26,14 +26,14 @@ def download_video_yt_dlp(playlist, line, config_file, download_folder):
         print(f"Subprocess failed with error: {e}")
 
 
-def download_video_you_get(playlist, url, config_file, download_folder):
+def download_video_you_get(playlist, url, index, download_folder):
 
     command = ["you-get",
 
                '-o', os.path.expanduser(
-                   f'~/{download_folder}/{playlist}/'),
-               "-l",
-               url,
+                   f'~/{download_folder}/{playlist}/{index}/'),
+
+               url.strip(),
                "--debug"]
     try:
         subprocess.run(command, check=True)
@@ -59,7 +59,9 @@ def download_video_mul(playlist="list1"):
     for i, line in enumerate(lines, start=1):
         print(f"Start to download {i}: {line.strip()}")
         if ".bilibili." in line:
-            download_video_you_get(playlist, line, 'yt-dlp_bili.conf', 'bili')
+            download_video_you_get(playlist, line, i, 'bili')
+            # download_video_yt_dlp(
+            #     playlist, line, 'yt-dlp_bili.conf', 'bili')
         elif ".youtube." in line:
             download_video_yt_dlp(
                 playlist, line, 'yt-dlp_YouTube.conf', 'YouTube')
