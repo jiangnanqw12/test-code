@@ -27,12 +27,10 @@ def download_video_yt_dlp(playlist, line, config_file, download_folder):
 
 
 def download_video_you_get(playlist, url, index, download_folder):
-
+    output_folder = os.path.join(download_folder, playlist, str(index))
+    os.makedirs(output_folder, exist_ok=True)
     command = ["you-get",
-
-               '-o', os.path.expanduser(
-                   f'~/{download_folder}/{playlist}/{index}/'),
-
+               '-o', output_folder,
                url.strip(),
                "--debug"]
     try:
@@ -65,48 +63,6 @@ def download_video_mul(playlist="list1"):
         elif ".youtube." in line:
             download_video_yt_dlp(
                 playlist, line, 'yt-dlp_YouTube.conf', 'YouTube')
-
-
-def get_playlist_details(url):
-    try:
-        # Get the playlist details
-        result = subprocess.run(
-            ['yt-dlp', '--flat-playlist', url], capture_output=True, text=True)
-
-        if result.returncode == 0:
-            playlist_details = result.stdout.strip()
-            print("Playlist details fetched successfully.")
-            return playlist_details
-        else:
-            error_message = f"Failed to get playlist details: {result.stderr.strip()}"
-            print(error_message)
-            return error_message
-
-    except Exception as e:
-        error_message = f"An error occurred: {e}"
-        print(error_message)
-        return error_message
-
-
-def get_video_details(url):
-    try:
-        playlist_title_result = subprocess.run(
-            ['yt-dlp', '--get-title', url], capture_output=True, text=True)
-        if playlist_title_result.returncode == 0:
-            playlist_title = playlist_title_result.stdout.strip()
-        else:
-            playlist_title = f"Failed to get playlist title: {playlist_title_result.stderr.strip()}"
-
-        filename_result = subprocess.run(
-            ['yt-dlp', '--get-filename', url], capture_output=True, text=True)
-        if filename_result.returncode == 0:
-            filename = filename_result.stdout.strip()
-        else:
-            filename = f"Failed to get file extension: {filename_result.stderr.strip()}"
-
-        return playlist_title, filename
-    except Exception as e:
-        return f"An error occurred: {e}"
 
 
 def main():

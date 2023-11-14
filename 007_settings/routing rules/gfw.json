@@ -1,3 +1,6 @@
+geosite:china-list,
+geosite:apple-cn,
+geosite:google-cn,
 [
   {
     "inboundTag": [],
@@ -7,25 +10,30 @@
       "github.com",
       "githubassets.com",
       "githubusercontent.com",
-      "notion.so",
-      "notion.com"
+      "notion.com",
+      "openai.com",
+      "op.gg",
+      "khanacademy.org",
+      "kastatic.org",
+      "bing.com",
+      "sentry.io",
+      "zlibrary-africa.se",
+      "www.linkedin.com",
+      "1point3acres.com",
+      "scotthyoung.com",
+      "classify.oclc.org"
     ],
     "enabled": true
   },
   {
-    "port": "",
-    "inboundTag": [],
     "outboundTag": "block",
-    "ip": [],
     "domain": [
       "#阻止CrxMouse鼠标手势收集上网数据",
       "mousegesturesapi.com"
     ],
-    "protocol": [],
     "enabled": true
   },
   {
-    "inboundTag": [],
     "outboundTag": "direct",
     "domain": [
       "bitwarden.com",
@@ -34,9 +42,6 @@
       "letsencrypt.org",
       "adblockplus.org",
       "safesugar.net",
-      "tomatobox.cn",
-      "selfma.com",
-      "odysseusline.com",
       "#下两行谷歌广告",
       "googleads.g.doubleclick.net",
       "adservice.google.com",
@@ -66,47 +71,18 @@
   },
   {
     "type": "field",
-    "port": "0-65535",
-    "inboundTag": [],
-    "outboundTag": "direct",
-    "ip": [],
-    "domain": [],
-    "protocol": [],
-    "enabled": true
-  },
-  {
-    "outboundTag": "direct",
-    "domain": [
-      "geosite:cn"
-    ],
-    "enabled": true
-  },
-  {
-    "outboundTag": "direct",
-    "ip": [
-      "geoip:private",
-      "geoip:cn"
-    ],
-    "enabled": true
-  },
-  {
-    "outboundTag": "direct",
-    "domain": [
-      "domain:example-example.com",
-      "domain:example-example2.com"
-    ],
-    "enabled": true
-  },
-  {
     "outboundTag": "proxy",
-    "ip": [
-      "geoip:telegram"
-    ],
     "domain": [
+      "#GFW域名列表",
       "geosite:gfw",
-      "geosite:greatfire",
-      "geosite:tld-!cn"
+      "geosite:greatfire"
     ],
+    "enabled": true
+  },
+  {
+    "type": "field",
+    "port": "0-65535",
+    "outboundTag": "direct",
     "enabled": true
   }
 ]
