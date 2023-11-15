@@ -1,6 +1,5 @@
 
 # whisper audio.flac --model medium --language Japanese
-import subprocess
 
 import subprocess
 import os
@@ -24,11 +23,9 @@ def get_subtitles(video_directory=None):
         result = subprocess.run(command)
         if result.returncode == 0:
             print("Conversion was successful")
-            return True
+
         else:
             print("Conversion failed")
-            print("Error:", result.stderr.decode('utf-8'))
-            return False
 
 
 def main():

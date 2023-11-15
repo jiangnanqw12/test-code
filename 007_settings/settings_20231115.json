@@ -1,0 +1,100 @@
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.formatOnPaste": true,
+    "editor.fontSize": 18,
+    "editor.minimap.maxColumn": 40,
+    "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?�������������������������������������������� ",
+    "editor.fontFamily": "'Source Code Pro', Consolas, 'Courier New', monospace",
+    "editor.suggest.localityBonus": true,
+    //"window.title": "${dirty}${activeEditorLong}${separator}${rootName}${separator}${appName}",
+    "window.title": "${rootName}${activeEditorLong}${separator}",
+    "window.titleBarStyle": "custom",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Better Solarized Dark",
+    "workbench.sideBar.location": "left",
+    "diffEditor.ignoreTrimWhitespace": true,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true
+    },
+    // "[cpp]": {
+    //     "editor.defaultFormatter": "xaver.clang-format"
+    // },
+    "workbench.statusBar.visible": true,
+    //"terminal.integrated.fontFamily": "monospace",
+    "terminal.integrated.fontSize": 16,
+
+    "git.ignoreMissingGitWarning": true,
+    "git.enableSmartCommit": true,
+
+    "git.autofetch": true,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
+    "python.languageServer": "Default",
+    //"C_Cpp.clang_format_sortIncludes": true,
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "cmake.buildBeforeRun": false,
+    //"C_Cpp.intelliSenseEngine": "Disabled",
+    //"clangd.onConfigChanged": "restart",
+    // "C_Cpp.intelliSenseEngine": "Disabled",
+    // "C_Cpp.default.browse.path": [],
+    // "C_Cpp.autocomplete": "Disabled", // So you don't get autocomplete from both extensions.
+    // "C_Cpp.errorSquiggles": "Disabled", // So you don't get error squiggles from both extensions clangd's seem to be more reliable anyway.
+    // //"clang-format.fallbackStyle": "Google",
+    //"clangd.path": "/mnt/d/Program Files/LLVM/bin",
+    "clangd.arguments": [
+        "-log=verbose",
+        "-pretty",
+        "--background-index",
+        "--compile-commands-dir=${workspaceFolder}/build"
+    ],
+    "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
+    "cmake.copyCompileCommands": "${workspaceFolder}/build",
+    "bracket-pair-colorizer-2.depreciation-notice": false,
+    "editor.guides.bracketPairs": true,
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Ubuntu-20.04 (WSL)": {
+            "path": "C:\\Windows\\System32\\wsl.exe",
+            "args": [
+                "-d",
+                "Ubuntu-20.04"
+            ]
+        },
+        "Windows PowerShell": {
+            "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        }
+    },
+    "cmake.configureOnOpen": true,
+    "editor.inlineSuggest.enabled": true,
+    "security.workspace.trust.untrustedFiles": "open",
+    "[python]": {},
+    "git.openRepositoryInParentFolders": "always",
+    //"svg.preview.mode": "img",
+    "editor.minimap.autohide": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.defaultFormatter": "xaver.clang-format",
+    "Codegeex.Privacy": true,
+    "editor.fontLigatures": false,
+    "hediet.vscode-drawio.resizeImages": null,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+}
