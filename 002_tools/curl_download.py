@@ -7,6 +7,7 @@ import urllib.parse
 
 def download_file(url, local_path, base_path=None):
     download_file_curl(url, local_path, base_path)
+    # download_file_requests(url, local_path, base_path)
 
 
 def download_file_curl(url, local_path, base_path=None):
