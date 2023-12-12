@@ -1,0 +1,36 @@
+[
+  {
+    "id": "5508182944404021528",
+    "port": "",
+    "outboundTag": "proxy",
+    "ip": [],
+    "domain": [
+      "#github",
+      "github.com",
+      "githubassets.com",
+      "githubusercontent.com",
+      "notion.com",
+      "openai.com",
+      "op.gg",
+      "khanacademy.org",
+      "kastatic.org",
+      "bing.com",
+      "sentry.io",
+      "zlibrary-africa.se",
+      "www.linkedin.com",
+      "1point3acres.com",
+      "scotthyoung.com",
+      "classify.oclc.org"
+    ],
+    "enabled": false
+  },
+  {
+    "id": "5158079883810071612",
+    "port": "",
+    "outboundTag": "direct",
+    "protocol": [
+      "bittorrent"
+    ],
+    "enabled": true
+  }
+]
