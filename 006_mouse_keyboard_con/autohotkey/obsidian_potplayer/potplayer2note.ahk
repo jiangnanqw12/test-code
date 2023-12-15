@@ -31,7 +31,7 @@ InitNote2PotPlayer()
         KeyWait "Control","T1"
         KeyWait "Alt","T1"
         KeyWait "g","T1"
-        
+
         global screenshot := 1
         Potplayer2Obsidian(markdown_tittle)
     }
@@ -42,7 +42,7 @@ InitNote2PotPlayer(){
     protocol_name := GetProtocolName(url_protocol)
     RegistrationProtocol(protocol_name)
 }
-  
+
 GetProtocolName(url_protocol){
     index_of := InStr(url_protocol, ":")
     if (index_of = 0){
@@ -52,7 +52,7 @@ GetProtocolName(url_protocol){
     result := SubStr(url_protocol, 1,index_of-1)
     return result
 }
-  
+
 RegistrationProtocol(protocol_name){
     RegCreateKey "HKEY_CURRENT_USER\Software\Classes\" protocol_name
     RegWrite "", "REG_SZ", "HKEY_CURRENT_USER\Software\Classes\" protocol_name, "URL Protocol"
@@ -68,7 +68,7 @@ Potplayer2Obsidian(markdown_tittle){
     if WinActive("ahk_exe " . note_app_name){
         ActivateProgram(potplayer_name)
     }
-    
+
     media_path := GetMediaPath()
     media_time := GetMediaTime()
     SaveScreenshot()
