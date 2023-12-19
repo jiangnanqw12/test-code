@@ -1,0 +1,6 @@
+Shortcuts [
+	[
+		Cmd = CmdShowInFolder
+		Key = Alt + Shift + R
+	]
+]
