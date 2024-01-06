@@ -1,6 +1,6 @@
 [
   {
-    "id": "5508182944404021528",
+    "id": "5178340823468183618",
     "port": "",
     "outboundTag": "proxy",
     "ip": [],
@@ -25,11 +25,27 @@
     "enabled": false
   },
   {
-    "id": "5158079883810071612",
+    "id": "4750240720954463403",
     "port": "",
     "outboundTag": "direct",
-    "protocol": [
-      "bittorrent"
+    "ip": [],
+    "domain": [
+      "harvard.edu",
+      "#steam",
+      "st.dl.eccdnx.com",
+      "st.dl.bscstorage.net",
+      "dl.steam.clngaa.com",
+      "st.dl.pinyuncloud.com",
+      "xz.pphimalayanrt.com",
+      "cdn-ws.content.steamchina.com",
+      "steampipe.steamcontent.tnkjmec.com",
+      "cdn.mileweb.cs.steampowered.com.8686c.com",
+      "dl.steam.clngaa.com",
+      "geosite:china-list",
+      "geosite:apple-cn",
+      "geosite:google-cn",
+      "geosite:steam@cn",
+      "geosite:category-games@cn"
     ],
     "enabled": true
   }
