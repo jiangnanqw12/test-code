@@ -1,0 +1,28 @@
+
+[
+  {
+  "id": "4750240720954463403",
+  "port": "",
+  "outboundTag": "direct",
+  "ip": [],
+  "domain": [
+    "harvard.edu",
+    "#steam",
+    "st.dl.eccdnx.com",
+    "st.dl.bscstorage.net",
+    "dl.steam.clngaa.com",
+    "st.dl.pinyuncloud.com",
+    "xz.pphimalayanrt.com",
+    "cdn-ws.content.steamchina.com",
+    "steampipe.steamcontent.tnkjmec.com",
+    "cdn.mileweb.cs.steampowered.com.8686c.com",
+    "dl.steam.clngaa.com",
+    "geosite:china-list",
+    "geosite:apple-cn",
+    "geosite:google-cn",
+    "geosite:steam@cn",
+    "geosite:category-games@cn"
+  ],
+  "enabled": true
+  }
+]
