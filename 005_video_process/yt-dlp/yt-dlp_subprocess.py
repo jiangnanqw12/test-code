@@ -32,7 +32,8 @@ def download_video_you_get(playlist, url, index, download_folder):
     command = ["you-get",
                '-o', output_folder,
                url.strip(),
-               "--debug"]
+               "--debug",
+               "--no-proxy"]
     try:
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
