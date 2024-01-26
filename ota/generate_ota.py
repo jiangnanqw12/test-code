@@ -41,22 +41,30 @@ def calculate_md5(filename, block_size=4096):
 def prepare_ota_file(version, binary_file, ota_file):
     """ Prepare OTA file with version, reserved bytes, MD5 checksum, and binary data """
     reserved_bytes = b'\x00\x00'  # 2 reserved bytes
-    version_bytes = version.to_bytes(6, byteorder='big')
-
+    # Splitting the 48-bit firmware version into three 16-bit parts
+    part1 = (version >> 32) & 0xFFFF  # Upper 16 bits
+    part2 = (version >> 16) & 0xFFFF  # Middle 16 bits
+    part3 = version & 0xFFFF         # Lower 16 bits
+    # Converting each part to bytes in little-endian format
+    version_bytes = part1.to_bytes(
+        2, 'little') + part2.to_bytes(2, 'little') + part3.to_bytes(2, 'little')
+    # version_bytes = version.to_bytes(6, byteorder='big')
+    # , byteorder='big'
     with open(binary_file, 'rb') as bin_file:
         binary_data = bin_file.read()
         binary_data_length = len(binary_data)
-        print("Binary Data Length:", len(binary_data), hex(len(binary_data)))
+        # print("Binary Data Length:", len(binary_data), hex(len(binary_data)))
         binary_data_length_bytes = struct.pack(
             '<I', binary_data_length)  # Little-endian
-        print("Binary Data Length (Hex, Little-Endian):",
-              binary_data_length_bytes.hex())
+        # print("Binary Data Length (Hex, Little-Endian):",
+        #       binary_data_length_bytes.hex())
         binary_data = binary_data_length_bytes+binary_data
     with open(binary_file, 'wb') as bin_file:
         bin_file.write(binary_data)
     md5_checksum = calculate_md5(binary_file)
     print("MD5 Checksum:", md5_checksum.hex())
     with open(ota_file, 'wb') as ota:
+
         ota.write(version_bytes)
         ota.write(reserved_bytes)
         ota.write(md5_checksum)
@@ -68,7 +76,8 @@ def main():
     output_file = r"tms320f28335-csd"
     execute_tiobj2bin_command(output_file)
     # Example usage
-    firmware_version = 0x8  # example version number
+    firmware_version = 0x010000010003  # example version number
+
     prepare_ota_file(firmware_version,
                      rf'{output_file}.bin', rf'{output_file}.ota')
 
