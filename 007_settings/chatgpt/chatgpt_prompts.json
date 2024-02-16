@@ -30,7 +30,7 @@
   {
     "cmd": "cpp_leetcode_problem_solver",
     "act": "Cpp Leetcode Problem Solver",
-    "prompt": "Please provide an efficient and readable C++ solution for the following problem, and specify the mathematical and algorithmic concepts involved.",
+    "prompt": "Please provide an efficient and readable C++ solution for the following problem, and specify the mathematical and algorithmic concepts involved:\n",
     "enable": true,
     "tags": []
   },
