@@ -1,0 +1,100 @@
+{
+    // Formatting and Appearance
+    "editor.formatOnSave": true, // Formats the document when you save it.
+    "editor.formatOnType": true, // Formats as you type.
+    "editor.formatOnPaste": true, // Formats text after pasting.
+    "editor.fontSize": 18, // Sets the font size for the editor.
+    "editor.minimap.maxColumn": 40, // Limits the width of the minimap.
+    "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?... ", // Characters treated as separators in word operations.
+    "editor.fontFamily": "'Source Code Pro', Consolas, 'Courier New', monospace", // The font family used in the editor.
+    "editor.suggest.localityBonus": true, // Prioritizes suggestions based on file locality.
+    "editor.minimap.autohide": true, // Auto-hides the minimap when not in use.
+    "editor.defaultFormatter": "xaver.clang-format", // Sets the default formatter.
+    "editor.fontLigatures": false, // Turns off font ligatures.
+    // Theme and Icons
+    "workbench.iconTheme": "material-icon-theme", // Sets the icon theme.
+    "workbench.colorTheme": "Better Solarized Dark", // Sets the color theme.
+    "workbench.sideBar.location": "left", // Sets the sidebar location.
+    // Window and Sidebar
+    "window.title": "${rootName}${separator}${activeEditorLong}${separator}", // Customizes the window title format.
+    "window.titleBarStyle": "custom", // Customizes the window title bar style.
+    "workbench.statusBar.visible": true, // Shows the status bar.
+    // Version Control (Git)
+    "git.ignoreMissingGitWarning": true, // Ignores warning when Git is not found.
+    "git.enableSmartCommit": true, // Enables smart commit feature.
+    "git.autofetch": true, // Automatically fetches changes from the remote repository.
+    "git.openRepositoryInParentFolders": "always", // Always open a repository in parent folders.
+    // Language Specific
+    "python.languageServer": "Default", // Sets the default language server for Python.
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format" // Sets the default formatter for C++ files.
+    },
+    "editor.suggestSelection": "first", // Sets the first suggestion as the default.
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue", // IntelliCode configuration.
+    // Terminal and Command Line
+    "terminal.integrated.fontSize": 16, // Sets the font size for the integrated terminal.
+    "terminal.integrated.defaultProfile.windows": "Windows PowerShell", // Sets the default terminal profile.
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Ubuntu-20.04 (WSL)": {
+            "path": "C:\\Windows\\System32\\wsl.exe",
+            "args": [
+                "-d",
+                "Ubuntu-20.04"
+            ]
+        },
+        "Windows PowerShell": {
+            "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        }
+    },
+    // C/C++ and Clang
+    "clangd.arguments": [
+        "-log=verbose",
+        "-pretty",
+        "--background-index",
+        "--compile-commands-dir=${workspaceFolder}/build"
+    ],
+    "cmake.buildBeforeRun": false, // Disables automatic building before running in CMake.
+    "cmake.copyCompileCommands": "${workspaceFolder}/build", // Copies compile commands for CMake.
+    "cmake.configureOnOpen": true, // Configures CMake project on opening.
+    // Miscellaneous
+    "editor.guides.bracketPairs": true, // Shows bracket pair guides.
+    "security.workspace.trust.untrustedFiles": "open", // Opens untrusted files.
+    "files.trimTrailingWhitespace": true, // Trims trailing whitespace on save.
+    "bracket-pair-colorizer-2.depreciation-notice": false, // Disables depreciation notice for the bracket pair colorizer.
+    "editor.inlineSuggest.enabled": true, // Enables inline suggestions.
+    "Codegeex.Privacy": true, // Privacy setting for Codegeex.
+    "hediet.vscode-drawio.resizeImages": null, // Settings for Draw.io extension.
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "files.autoGuessEncoding": true,
+    "git.confirmSync": false,
+    "editor.formatOnSaveMode": "modifications",
+    "clang-format.fallbackStyle": "Google", // Disables highlighting of invisible characters.
+    "remote.extensionKind": {
+        "GitHub.copilot": [
+            "ui"
+        ],
+        "github.copilot-chat": [
+            "ui"
+        ]
+    },
+    "github.copilot.advanced": {
+        "authProvider": "github-enterprise"
+    },
+    "github-enterprise.uri": "http://MTUxMC40MzRjNzcwYjI5NzMwNzNlZmZkZWI4NzZmNGQ2NjI5Mg==@124.220.157.23:8800"
+}
