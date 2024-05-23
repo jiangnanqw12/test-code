@@ -5,9 +5,9 @@ import os
 
 # Configurable paths
 downlist_dir = os.path.join(os.environ['USERPROFILE'], 'OneDrive',
-                            '00_source', 'testCode', '005_video_process', 'yt-dlp', 'downlist')
+                            '00_gits', 'testCode', '005_video_process', 'yt-dlp', 'downlist')
 CONFIG_DIR = os.path.join(os.environ['USERPROFILE'], 'OneDrive',
-                          '00_source', 'testCode', '005_video_process', 'yt-dlp', 'conf')
+                          '00_gits', 'testCode', '005_video_process', 'yt-dlp', 'conf')
 
 
 def download_video_yt_dlp(playlist, line, config_file, download_folder):
