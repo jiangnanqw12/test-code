@@ -1,3 +1,6 @@
+
+## vscode example
+
 // Place your key bindings in this file to override the defaults
 [
     {
@@ -54,4 +57,13 @@
         "command": "-md-shortcut.toggleNumbers",
         "when": "editorTextFocus && markdownShortcuts:enabled"
     }
+]
+
+## sumatra pdf example
+
+Shortcuts [
+	[
+		Cmd = CmdShowInFolder
+		Key = Alt + Shift + R
+	]
 ]
