@@ -12,6 +12,9 @@ ax.set_ylim(0, 100)
 fig.patch.set_facecolor('black')
 ax.set_facecolor('black')
 
+# 设置轴比例为相等
+ax.set_aspect('equal', adjustable='box')
+
 # led_1 circle
 led_1_x, led_1_y = 178.2, 40.524
 led_1_diameter = 2

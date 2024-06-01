@@ -1,0 +1,26 @@
+led_1:
+  circle:
+    center: [178.2, 40.524]
+    diameter: 2
+    stroke: 'white'
+    fill: 'white'
+
+glass_gubstrate_1_led_1_delta:
+  delta: [(30 + 1 + 152 / 2), (7 + 6.35 / 2)]
+
+glass_substrate_1:
+  rectangle:
+    center_offset: 'delta_1'
+    dimensions: [152, 6.35]
+    stroke: 'white'
+    fill: 'black'
+
+protection_frame_1_led_1_delta:
+  delta: [(30 + 1 + 152 / 2), (7 - 6 / 2)]
+
+protection_frame_1:
+  rectangle:
+    center_offset: 'delta_2'
+    dimensions: [122, 6]
+    stroke: 'white'
+    fill: 'black'
