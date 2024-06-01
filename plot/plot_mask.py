@@ -7,12 +7,17 @@ LED_1_DIAMETER = 2
 
 GLASS_SUBSTRATE_1_LENGTH = 152
 GLASS_SUBSTRATE_1_WIDTH = 6.35
-GLASS_SUBSTRATE_1_LED_1_delta_x=-(30 + 1 + GLASS_SUBSTRATE_1_LENGTH / 2)
-GLASS_SUBSTRATE_1_LED_1_delta_y=(7 + GLASS_SUBSTRATE_1_WIDTH / 2)
-GLASS_SUBSTRATE_1_x=(GLASS_SUBSTRATE_1_LED_1_delta_x + LED_1_X)
-GLASS_SUBSTRATE_1_y=GLASS_SUBSTRATE_1_LED_1_delta_y + LED_1_Y
+GLASS_SUBSTRATE_1_DELTA_X = -(30 + 1 + GLASS_SUBSTRATE_1_LENGTH / 2)
+GLASS_SUBSTRATE_1_DELTA_Y = (7 + GLASS_SUBSTRATE_1_WIDTH / 2)
+GLASS_SUBSTRATE_1_X = GLASS_SUBSTRATE_1_DELTA_X + LED_1_X
+GLASS_SUBSTRATE_1_Y = GLASS_SUBSTRATE_1_DELTA_Y + LED_1_Y
+
 PROTECTION_FRAME_1_LENGTH = 122
 PROTECTION_FRAME_1_WIDTH = 6
+PROTECTION_FRAME_1_DELTA_X = -(30 + 1 + PROTECTION_FRAME_1_LENGTH / 2)
+PROTECTION_FRAME_1_DELTA_Y = (7 - PROTECTION_FRAME_1_WIDTH / 2)
+PROTECTION_FRAME_1_X = PROTECTION_FRAME_1_DELTA_X + LED_1_X
+PROTECTION_FRAME_1_Y = PROTECTION_FRAME_1_DELTA_Y + LED_1_Y
 
 # 创建一个绘图区域
 fig, ax = plt.subplots()
@@ -33,18 +38,16 @@ led_1_circle = patches.Circle((LED_1_X, LED_1_Y), LED_1_DIAMETER / 2, edgecolor=
 ax.add_patch(led_1_circle)
 
 # glass_substrate_1 rectangle
-delta_x_1, delta_y_1 = -(30 + 1 + GLASS_SUBSTRATE_1_LENGTH / 2), (7 + GLASS_SUBSTRATE_1_WIDTH / 2)
-center_x_1, center_y_1 = (delta_x_1 + LED_1_X), (delta_y_1 + LED_1_Y)
 glass_substrate_1_rect = patches.Rectangle(
-    (GLASS_SUBSTRATE_1_x - GLASS_SUBSTRATE_1_LENGTH / 2, GLASS_SUBSTRATE_1_y - GLASS_SUBSTRATE_1_WIDTH / 2), GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH, edgecolor='white', facecolor='black'
+    (GLASS_SUBSTRATE_1_X - GLASS_SUBSTRATE_1_LENGTH / 2, GLASS_SUBSTRATE_1_Y - GLASS_SUBSTRATE_1_WIDTH / 2),
+    GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH, edgecolor='white', facecolor='black'
 )
 ax.add_patch(glass_substrate_1_rect)
 
 # protection_frame_1 rectangle
-delta_x2_1, delta_y2_1 = -(30 + 1 + PROTECTION_FRAME_1_LENGTH / 2), (7 - PROTECTION_FRAME_1_WIDTH / 2)
-center_x_2, center_y_2 = (delta_x2_1 + LED_1_X), (delta_y2_1 + LED_1_Y)
 protection_frame_1_rect = patches.Rectangle(
-    (center_x_2 - PROTECTION_FRAME_1_LENGTH / 2, center_y_2 - PROTECTION_FRAME_1_WIDTH / 2), PROTECTION_FRAME_1_LENGTH, PROTECTION_FRAME_1_WIDTH, edgecolor='white', facecolor='black'
+    (PROTECTION_FRAME_1_X - PROTECTION_FRAME_1_LENGTH / 2, PROTECTION_FRAME_1_Y - PROTECTION_FRAME_1_WIDTH / 2),
+    PROTECTION_FRAME_1_LENGTH, PROTECTION_FRAME_1_WIDTH, edgecolor='white', facecolor='black'
 )
 ax.add_patch(protection_frame_1_rect)
 
