@@ -15,8 +15,8 @@ import matplotlib.patches as patches
 # matplotlib x
 # the circle's center
 
-# Configuration constants (all lengths are in mm)
-LED_1_X, LED_1_Y = 178.2, 40.524
+# Configuration constants front_view (all lengths are in mm)
+LED_1_X, LED_1_Y = 150, 50
 LED_1_DIAMETER = 2
 
 GLASS_SUBSTRATE_1_LENGTH = 152
@@ -96,13 +96,14 @@ def plot_front_view_mask(ax, slot_height, num_components):
         glass_substrate.draw(ax)
         protection_frame.draw(ax)
         pin.draw(ax)
-
+    led_mapping=LED(LED_1_X, LED_1_Y + slot_height, LED_1_DIAMETER)
+    led_mapping.draw(ax)
 def main():
     """Main function to create and display the plot."""
     fig, ax = plt.subplots()
 
     # Set plot limits and background color
-    ax.set_xlim(-50, 200)
+    ax.set_xlim(-100, 200)
     ax.set_ylim(-100, 100)
     fig.patch.set_facecolor('black')
     ax.set_facecolor('black')
