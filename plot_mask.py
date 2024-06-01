@@ -8,6 +8,10 @@ fig, ax = plt.subplots()
 ax.set_xlim(0, 400)
 ax.set_ylim(0, 100)
 
+# 设置背景颜色为黑色
+fig.patch.set_facecolor('black')
+ax.set_facecolor('black')
+
 # led_1 circle
 led_1_x, led_1_y = 178.2, 40.524
 led_1_diameter = 2
@@ -29,9 +33,6 @@ protection_frame_1_rect = patches.Rectangle(
     (center_x_2 - 122 / 2, center_y_2 - 6 / 2), 122, 6, edgecolor='white', facecolor='black'
 )
 ax.add_patch(protection_frame_1_rect)
-
-# 设置背景颜色为黑色
-ax.set_facecolor('black')
 
 # 隐藏坐标轴
 ax.axis('off')
