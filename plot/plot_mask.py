@@ -81,19 +81,10 @@ class ProtectionFrame(RectangleComponentMatplotlib):
 class Pin(RectangleComponentMatplotlib):
     pass
 
-def main(slot_height=SLOT_HEIGHT):
-    """Main function to create and display the plot."""
-    fig, ax = plt.subplots()
 
-    # Set plot limits and background color
-    ax.set_xlim(-50, 200)
-    ax.set_ylim(-100, 100)
-    fig.patch.set_facecolor('black')
-    ax.set_facecolor('black')
-    ax.set_aspect('equal', adjustable='box')
-
-    # Create and draw components
-    for i in range(6):
+def plot_front_view_mask(ax, slot_height, num_components):
+    """Plot the front view mask with the given slot height and number of components."""
+    for i in range(num_components):
         led = LED(LED_1_X, LED_1_Y - i * slot_height, LED_1_DIAMETER)
         glass_substrate = GlassSubstrate(GLASS_SUBSTRATE_1_X, GLASS_SUBSTRATE_1_Y - i * slot_height,
                                          GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH)
@@ -105,6 +96,20 @@ def main(slot_height=SLOT_HEIGHT):
         glass_substrate.draw(ax)
         protection_frame.draw(ax)
         pin.draw(ax)
+
+def main():
+    """Main function to create and display the plot."""
+    fig, ax = plt.subplots()
+
+    # Set plot limits and background color
+    ax.set_xlim(-50, 200)
+    ax.set_ylim(-100, 100)
+    fig.patch.set_facecolor('black')
+    ax.set_facecolor('black')
+    ax.set_aspect('equal', adjustable='box')
+
+    # Plot the front view mask
+    plot_front_view_mask(ax, SLOT_HEIGHT, 6)
 
     # Hide the axes and show the plot
     ax.axis('off')
