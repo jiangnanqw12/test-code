@@ -92,23 +92,24 @@ def main():
 
     # Set plot limits and background color
     ax.set_xlim(-50, 200)
-    ax.set_ylim(0, 100)
+    ax.set_ylim(-100, 100)
     fig.patch.set_facecolor('black')
     ax.set_facecolor('black')
     ax.set_aspect('equal', adjustable='box')
+    for i in range(6):
 
-    # Create the components
-    led_1 = LED(LED_1_X, LED_1_Y, LED_1_DIAMETER)
+        # Create the components
+        led_1 = LED(LED_1_X, LED_1_Y-(i*SLOT_HEIGHT), LED_1_DIAMETER)
 
-    glass_substrate_1 = GlassSubstrate(GLASS_SUBSTRATE_1_X, GLASS_SUBSTRATE_1_Y, GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH)
-    protection_frame_1 = ProtectionFrame(PROTECTION_FRAME_1_X, PROTECTION_FRAME_1_Y, PROTECTION_FRAME_1_LENGTH, PROTECTION_FRAME_1_WIDTH)
-    pin_1 = Pin(PIN_1_X, PIN_1_Y, PIN_1_WIDTH, PIN_1_LENGTH, facecolor='white')
+        glass_substrate_1 = GlassSubstrate(GLASS_SUBSTRATE_1_X, GLASS_SUBSTRATE_1_Y-(i*SLOT_HEIGHT), GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH)
+        protection_frame_1 = ProtectionFrame(PROTECTION_FRAME_1_X, PROTECTION_FRAME_1_Y-(i*SLOT_HEIGHT), PROTECTION_FRAME_1_LENGTH, PROTECTION_FRAME_1_WIDTH)
+        pin_1 = Pin(PIN_1_X, PIN_1_Y-(i*SLOT_HEIGHT), PIN_1_WIDTH, PIN_1_LENGTH, facecolor='white')
 
-    # Draw the components
-    led_1.draw(ax)
-    glass_substrate_1.draw(ax)
-    protection_frame_1.draw(ax)
-    pin_1.draw(ax)
+        # Draw the components
+        led_1.draw(ax)
+        glass_substrate_1.draw(ax)
+        protection_frame_1.draw(ax)
+        pin_1.draw(ax)
 
     # Hide the axes
     ax.axis('off')
