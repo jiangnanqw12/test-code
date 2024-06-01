@@ -1,6 +1,14 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
+# 定义常量
+LED_1_X, LED_1_Y = 178.2, 40.524
+LED_1_DIAMETER = 2
+GLASS_SUBSTRATE_1_LENGTH = 152
+GLASS_SUBSTRATE_1_WIDTH = 6.35
+PROTECTION_FRAME_1_LENGTH = 122
+PROTECTION_FRAME_1_WIDTH = 6
+
 # 创建一个绘图区域
 fig, ax = plt.subplots()
 
@@ -16,28 +24,22 @@ ax.set_facecolor('black')
 ax.set_aspect('equal', adjustable='box')
 
 # led_1 circle
-led_1_x, led_1_y = 178.2, 40.524
-led_1_diameter = 2
-led_1_circle = patches.Circle((led_1_x, led_1_y), led_1_diameter / 2, edgecolor='white', facecolor='white')
+led_1_circle = patches.Circle((LED_1_X, LED_1_Y), LED_1_DIAMETER / 2, edgecolor='white', facecolor='white')
 ax.add_patch(led_1_circle)
 
 # glass_substrate_1 rectangle
-delta_x_1, delta_y_1 = -(30 + 1 + 152 / 2), (7 + 6.35 / 2)
-center_x_1, center_y_1 = (delta_x_1 + led_1_x), (delta_y_1 + led_1_y)
-glass_substrate_1_rect_length=152
-glass_substrate_1_rect_width=6.35
+delta_x_1, delta_y_1 = -(30 + 1 + GLASS_SUBSTRATE_1_LENGTH / 2), (7 + GLASS_SUBSTRATE_1_WIDTH / 2)
+center_x_1, center_y_1 = (delta_x_1 + LED_1_X), (delta_y_1 + LED_1_Y)
 glass_substrate_1_rect = patches.Rectangle(
-    (center_x_1 - glass_substrate_1_rect_length / 2, center_y_1 - glass_substrate_1_rect_width / 2), glass_substrate_1_rect_length, glass_substrate_1_rect_width, edgecolor='white', facecolor='black'
+    (center_x_1 - GLASS_SUBSTRATE_1_LENGTH / 2, center_y_1 - GLASS_SUBSTRATE_1_WIDTH / 2), GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH, edgecolor='white', facecolor='black'
 )
 ax.add_patch(glass_substrate_1_rect)
 
 # protection_frame_1 rectangle
-delta_x2_1, delta_y2_1 = -(30 + 1 + 152 / 2), (7 - 6 / 2)
-center_x_2, center_y_2 = (delta_x2_1 + led_1_x), (delta_y2_1 + led_1_y)
-protection_frame_1_rect_length=122
-protection_frame_1_rect_width=6
+delta_x2_1, delta_y2_1 = -(30 + 1 + PROTECTION_FRAME_1_LENGTH / 2), (7 - PROTECTION_FRAME_1_WIDTH / 2)
+center_x_2, center_y_2 = (delta_x2_1 + LED_1_X), (delta_y2_1 + LED_1_Y)
 protection_frame_1_rect = patches.Rectangle(
-    (center_x_2 - protection_frame_1_rect_length / 2, center_y_2 - protection_frame_1_rect_width / 2), protection_frame_1_rect_length, protection_frame_1_rect_width, edgecolor='white', facecolor='black'
+    (center_x_2 - PROTECTION_FRAME_1_LENGTH / 2, center_y_2 - PROTECTION_FRAME_1_WIDTH / 2), PROTECTION_FRAME_1_LENGTH, PROTECTION_FRAME_1_WIDTH, edgecolor='white', facecolor='black'
 )
 ax.add_patch(protection_frame_1_rect)
 
