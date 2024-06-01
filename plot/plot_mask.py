@@ -4,8 +4,13 @@ import matplotlib.patches as patches
 # 定义常量
 LED_1_X, LED_1_Y = 178.2, 40.524
 LED_1_DIAMETER = 2
+
 GLASS_SUBSTRATE_1_LENGTH = 152
 GLASS_SUBSTRATE_1_WIDTH = 6.35
+GLASS_SUBSTRATE_1_LED_1_delta_x=-(30 + 1 + GLASS_SUBSTRATE_1_LENGTH / 2)
+GLASS_SUBSTRATE_1_LED_1_delta_y=(7 + GLASS_SUBSTRATE_1_WIDTH / 2)
+GLASS_SUBSTRATE_1_x=(GLASS_SUBSTRATE_1_LED_1_delta_x + LED_1_X)
+GLASS_SUBSTRATE_1_y=GLASS_SUBSTRATE_1_LED_1_delta_y + LED_1_Y
 PROTECTION_FRAME_1_LENGTH = 122
 PROTECTION_FRAME_1_WIDTH = 6
 
@@ -31,7 +36,7 @@ ax.add_patch(led_1_circle)
 delta_x_1, delta_y_1 = -(30 + 1 + GLASS_SUBSTRATE_1_LENGTH / 2), (7 + GLASS_SUBSTRATE_1_WIDTH / 2)
 center_x_1, center_y_1 = (delta_x_1 + LED_1_X), (delta_y_1 + LED_1_Y)
 glass_substrate_1_rect = patches.Rectangle(
-    (center_x_1 - GLASS_SUBSTRATE_1_LENGTH / 2, center_y_1 - GLASS_SUBSTRATE_1_WIDTH / 2), GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH, edgecolor='white', facecolor='black'
+    (GLASS_SUBSTRATE_1_x - GLASS_SUBSTRATE_1_LENGTH / 2, GLASS_SUBSTRATE_1_y - GLASS_SUBSTRATE_1_WIDTH / 2), GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH, edgecolor='white', facecolor='black'
 )
 ax.add_patch(glass_substrate_1_rect)
 
