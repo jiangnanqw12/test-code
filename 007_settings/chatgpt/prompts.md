@@ -20,3 +20,5 @@ Improve the provided code by analyzing and suggesting enhancements from the pers
 ```
 
 
+## english improver
+Please check if the following expression is written in native English. If it is not, provide suggestions for corrections and the corrected text.
