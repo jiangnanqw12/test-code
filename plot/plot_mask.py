@@ -49,6 +49,8 @@ PIN_1_LED_1_DELTA_Y = 7+7
 PIN_1_X = PIN_1_LED_1_DELTA_X+LED_1_X
 PIN_1_Y = PIN_1_LED_1_DELTA_Y+LED_1_Y
 
+# slot_height
+SLOT_HEIGHT=19.05
 
 class CircleComponentMatplotlib:
     def __init__(self, x, y, diameter, edgecolor='white', facecolor='white'):
@@ -78,36 +80,41 @@ class RectangleComponentMatplotlib:
             (self.x, self.y), self.length, self.width, edgecolor=self.edgecolor, facecolor=self.facecolor)
         ax.add_patch(rectangle)
 
+def main():
+    # Create a plot
+    fig, ax = plt.subplots()
 
-# Create the components
-led_1 = CircleComponentMatplotlib(LED_1_X, LED_1_Y, LED_1_DIAMETER)
+    # Set plot limits and background color
+    ax.set_xlim(-50, 200)
+    ax.set_ylim(0, 100)
+    fig.patch.set_facecolor('black')
+    ax.set_facecolor('black')
+    ax.set_aspect('equal', adjustable='box')
 
-glass_substrate_1 = RectangleComponentMatplotlib(GLASS_SUBSTRATE_1_X, GLASS_SUBSTRATE_1_Y,
-                                                 GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH)
-protection_frame_1 = RectangleComponentMatplotlib(PROTECTION_FRAME_1_X, PROTECTION_FRAME_1_Y,
-                                                  PROTECTION_FRAME_1_LENGTH, PROTECTION_FRAME_1_WIDTH)
-pin_1 = RectangleComponentMatplotlib(PIN_1_X,    PIN_1_Y,
-                                     PIN_1_WIDTH, PIN_1_LENGTH, facecolor='white'
-                                     )
+    # Create the components
+    led_1 = CircleComponentMatplotlib(LED_1_X, LED_1_Y, LED_1_DIAMETER)
 
-# Create a plot
-fig, ax = plt.subplots()
+    glass_substrate_1 = RectangleComponentMatplotlib(GLASS_SUBSTRATE_1_X, GLASS_SUBSTRATE_1_Y,
+                                                    GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH)
+    protection_frame_1 = RectangleComponentMatplotlib(PROTECTION_FRAME_1_X, PROTECTION_FRAME_1_Y,
+                                                    PROTECTION_FRAME_1_LENGTH, PROTECTION_FRAME_1_WIDTH)
+    pin_1 = RectangleComponentMatplotlib(PIN_1_X,    PIN_1_Y,
+                                        PIN_1_WIDTH, PIN_1_LENGTH, facecolor='white'
+                                        )
 
-# Set plot limits and background color
-ax.set_xlim(-50, 200)
-ax.set_ylim(0, 100)
-fig.patch.set_facecolor('black')
-ax.set_facecolor('black')
-ax.set_aspect('equal', adjustable='box')
 
-# Draw the components
-led_1.draw(ax)
-glass_substrate_1.draw(ax)
-protection_frame_1.draw(ax)
-pin_1.draw(ax)
 
-# Hide the axes
-ax.axis('off')
+    # Draw the components
+    led_1.draw(ax)
+    glass_substrate_1.draw(ax)
+    protection_frame_1.draw(ax)
+    pin_1.draw(ax)
 
-# Show the plot
-plt.show()
+    # Hide the axes
+    ax.axis('off')
+
+    # Show the plot
+    plt.show()
+
+if __name__ == "__main__":
+    main()
