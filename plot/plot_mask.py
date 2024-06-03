@@ -22,6 +22,11 @@ the circle's center
 TUBAN = 6
 OTHER_SLOT_HEIGHT = 19.05
 
+XRL_XLIM=(-72.8, 152)
+XRL_YLIM=(-47.5, 74)
+XRL_ZLIM=(-6, 200)
+
+
 LED_1_X, LED_1_Y, LED_1_Z = 150, 50, 0
 LED_1_DIAMETER = 2
 
@@ -141,9 +146,9 @@ def plot_top_view_mask(ax):
 
 def create_combined_fig():
     """Create a combined figure with two subplots and save as an SVG file."""
-    xlim = (-72.8, 152)
-    ylim = (-47.5, 74)
-    zlim = (-6, 200)
+    xlim = XRL_XLIM
+    ylim = XRL_YLIM
+    zlim = XRL_ZLIM
 
     fig, axs = plt.subplots(1, 2, figsize=(12, 6))
 
@@ -181,9 +186,9 @@ def create_combined_fig():
 
 def create_separate_figs():
     """Create separate figures for front and top views and save each as an SVG file."""
-    xlim = (-72.8, 152)
-    ylim = (-47.5, 74)
-    zlim = (-6, 200)
+    xlim = XRL_XLIM
+    ylim = XRL_YLIM
+    zlim = XRL_ZLIM
 
     # Front view figure
     fig, ax = plt.subplots(figsize=(6, 6))
