@@ -144,7 +144,7 @@ def plot_top_view_mask(ax):
     pin2.draw(ax)
 
 
-def create_combined_fig():
+def create_combined_fig(block):
     """Create a combined figure with two subplots and save as an SVG file."""
     xlim = XRL_XLIM
     ylim = XRL_YLIM
@@ -180,11 +180,14 @@ def create_combined_fig():
     # Save the plot as an SVG file
     plt.savefig("C:\\output\\view_masks_combined.svg", format="svg")
 
-    # Show the plot (optional)
-    plt.show()
+    # Show the plot
+    if block:
+        plt.show()
+    else:
+        plt.show(block=False)
 
 
-def create_separate_figs():
+def create_separate_figs(block):
     """Create separate figures for front and top views and save each as an SVG file."""
     xlim = XRL_XLIM
     ylim = XRL_YLIM
@@ -201,7 +204,10 @@ def create_separate_figs():
     plot_front_view_mask(ax, OTHER_SLOT_HEIGHT, 6)
     ax.axis('off')
     plt.savefig("C:\\output\\front_view_mask.svg", format="svg")
-    plt.show()
+    if block:
+        plt.show()
+    else:
+        plt.show(block=False)
 
     # Top view figure
     fig, ax = plt.subplots(figsize=(6, 6))
@@ -214,15 +220,24 @@ def create_separate_figs():
     plot_top_view_mask(ax)
     ax.axis('off')
     plt.savefig("C:\\output\\top_view_mask.svg", format="svg")
-    plt.show()
+    if block:
+        plt.show()
+    else:
+        plt.show(block=False)
 
-def main():
+
+def plot_xrl(block=True):
     """Main function to create and save the plot as an SVG file."""
     # Create combined figure with both views
-    create_combined_fig()
+    create_combined_fig(block)
 
     # Create separate figures for each view
-    create_separate_figs()
+    create_separate_figs(block)
 
+    if not block:
+        plt.show()
+
+def main():
+    plot_xrl(False)
 if __name__ == "__main__":
     main()
