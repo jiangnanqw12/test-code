@@ -25,7 +25,7 @@ OTHER_SLOT_HEIGHT = 19.05
 LED_1_X, LED_1_Y, LED_1_Z = 150, 50, 0
 LED_1_DIAMETER = 2
 
-TUBAN_ZAIWAI_DELTA_Z=50
+TUBAN_ZAIWAI_DELTA_Z = 50
 
 GLASS_SUBSTRATE_1_LENGTH = 152
 GLASS_SUBSTRATE_1_WIDTH = 152
@@ -123,14 +123,14 @@ def plot_front_view_mask(ax, slot_height, num_components):
 def plot_top_view_mask(ax):
     """Plot the top view (XZ) mask with the given slot height and number of components."""
 
-    led = LED(LED_1_X, LED_1_Z , LED_1_DIAMETER)
-    led2 = LED(LED_1_X, LED_1_Z+TUBAN_ZAIWAI_DELTA_Z , LED_1_DIAMETER)
-    glass_substrate = GlassSubstrate(GLASS_SUBSTRATE_1_X, GLASS_SUBSTRATE_1_Z ,
-                                        GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH)
-    protection_frame = ProtectionFrame(PROTECTION_FRAME_1_X, PROTECTION_FRAME_1_Z ,
-                                        PROTECTION_FRAME_1_LENGTH, PROTECTION_FRAME_1_WIDTH)
-    pin = Pin(PIN_1_X, PIN_1_Z , PIN_1_WIDTH, PIN_1_LENGTH, facecolor='white')
-    pin2 = Pin(PIN_1_X, PIN_1_Z+TUBAN_ZAIWAI_DELTA_Z , PIN_1_WIDTH, PIN_1_LENGTH, facecolor='white')
+    led = LED(LED_1_X, LED_1_Z, LED_1_DIAMETER)
+    led2 = LED(LED_1_X, LED_1_Z + TUBAN_ZAIWAI_DELTA_Z, LED_1_DIAMETER)
+    glass_substrate = GlassSubstrate(GLASS_SUBSTRATE_1_X, GLASS_SUBSTRATE_1_Z,
+                                     GLASS_SUBSTRATE_1_LENGTH, GLASS_SUBSTRATE_1_WIDTH)
+    protection_frame = ProtectionFrame(PROTECTION_FRAME_1_X, PROTECTION_FRAME_1_Z,
+                                       PROTECTION_FRAME_1_LENGTH, PROTECTION_FRAME_1_WIDTH)
+    pin = Pin(PIN_1_X, PIN_1_Z, PIN_1_WIDTH, PIN_1_LENGTH, facecolor='white')
+    pin2 = Pin(PIN_1_X, PIN_1_Z + TUBAN_ZAIWAI_DELTA_Z, PIN_1_WIDTH, PIN_1_LENGTH, facecolor='white')
     led.draw(ax)
     led2.draw(ax)
     glass_substrate.draw(ax)
@@ -139,13 +139,12 @@ def plot_top_view_mask(ax):
     pin2.draw(ax)
 
 
-
-def main():
+def create_combined_fig():
+    """Create a combined figure with two subplots and save as an SVG file."""
     xlim = (-72.8, 152)
     ylim = (-47.5, 74)
     zlim = (-6, 200)
-    # aspect_ratio=(xlim[1]-xlim[0])/(ylim[1]-ylim[0])
-    """Main function to create and save the plot as an SVG file."""
+
     fig, axs = plt.subplots(1, 2, figsize=(12, 6))
 
     # Set plot limits and background color for front view
@@ -174,11 +173,51 @@ def main():
     ax.axis('off')
 
     # Save the plot as an SVG file
-    plt.savefig("C:\\output\\view_masks.svg", format="svg")
+    plt.savefig("C:\\output\\view_masks_combined.svg", format="svg")
 
     # Show the plot (optional)
     plt.show()
 
+
+def create_separate_figs():
+    """Create separate figures for front and top views and save each as an SVG file."""
+    xlim = (-72.8, 152)
+    ylim = (-47.5, 74)
+    zlim = (-6, 200)
+
+    # Front view figure
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.set_xlim(xlim)
+    ax.set_ylim(ylim)
+    fig.patch.set_facecolor('black')
+    ax.set_facecolor('black')
+    ax.set_aspect('equal', adjustable='box')
+    fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
+    plot_front_view_mask(ax, OTHER_SLOT_HEIGHT, 6)
+    ax.axis('off')
+    plt.savefig("C:\\output\\front_view_mask.svg", format="svg")
+    plt.show()
+
+    # Top view figure
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.set_xlim(xlim)
+    ax.set_ylim(zlim)
+    fig.patch.set_facecolor('black')
+    ax.set_facecolor('black')
+    ax.set_aspect('equal', adjustable='box')
+    fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
+    plot_top_view_mask(ax)
+    ax.axis('off')
+    plt.savefig("C:\\output\\top_view_mask.svg", format="svg")
+    plt.show()
+
+def main():
+    """Main function to create and save the plot as an SVG file."""
+    # Create combined figure with both views
+    create_combined_fig()
+
+    # Create separate figures for each view
+    create_separate_figs()
 
 if __name__ == "__main__":
     main()
