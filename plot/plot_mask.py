@@ -40,7 +40,7 @@ PIN_1_LED_1_DELTA_Y = 7 + 7
 PIN_1_X = PIN_1_LED_1_DELTA_X + LED_1_X
 PIN_1_Y = PIN_1_LED_1_DELTA_Y + LED_1_Y
 
-SLOT_HEIGHT = 19.05
+OTHER_SLOT_HEIGHT = 19.05
 
 class CircleComponentMatplotlib:
     def __init__(self, x, y, diameter, edgecolor='white', facecolor='white'):
@@ -81,7 +81,6 @@ class ProtectionFrame(RectangleComponentMatplotlib):
 class Pin(RectangleComponentMatplotlib):
     pass
 
-
 def plot_front_view_mask(ax, slot_height, num_components):
     """Plot the front view mask with the given slot height and number of components."""
     for i in range(num_components):
@@ -99,21 +98,30 @@ def plot_front_view_mask(ax, slot_height, num_components):
     led_mapping=LED(LED_1_X, LED_1_Y + slot_height, LED_1_DIAMETER)
     led_mapping.draw(ax)
 def main():
-    """Main function to create and display the plot."""
+    xlim=(-72.8, 152)
+    ylim=(-47.5, 74)
+    #aspect_ratio=(xlim[1]-xlim[0])/(ylim[1]-ylim[0])
+    """Main function to create and save the plot as an SVG file."""
     fig, ax = plt.subplots()
 
     # Set plot limits and background color
-    ax.set_xlim(-100, 200)
-    ax.set_ylim(-100, 100)
+    ax.set_xlim(xlim)
+    ax.set_ylim(ylim)
     fig.patch.set_facecolor('black')
     ax.set_facecolor('black')
     ax.set_aspect('equal', adjustable='box')
-
+    #fig.subplots_adjust(left=0.1,right=0.9,top=0.9,bottom=0.1)
+    fig.subplots_adjust(left=0,right=1,top=1,bottom=0)
     # Plot the front view mask
-    plot_front_view_mask(ax, SLOT_HEIGHT, 6)
+    plot_front_view_mask(ax, OTHER_SLOT_HEIGHT, 6)
 
-    # Hide the axes and show the plot
+    # Hide the axes
     ax.axis('off')
+
+    # Save the plot as an SVG file
+    plt.savefig("front_view_mask.svg", format="svg")
+
+    # Show the plot (optional)
     plt.show()
 
 if __name__ == "__main__":
