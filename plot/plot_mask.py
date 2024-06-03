@@ -22,6 +22,8 @@ the circle's center
 TUBAN = 6
 OTHER_SLOT_HEIGHT = 19.05
 
+MAPPING_ZAIWAI_DELTA_Y=14
+
 XRL_XLIM=(-72.8, 152)
 XRL_YLIM=(-47.5, 74)
 XRL_ZLIM=(-6, 200)
@@ -121,7 +123,7 @@ def plot_front_view_mask(ax, slot_height, num_components):
         protection_frame.draw(ax)
         pin.draw(ax)
 
-    led_mapping = LED(LED_1_X, LED_1_Y + slot_height, LED_1_DIAMETER, facecolor='red')
+    led_mapping = LED(LED_1_X, LED_1_Y + MAPPING_ZAIWAI_DELTA_Y, LED_1_DIAMETER, facecolor='red')
     led_mapping.draw(ax)
 
 
