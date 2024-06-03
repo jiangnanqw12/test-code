@@ -119,7 +119,7 @@ def main():
     ax.axis('off')
 
     # Save the plot as an SVG file
-    plt.savefig("front_view_mask.svg", format="svg")
+    plt.savefig("C:\\output\\front_view_mask.svg", format="svg")
 
     # Show the plot (optional)
     plt.show()
